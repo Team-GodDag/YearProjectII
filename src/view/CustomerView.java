@@ -1,5 +1,6 @@
 package view;
-
+// Start side
+// Viser nuværende kunder i databasen
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

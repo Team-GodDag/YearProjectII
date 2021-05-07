@@ -22,9 +22,10 @@ public class UIController {
     //creates scene
 
     public Scene createScene() {
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 950, 700);
         root.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
         switchTop(new TopMenuView().createTopMenu());
+        switchCenter(new CustomerView().createView());
         return scene;
     }
 

@@ -1,5 +1,5 @@
 package view;
-
+// når der skal oprettes et tilbud/ordre
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-public class QuotationView {
+public class NewOfferView {
 
     public Node createView(){
 
@@ -28,7 +28,8 @@ public class QuotationView {
         //------------------------------------//
 
         Line line = new Line(100,150,1010,150);
-        salesGrid.add(line,0,1,2,1);
+        line.setStroke(Color.SILVER);
+        salesGrid.add(line,0,1,70,1);
 
 
 
@@ -37,77 +38,84 @@ public class QuotationView {
         Label cprLabel = new Label("CPR: ");
         GridPane.setConstraints(cprLabel,0,0);
         TextField cprTextField = new TextField("");
-        cprTextField.setDisable(true);
+        cprTextField.setPromptText("XXXXXX-XXXX");
         GridPane.setConstraints(cprTextField,1,0);
+        Button getButton = new Button("Get");
+        GridPane.setConstraints(getButton,2,0);
 
 
         Label creditLabel = new Label("Credit Rating: ");
-        GridPane.setConstraints(creditLabel,69,0);
+        GridPane.setConstraints(creditLabel,55,0);
         Text creditRatingTextField = new Text("A");
-        GridPane.setConstraints(creditRatingTextField,70,0);
+        GridPane.setConstraints(creditRatingTextField,56,0);
 
         Label nameLabel = new Label("Name: ");
         TextField nameTextField = new TextField();
-        nameTextField.setDisable(true);
+        nameTextField.setPromptText("Name");
         GridPane.setConstraints(nameLabel,0,3);
         GridPane.setConstraints(nameTextField,1,3);
 
         Label phoneLabel = new Label("Phone: ");
         TextField phoneTextField = new TextField();
-        phoneTextField.setDisable(true);
+        phoneTextField.setPromptText("Phone Number");
         GridPane.setConstraints(phoneLabel,0,4);
         GridPane.setConstraints(phoneTextField,1,4);
 
         Label emailLabel = new Label("Email: ");
         TextField emailTextField = new TextField();
-        emailTextField.setDisable(true);
+        emailTextField.setPromptText("Email");
         GridPane.setConstraints(emailLabel,0,5);
         GridPane.setConstraints(emailTextField,1,5);
 
         Label adressLabel = new Label("Adress: ");
         TextField adressTextField = new TextField();
-        adressTextField.setDisable(true);
+        adressTextField.setPromptText("Adress");
         GridPane.setConstraints(adressLabel,0,6);
         GridPane.setConstraints(adressTextField,1,6);
 
         Label carModelLabel = new Label("Car Model: ");
-        TextField carModelTextField = new TextField();
-        carModelTextField.setDisable(true);
+        ComboBox carModelCombobox = new ComboBox<String>(FXCollections.observableArrayList("Slow", "Slower", "Henrik"));
+        carModelCombobox.setPromptText("Car Model");
         GridPane.setConstraints(carModelLabel,0,7);
-        GridPane.setConstraints(carModelTextField,1,7);
+        GridPane.setConstraints(carModelCombobox,1,7);
 
         Label priceLabel = new Label("Price: ");
         TextField priceTextField = new TextField();
-        priceTextField.setDisable(true);
+        priceTextField.setPromptText("Price");
         GridPane.setConstraints(priceLabel,0,8);
         GridPane.setConstraints(priceTextField,1,8);
 
         Label downPaymentLabel = new Label("Down Payment: ");
         TextField downPaymentTextField = new TextField();
-        downPaymentTextField.setDisable(true);
+        downPaymentTextField.setPromptText("Down Payment:");
         GridPane.setConstraints(downPaymentLabel,0,9);
         GridPane.setConstraints(downPaymentTextField,1,9);
 
         Label installmentPeriodLabel = new Label("Down Payment: ");
-        TextField installmentPeriodTextField = new TextField();
-        installmentPeriodTextField.setDisable(true);
+        ComboBox installmentPeriodCombobox = new ComboBox<String>(FXCollections.observableArrayList("One", "Two", "Three"));
+        installmentPeriodCombobox.setPromptText("Period:");
         GridPane.setConstraints(installmentPeriodLabel,0,10);
-        GridPane.setConstraints(installmentPeriodTextField,1,10);
+        GridPane.setConstraints(installmentPeriodCombobox,1,10);
 
         Label salesPersonLabel = new Label("Sales Person: ");
-        TextField salesPersonTextField = new TextField();
-        salesPersonTextField.setDisable(true);
+        ComboBox salesPersonCombobox = new ComboBox<String>(FXCollections.observableArrayList("John", "Carsten", "Henning"));
+        salesPersonCombobox.setPromptText("Sales Person:");
         GridPane.setConstraints(salesPersonLabel,0,11);
-        GridPane.setConstraints(salesPersonTextField,1,11);
+        GridPane.setConstraints(salesPersonCombobox,1,11);
 
-        Button printQuoteButton = new Button("print Quote");
-        GridPane.setConstraints(printQuoteButton,19,15);
+        Button calcQuoteButton = new Button("Calculate Quote");
+        GridPane.setConstraints(calcQuoteButton,19,15);
+
+        Button clearButton = new Button("      Clear       ");
+        GridPane.setConstraints(clearButton,20,15);
+
 
 
         salesGrid.getChildren().addAll(
 
                 cprLabel,
                 cprTextField,
+                getButton,
                 creditLabel,
                 creditRatingTextField,
                 nameLabel,
@@ -119,18 +127,35 @@ public class QuotationView {
                 adressLabel,
                 adressTextField,
                 carModelLabel,
-                carModelTextField,
+                carModelCombobox,
                 priceLabel,
                 priceTextField,
                 downPaymentLabel,
                 downPaymentTextField,
                 installmentPeriodLabel,
-                installmentPeriodTextField,
+                installmentPeriodCombobox,
                 salesPersonLabel,
-                salesPersonTextField,
-                printQuoteButton
+                salesPersonCombobox,
+                calcQuoteButton,
+                clearButton
+
 
         );
+
+        BooleanBinding booleanBind = cprTextField.textProperty().isEmpty()
+                .or(creditRatingTextField.textProperty().isEmpty())
+                .or(nameTextField.textProperty().isEmpty())
+                .or(phoneTextField.textProperty().isEmpty())
+                .or(emailTextField.textProperty().isEmpty())
+                .or(adressTextField.textProperty().isEmpty())
+                .or(carModelCombobox.valueProperty().isNull())
+                .or(priceTextField.textProperty().isEmpty())
+                .or(downPaymentTextField.textProperty().isEmpty())
+                .or(installmentPeriodCombobox.valueProperty().isNull())
+                .or(salesPersonCombobox.valueProperty().isNull());
+        calcQuoteButton.disableProperty().bind(booleanBind);
+
+
 
 
         HBox root = new HBox(salesGrid);
