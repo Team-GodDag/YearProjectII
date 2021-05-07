@@ -1,5 +1,5 @@
 package view;
-
+//pop up når du skal se tidligere salg
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;

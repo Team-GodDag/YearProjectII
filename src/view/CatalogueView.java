@@ -1,5 +1,5 @@
 package view;
-
+//Viser tilgængelige bil modeller
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
