@@ -1,2 +1,4 @@
-package view;public class AllCasesView {
+package view;
+
+public class AllCasesView {
 }

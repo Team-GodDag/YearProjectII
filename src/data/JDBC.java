@@ -1,2 +1,4 @@
-package data;public class JDBC {
+package data;
+
+public class JDBC {
 }
