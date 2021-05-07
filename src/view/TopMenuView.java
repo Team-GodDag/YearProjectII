@@ -20,7 +20,7 @@ public class TopMenuView {
         catalogButton.setOnAction(click -> UIController.instance().switchCenter(new CatalogueView().createView()));
 
         Button casesButton = new Button("Cases");
-
+        // skal pege til AllCasesView
         ToolBar root = new ToolBar(customerButton, newSalesButton, newCustomerButton, catalogButton, casesButton);
         root.setPrefWidth(700);
         return root;
