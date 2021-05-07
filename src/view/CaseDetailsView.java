@@ -1,5 +1,6 @@
 package view;
-
+//når man på tilbud som er oprettet allerede
+//pop up når når NewOfferView tilbud udregnes
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
