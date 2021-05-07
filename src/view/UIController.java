@@ -25,6 +25,7 @@ public class UIController {
         Scene scene = new Scene(root, 800, 500);
         root.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
         switchTop(new TopMenuView().createTopMenu());
+        switchCenter(new CustomerView().createView());
         return scene;
     }
 
