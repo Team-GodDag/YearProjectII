@@ -1,5 +1,6 @@
 package view;
 
+import data.DataLayer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,6 +15,8 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        DataLayer datalayer = new DataLayer("YearProjectDB");
+        System.out.println(datalayer.getAllCarModels());
         launch(args);
     }
 }
