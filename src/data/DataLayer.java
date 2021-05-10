@@ -6,7 +6,7 @@ import logic.Car;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DataLayer {
+public class DataLayer { // Henrik
 
     public static DataLayer instance = new DataLayer("YearProjectDB");
     protected Connection connection;
