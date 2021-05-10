@@ -1,69 +1,130 @@
 package data;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import logic.AllCarModels;
+import logic.Car;
 
-public class CarModel {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
+public class CarModel extends Car{
+    Car car = new Car();
 
-    public int id;
-    public StringProperty model_name, price, horsepower;
-    public IntegerProperty point,  draws;
-    public IntegerProperty hp = new SimpleIntegerProperty(50);
-    public boolean hasWon = true;
-
-    public CarModel(int id, String model_name, String price, String horsepower) {
-        this.id = id;
-        this.model_name = new SimpleStringProperty(model_name);
-        this.price = new SimpleStringProperty(price);
-        this.horsepower = new SimpleStringProperty(horsepower);
-
-
+    public ArrayList<Car> getAllCarModels() {
+        return getCarModelsByCondition("0 = 0");
     }
 
-    public void setModel_name(String model_name){
-        this.model_name.set(model_name);
+    public boolean addNewCarModel(CarModel carModel) {
+        try {
+            String sql = "INSERT INTO carmodels VALUES ('" +
+                    carModel.getModel_name() + "', '" +
+                    carModel.getPrice() + "', '" +
+                    carModel.getHorsepower() +")";
+
+            System.out.println(sql);
+            Statement statement = DataLayer.instance.connection.createStatement();
+            int affectedRows = statement.executeUpdate(sql);
+
+            ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
+            if (resultSet.next()){
+                int autoKey = resultSet.getInt(1);
+                carModel.setId(autoKey);
+            }
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public StringProperty model_nameProperty() {
-        return model_name;
+    public boolean deleteCarModel(CarModel carModel) {
+        try {
+            String condition = "id=" + carModel.getId();
+            String sql = "DELETE FROM carmodels WHERE " + condition;
+            System.out.println(sql);
+            Statement statement = DataLayer.instance.connection.createStatement();
+            int affectedRows = statement.executeUpdate(sql);
+
+            return (affectedRows == 1);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public StringProperty getModel_name() {
-        return model_name;
+    public boolean updateTeam(CarModel carModel) {
+        try {
+            StringBuffer assignments = new StringBuffer();
+            assignments.append("model_name='" + carModel.getModel_name() + "', ");
+            assignments.append("Vundet='" + carModel.getPrice() + "', ");
+            assignments.append("Tabte='" + carModel.getHorsepower());
+
+            String condition = "id=" + carModel.getId();
+
+            String sql = "UPDATE carmodels SET " + assignments +
+                    " WHERE " + condition;
+
+            System.out.println(sql);
+            Statement statement = DataLayer.instance.connection.createStatement();
+            int affectedRows = statement.executeUpdate(sql);
+            return (affectedRows == 1);
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public StringProperty priceProperty() {
-        return price;
+    private ArrayList<Car> getCarModelsByCondition(String condition) {
+        System.out.println("condition: " + condition);
+        try {
+            String sql = "SELECT * FROM carmodels WHERE " + condition;
+            Statement statement = DataLayer.instance.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {// iteration starter 'before first'
+                int id = resultSet.getInt("car_model_id");
+                String modelName = resultSet.getString("model_name");
+                String price = resultSet.getString("price");
+                String horsepower = resultSet.getString("horsepower");
+
+                Car carmodel = new Car(id, modelName, price, horsepower);
+                AllCarModels.allCars.add(carmodel);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return AllCarModels.allCars;
     }
 
-    public String getPrice() {
-        return price.get();
+    public ArrayList<Car> getCarModelList() {
+        ArrayList<Car> carModelTable = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM carmodels ORDER BY car_model_id DESC";
+            Statement statement = DataLayer.instance.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // iteration starter 'before first'
+            while (resultSet.next()) {
+                // hent data fra denne række
+                int id = resultSet.getInt("car_model_id");
+                String modelName = resultSet.getString("model_name");
+                String price = resultSet.getString("price");
+                String horsepower = resultSet.getString("horsepower");
+
+
+                Car carModel = new Car(id, modelName, price, horsepower);
+                carModelTable.add(carModel);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return carModelTable;
     }
-
-    public StringProperty horsepowerProperty() {
-        return horsepower;
-    }
-
-    public String getHorsepower() {
-        return horsepower.get();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-    @Override
-    public String toString() {
-        return model_name.get();
-    }
-
-
 }

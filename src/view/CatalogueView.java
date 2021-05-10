@@ -1,6 +1,6 @@
 package view;
 //Viser tilgængelige bil modeller
-import data.CarModel;
+import logic.Car;
 import data.DataLayer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +13,7 @@ public class CatalogueView {
 
     public VBox createView() {
         TableView table = new TableView();
-        ObservableList<CarModel> ModelList = FXCollections.observableArrayList(DataLayer.instance.getCarModelList());
+        ObservableList<Car> ModelList = FXCollections.observableArrayList(DataLayer.instance.getCarModelList());
 
         table.setEditable(false);
         table.setMinWidth(700);
@@ -22,15 +22,15 @@ public class CatalogueView {
 
         TableColumn modelName = new TableColumn<>("Model Name");
         modelName.setMinWidth(200);
-        modelName.setCellValueFactory(new PropertyValueFactory<CarModel, String>("model_name"));
+        modelName.setCellValueFactory(new PropertyValueFactory<Car, String>("model_name"));
 
         TableColumn price = new TableColumn<>("Price");
         price.setMinWidth(150);
-        price.setCellValueFactory(new PropertyValueFactory<CarModel, String>("price"));
+        price.setCellValueFactory(new PropertyValueFactory<Car, String>("price"));
 
         TableColumn horsepower = new TableColumn<>("Horsepower");
         horsepower.setMinWidth(150);
-        horsepower.setCellValueFactory(new PropertyValueFactory<CarModel, String>("horsepower"));
+        horsepower.setCellValueFactory(new PropertyValueFactory<Car, String>("horsepower"));
 
 
         table.getColumns().addAll(modelName, price, horsepower);

@@ -1,6 +1,7 @@
 package data;
 
 import logic.AllCarModels;
+import logic.Car;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class DataLayer {
 
     public static DataLayer instance = new DataLayer("YearProjectDB");
-    private Connection connection;
+    protected Connection connection;
 
     public  DataLayer(String databaseName) {
         loadJdbcDriver();
@@ -48,98 +49,9 @@ public class DataLayer {
         }
     }
 
-    public ArrayList<CarModel> getAllCarModels() {
-        return getCarModelsByCondition("0 = 0");
-    }
 
-    public boolean addTeams(CarModel carModel) {
-        try {
-            String sql = "INSERT INTO carmodels VALUES ('" +
-                    carModel.getModel_name() + "', '" +
-                    carModel.getPrice() + "', '" +
-                    carModel.getHorsepower() +")";
-
-            System.out.println(sql);
-            Statement statement = connection.createStatement();
-            int affectedRows = statement.executeUpdate(sql);
-
-            ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
-            if (resultSet.next()){
-                int autoKey = resultSet.getInt(1);
-                carModel.setId(autoKey);
-            }
-            return true;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean deleteCarModel(CarModel carModel) {
-        try {
-            String condition = "id=" + carModel.getId();
-            String sql = "DELETE FROM carmodels WHERE " + condition;
-            System.out.println(sql);
-            Statement statement = connection.createStatement();
-            int affectedRows = statement.executeUpdate(sql);
-
-            return (affectedRows == 1);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateTeam(CarModel carModel) {
-        try {
-            StringBuffer assignments = new StringBuffer();
-            assignments.append("model_name='" + carModel.getModel_name() + "', ");
-            assignments.append("Vundet='" + carModel.getPrice() + "', ");
-            assignments.append("Tabte='" + carModel.getHorsepower());
-
-            String condition = "id=" + carModel.getId();
-
-            String sql = "UPDATE carmodels SET " + assignments +
-                    " WHERE " + condition;
-
-            System.out.println(sql);
-            Statement statement = connection.createStatement();
-            int affectedRows = statement.executeUpdate(sql);
-            return (affectedRows == 1);
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private ArrayList<CarModel> getCarModelsByCondition(String condition) {
-        System.out.println("condition: " + condition);
-        try {
-            String sql = "SELECT * FROM carmodels WHERE " + condition;
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {// iteration starter 'before first'
-                int id = resultSet.getInt("car_model_id");
-                String modelName = resultSet.getString("model_name");
-                String price = resultSet.getString("price");
-                String horsepower = resultSet.getString("horsepower");
-
-                CarModel carmodel = new CarModel(id, modelName, price, horsepower);
-                AllCarModels.allCarModels.add(carmodel);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return AllCarModels.allCarModels;
-    }
-
-    public ArrayList<CarModel> getCarModelList() {
-        ArrayList<CarModel> carModelTable = new ArrayList<>();
+    public ArrayList<Car> getCarModelList() {
+        ArrayList<Car> carModelTable = new ArrayList<>();
 
         try {
             String sql = "SELECT * FROM carmodels ORDER BY car_model_id DESC";
@@ -154,7 +66,7 @@ public class DataLayer {
                 String horsepower = resultSet.getString("horsepower");
 
 
-                CarModel carModel = new CarModel(id, modelName, price, horsepower);
+                Car carModel = new Car(id, modelName, price, horsepower);
                 carModelTable.add(carModel);
             }
 
@@ -163,4 +75,5 @@ public class DataLayer {
         }
         return carModelTable;
     }
+
 }
