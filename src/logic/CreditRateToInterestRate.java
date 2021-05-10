@@ -8,5 +8,4 @@ package logic;
 
 public class CreditRateToInterestRate {
 
-
 }
