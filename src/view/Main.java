@@ -2,6 +2,7 @@ package view;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import logic.CreditRateToInterestRate;
 import logic.WriteCSV;
 
 public class Main extends Application {
@@ -16,6 +17,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        //WriteCSV.writeCsvFile("CsvTest.csv");
+        CreditRateToInterestRate.rkiInterestCalc("A");
     }
 }

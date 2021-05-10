@@ -12,8 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import logic.CreditRator;
 import logic.CsvWriter;
 import logic.Dir;
+import logic.Rating;
 
 import java.time.LocalDate;
 
@@ -42,16 +44,17 @@ public class NewOfferView {
         Label cprLabel = new Label("CPR: ");
         GridPane.setConstraints(cprLabel,0,0);
         TextField cprTextField = new TextField("");
-        cprTextField.setPromptText("XXXXXX-XXXX");
+        cprTextField.setPromptText("dd-mm-yy-xx");
         GridPane.setConstraints(cprTextField,1,0);
         Button getButton = new Button("Get");
+
         GridPane.setConstraints(getButton,2,0);
 
 
         Label creditLabel = new Label("Credit Rating: ");
-        GridPane.setConstraints(creditLabel,55,0);
+        GridPane.setConstraints(creditLabel,50,0);
         Text creditRatingTextField = new Text();
-        GridPane.setConstraints(creditRatingTextField,56,0);
+        GridPane.setConstraints(creditRatingTextField,51,0);
 
         Label nameLabel = new Label("Name: ");
         TextField nameTextField = new TextField();
@@ -95,7 +98,7 @@ public class NewOfferView {
         GridPane.setConstraints(downPaymentLabel,0,9);
         GridPane.setConstraints(downPaymentTextField,1,9);
 
-        Label installmentPeriodLabel = new Label("Down Payment: ");
+        Label installmentPeriodLabel = new Label("Installment Period: ");
         ComboBox installmentPeriodCombobox = new ComboBox<String>(FXCollections.observableArrayList("1", "2", "3","4","5"));
         installmentPeriodCombobox.setPromptText("Number Of Years:");
         GridPane.setConstraints(installmentPeriodLabel,0,10);
@@ -187,6 +190,11 @@ public class NewOfferView {
 //                .or(installmentPeriodCombobox.valueProperty().isNull())
 //                .or(salesPersonCombobox.valueProperty().isNull());
 //        calcQuoteButton.disableProperty().bind(booleanBind);
+//        Rating creditRating = CreditRator.i().rate(cprTextField.getText());
+
+//
+        getButton.setOnAction(click -> CreditRator.i().rate(cprTextField.getText()));
+        getButton.setOnAction(click -> creditRatingTextField.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));
 
 
 
