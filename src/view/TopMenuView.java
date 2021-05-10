@@ -11,7 +11,8 @@ public class TopMenuView {
         Button customerButton = new Button("Customers");
         customerButton.setOnAction(click -> UIController.instance().switchCenter(new CustomerView().createView()));
 
-        Button newSalesButton = new Button("New Quote");
+        Button newSalesButton = new Button("New Offer");
+        newSalesButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));
 
         Button newCustomerButton = new Button("New Customer");
         newCustomerButton.setOnAction(click -> UIController.instance().switchCenter(new NewCustomerView().createView()));
@@ -20,7 +21,7 @@ public class TopMenuView {
         catalogButton.setOnAction(click -> UIController.instance().switchCenter(new CatalogueView().createView()));
 
         Button casesButton = new Button("Cases");
-        // skal pege til AllCasesView
+        casesButton.setOnAction(click -> UIController.instance().switchCenter(new AllCasesView().createView()));
         ToolBar root = new ToolBar(customerButton, newSalesButton, newCustomerButton, catalogButton, casesButton);
         root.setPrefWidth(700);
         return root;

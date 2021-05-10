@@ -9,6 +9,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import logic.CsvWriter;
+import logic.Dir;
+import logic.WriteCSV;
+
+import java.io.File;
 
 
 public class CustomerView {
@@ -92,7 +100,12 @@ public class CustomerView {
         Button editButton = new Button("  Edit  ");
         //GridPane.setConstraints(editButton,1,6);
         Button saveButton = new Button("  Save  ");
-        saveButton.setDisable(true);
+        //saveButton.setOnAction(klick -> Dir.save());
+
+
+
+
+        //saveButton.setDisable(true);
         // GridPane.setConstraints(saveButton,2,6);
         HBox crudBox = new HBox(editButton,saveButton);
         crudBox.setSpacing(5);
@@ -133,6 +146,7 @@ public class CustomerView {
 
         HBox gridBox = new HBox(userInfoPane);
         HBox root = new HBox(listViewBox,gridBox);
+
         root.setPrefWidth(700);
         return root;
     }

@@ -12,6 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import logic.CsvWriter;
+import logic.Dir;
+
+import java.time.LocalDate;
 
 public class NewOfferView {
 
@@ -46,7 +50,7 @@ public class NewOfferView {
 
         Label creditLabel = new Label("Credit Rating: ");
         GridPane.setConstraints(creditLabel,55,0);
-        Text creditRatingTextField = new Text("A");
+        Text creditRatingTextField = new Text();
         GridPane.setConstraints(creditRatingTextField,56,0);
 
         Label nameLabel = new Label("Name: ");
@@ -92,18 +96,43 @@ public class NewOfferView {
         GridPane.setConstraints(downPaymentTextField,1,9);
 
         Label installmentPeriodLabel = new Label("Down Payment: ");
-        ComboBox installmentPeriodCombobox = new ComboBox<String>(FXCollections.observableArrayList("One", "Two", "Three"));
-        installmentPeriodCombobox.setPromptText("Period:");
+        ComboBox installmentPeriodCombobox = new ComboBox<String>(FXCollections.observableArrayList("1", "2", "3","4","5"));
+        installmentPeriodCombobox.setPromptText("Number Of Years:");
         GridPane.setConstraints(installmentPeriodLabel,0,10);
         GridPane.setConstraints(installmentPeriodCombobox,1,10);
+
+        Label startLabel = new Label("Start Date: ");
+        DatePicker startDatePicker = new DatePicker();
+        startDatePicker.setPromptText("Pick Start Date");
+        GridPane.setConstraints(startLabel,0,11);
+        GridPane.setConstraints(startDatePicker,1,11);
+
+        Label endLabel = new Label("End Date: ");
+        DatePicker endDatePicker = new DatePicker();
+        endDatePicker.setPromptText("Pick End Date");
+        GridPane.setConstraints(endLabel,0,12);
+        GridPane.setConstraints(endDatePicker,1,12);
 
         Label salesPersonLabel = new Label("Sales Person: ");
         ComboBox salesPersonCombobox = new ComboBox<String>(FXCollections.observableArrayList("John", "Carsten", "Henning"));
         salesPersonCombobox.setPromptText("Sales Person:");
-        GridPane.setConstraints(salesPersonLabel,0,11);
-        GridPane.setConstraints(salesPersonCombobox,1,11);
+        GridPane.setConstraints(salesPersonLabel,0,13);
+        GridPane.setConstraints(salesPersonCombobox,1,13);
 
-        Button calcQuoteButton = new Button("Calculate Quote");
+        Button calcQuoteButton = new Button("Calculate Sales Offer");
+        calcQuoteButton.setOnAction(click -> UIController.instance().switchCenter(new CaseDetailsView().createScene()));
+//        calcQuoteButton.setOnAction(klick ->
+//                CsvWriter.saveToCsv(
+//                nameTextField.getText(),
+//                phoneTextField.getText(),
+//                emailTextField.getText(),
+//                adressTextField.getText(),
+//                carModelCombobox.getValue().toString(),
+//                priceTextField.getText(),
+//                downPaymentTextField.getText(),
+//                installmentPeriodCombobox.getValue().toString(),
+//                salesPersonCombobox.getValue().toString()
+//                ));
         GridPane.setConstraints(calcQuoteButton,19,15);
 
         Button clearButton = new Button("      Clear       ");
@@ -134,6 +163,10 @@ public class NewOfferView {
                 downPaymentTextField,
                 installmentPeriodLabel,
                 installmentPeriodCombobox,
+                startLabel,
+                startDatePicker,
+                endLabel,
+                endDatePicker,
                 salesPersonLabel,
                 salesPersonCombobox,
                 calcQuoteButton,
@@ -142,18 +175,18 @@ public class NewOfferView {
 
         );
 
-        BooleanBinding booleanBind = cprTextField.textProperty().isEmpty()
-                .or(creditRatingTextField.textProperty().isEmpty())
-                .or(nameTextField.textProperty().isEmpty())
-                .or(phoneTextField.textProperty().isEmpty())
-                .or(emailTextField.textProperty().isEmpty())
-                .or(adressTextField.textProperty().isEmpty())
-                .or(carModelCombobox.valueProperty().isNull())
-                .or(priceTextField.textProperty().isEmpty())
-                .or(downPaymentTextField.textProperty().isEmpty())
-                .or(installmentPeriodCombobox.valueProperty().isNull())
-                .or(salesPersonCombobox.valueProperty().isNull());
-        calcQuoteButton.disableProperty().bind(booleanBind);
+//        BooleanBinding booleanBind = cprTextField.textProperty().isEmpty()
+//                .or(creditRatingTextField.textProperty().isEmpty())
+//                .or(nameTextField.textProperty().isEmpty())
+//                .or(phoneTextField.textProperty().isEmpty())
+//                .or(emailTextField.textProperty().isEmpty())
+//                .or(adressTextField.textProperty().isEmpty())
+//                .or(carModelCombobox.valueProperty().isNull())
+//                .or(priceTextField.textProperty().isEmpty())
+//                .or(downPaymentTextField.textProperty().isEmpty())
+//                .or(installmentPeriodCombobox.valueProperty().isNull())
+//                .or(salesPersonCombobox.valueProperty().isNull());
+//        calcQuoteButton.disableProperty().bind(booleanBind);
 
 
 
