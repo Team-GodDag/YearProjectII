@@ -100,29 +100,4 @@ public class CarModel extends Car{ // Henrik
         return AllCarModels.allCars;
     }
 
-//    public ArrayList<Car> getCarModelList() { ER FLYTTET TIL DATALAYER, SÅ SKAL NOK SLETTES HER
-//        ArrayList<Car> carModelTable = new ArrayList<>();
-//
-//        try {
-//            String sql = "SELECT * FROM carmodels ORDER BY car_model_id DESC";
-//            Statement statement = DataLayer.instance.connection.createStatement();
-//            ResultSet resultSet = statement.executeQuery(sql);
-//            // iteration starter 'before first'
-//            while (resultSet.next()) {
-//                // hent data fra denne række
-//                int id = resultSet.getInt("car_model_id");
-//                String modelName = resultSet.getString("model_name");
-//                String price = resultSet.getString("price");
-//                String horsepower = resultSet.getString("horsepower");
-//
-//
-//                Car carModel = new Car(id, modelName, price, horsepower);
-//                carModelTable.add(carModel);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return carModelTable;
-//    }
 }
