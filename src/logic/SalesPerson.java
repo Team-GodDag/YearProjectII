@@ -5,11 +5,11 @@ import javafx.beans.property.StringProperty;
 
 public class SalesPerson {
     public int id;
-    public StringProperty model_name, lastname, email, address, phonenumber, limit;
+    public StringProperty firstname, lastname, email, address, phonenumber, limit;
 
     public SalesPerson(int id, String firstname, String lastname, String email,String address, String phonenumber, String limit) {
         this.id = id;
-        this.model_name = new SimpleStringProperty(firstname);
+        this.firstname = new SimpleStringProperty(firstname);
         this.lastname = new SimpleStringProperty(lastname);
         this.email = new SimpleStringProperty(email);
         this.address = new SimpleStringProperty(address);
@@ -28,16 +28,16 @@ public class SalesPerson {
         this.id = id;
     }
 
-    public String getModel_name() {
-        return model_name.get();
+    public String getFirstname() {
+        return firstname.get();
     }
 
-    public StringProperty model_nameProperty() {
-        return model_name;
+    public StringProperty firstnameProperty() {
+        return firstname;
     }
 
-    public void setModel_name(String model_name) {
-        this.model_name.set(model_name);
+    public void setFirstname(String firstname) {
+        this.firstname.set(firstname);
     }
 
     public String getLastname() {

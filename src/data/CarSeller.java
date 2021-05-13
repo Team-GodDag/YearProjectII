@@ -19,9 +19,12 @@ public class CarSeller extends SalesPerson{ // Henrik
     public boolean addCarSeller(CarSeller carSeller) {
         try {
             String sql = "INSERT INTO carsellers VALUES ('" +
-                    carSeller.getModel_name() + "', '" +
-                    carSeller.getPrice() + "', '" +
-                    carSeller.getHorsepower() +")";
+                    carSeller.getFirstname() + "', '" +
+                    carSeller.getLastname() + "', '" +
+                    carSeller.getEmail() + "', '" +
+                    carSeller.getAddress() + "', '" +
+                    carSeller.getPhonenumber() + "', '" +
+                    carSeller.getLimit() +")";
 
             System.out.println(sql);
             Statement statement = DataLayer.instance.connection.createStatement();
@@ -59,11 +62,11 @@ public class CarSeller extends SalesPerson{ // Henrik
     public boolean updateCarSeller(CarSeller carSeller) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("firstname='" + carSeller.getModel_name() + "', ");
-            assignments.append("lastname='" + carSeller.getPrice() + "', ");
-            assignments.append("email='" + carSeller.getHorsepower());
-            assignments.append("phonenumber='" + carSeller.getHorsepower());
-            assignments.append("limit='" + carSeller.getHorsepower());
+            assignments.append("firstname='" + carSeller.getFirstname() + "', ");
+            assignments.append("lastname='" + carSeller.getLastname() + "', ");
+            assignments.append("email='" + carSeller.getEmail());
+            assignments.append("phonenumber='" + carSeller.getPhonenumber());
+            assignments.append("limit='" + carSeller.getLimit());
 
 
             String condition = "id=" + carSeller.getId();
