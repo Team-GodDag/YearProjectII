@@ -17,6 +17,9 @@ public class SalesPerson {
         this.limit = new SimpleStringProperty(limit);
     }
 
+    public SalesPerson(){
+
+    }
     public int getId() {
         return id;
     }

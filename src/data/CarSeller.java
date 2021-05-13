@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CarSeller extends Car{ // Henrik
+public class CarSeller extends SalesPerson{ // Henrik
     CarSeller carSeller = new CarSeller();
 
     public ArrayList<SalesPerson> getAllSalesPerons() {
