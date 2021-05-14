@@ -4,7 +4,7 @@ package logic;
 
 public class PaymentPeriodToInterestRate {
 
-    public double periodInterestRate(int paymentYears){
+    public int periodInterestRate(int paymentYears){
         int paymentYearsInterestRate = 0;
         if(paymentYears > 3) {
             paymentYearsInterestRate = 1;
@@ -12,6 +12,4 @@ public class PaymentPeriodToInterestRate {
         }
         return paymentYearsInterestRate;
     }
-
-
 }

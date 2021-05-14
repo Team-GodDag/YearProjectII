@@ -100,7 +100,7 @@ public class CustomerView {
         Button editButton = new Button("  Edit  ");
         //GridPane.setConstraints(editButton,1,6);
         Button saveButton = new Button("  Save  ");
-        //saveButton.setOnAction(klick -> Dir.save());
+        saveButton.setOnAction(klick -> WriteCSV.writeCsvFile("Johnny"));
 
 
 
