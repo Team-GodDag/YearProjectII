@@ -64,12 +64,12 @@ public class CustomerJDBCimpl implements CustomerJDBC {
     public boolean updateCustomer(CustomerEntity customer) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("cpr='" + customer.getCpr() + "', ");
-            assignments.append("firstname='" + customer.getFirstName() + "', ");
-            assignments.append("lastname='" + customer.getLastName() + "', ");
-            assignments.append("email='" + customer.getEmail());
-            assignments.append("address='" + customer.getAddress());
-            assignments.append("phonenumber='" + customer.getPhone());
+            assignments.append("cpr='"          + customer.getCpr() + "', ");
+            assignments.append("firstname='"    + customer.getFirstName() + "', ");
+            assignments.append("lastname='"     + customer.getLastName() + "', ");
+            assignments.append("email='"        + customer.getEmail());
+            assignments.append("address='"      + customer.getAddress());
+            assignments.append("phonenumber='"  + customer.getPhone());
 
 
             String condition = "id=" + customer.getId();
@@ -99,15 +99,15 @@ public class CustomerJDBCimpl implements CustomerJDBC {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
-                int id = resultSet.getInt("seller_id");
-                String firstname = resultSet.getString("firstname");
-                String lastname = resultSet.getString("lastname");
-                String email = resultSet.getString("email");
-                String address = resultSet.getString("address");
-                String phonenumber = resultSet.getString("phonenumber");
-                String limit = resultSet.getString("limit");
+                int id              = resultSet.getInt("customer_id");
+                String cpr          = resultSet.getString("cpr");
+                String firstName    = resultSet.getString("firstname");
+                String lastName     = resultSet.getString("lastname");
+                String email        = resultSet.getString("email");
+                String address      = resultSet.getString("address");
+                String phone  = resultSet.getString("phonenumber");
 
-                CustomerEntity customer = new CustomerEntity(id, firstname, lastname, email ,address , phonenumber, limit );
+                CustomerEntity customer = new CustomerEntity(id, cpr, firstName, lastName, email ,address , phone);
                 customers.add(customer);
             }
         } catch (SQLException e) {

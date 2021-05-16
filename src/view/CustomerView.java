@@ -1,6 +1,7 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
+import entities.CustomerEntity;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,7 +14,11 @@ import javafx.scene.text.Text;
 
 public class CustomerView {
 
-    public Node createView(){
+    CustomerEntity customer;
+    Text nameText, phoneText, emailText, adressText, cprText;
+
+
+    public Node createView() {
         TextField searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
         searchTextField.setPromptText("Søg efter CPR Nummer");
@@ -43,27 +48,27 @@ public class CustomerView {
 //
         Label nameLabel = new Label("Navn: ");
         GridPane.setConstraints(nameLabel,0,0);
-        Text nameText = new Text("Lars Nielsen");
+        nameText = new Text();
         GridPane.setConstraints(nameText,1,0);
 
         Label phoneLabel = new Label("Telefon: ");
         GridPane.setConstraints(phoneLabel,0,1);
-        Text phoneText = new Text("40316887");
+        phoneText = new Text();
         GridPane.setConstraints(phoneText,1,1);
 
         Label emailLabel = new Label("Email: ");
         GridPane.setConstraints(emailLabel,0,2);
-        Text emailText = new Text("lars@hotmail.com");
+        emailText = new Text();
         GridPane.setConstraints(emailText,1,2);
 
         Label adressLabel = new Label("Adresse: ");
         GridPane.setConstraints(adressLabel,0,3);
-        Text adressText = new Text("Skur 3 TV.");
+        adressText = new Text();
         GridPane.setConstraints(adressText,1,3);
 
         Label cprLabel = new Label("CPR Nr.: ");
         GridPane.setConstraints(cprLabel,0,4);
-        Text cprText = new Text("123456-7899");
+        cprText = new Text();
         GridPane.setConstraints(cprText,1,4);
 
         Label historyLabel = new Label("Historik: ");
@@ -78,7 +83,7 @@ public class CustomerView {
 
         Label customerNumLabel = new Label("Kunde Nr.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
-        Text customerNumText = new Text("01");
+        Text customerNumText = new Text("01");      //skal det med? er det id?
         GridPane.setConstraints(customerNumText,6,1);
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
@@ -98,13 +103,8 @@ public class CustomerView {
         crudBox.setSpacing(5);
         GridPane.setConstraints(crudBox,0,8);
 
-
-
-
-
 //        Label customerNumLabel = new Label("Kunde nummer: 00001");
 //        GridPane.setConstraints(rkiLabel,11,0);
-
 
         userInfoPane.getChildren().addAll(
                 nameLabel,
@@ -135,6 +135,13 @@ public class CustomerView {
         HBox root = new HBox(listViewBox,gridBox);
         root.setPrefWidth(700);
         return root;
+    }
+
+    private void setCustomerInfo(CustomerEntity customer) {
+        this.customer = customer;
+        this.emailText.setText(customer.getEmail());
+
+
     }
 
 }
