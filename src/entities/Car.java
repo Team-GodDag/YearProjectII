@@ -1,4 +1,4 @@
-package entities;
+package entities;       //måske POJOs?
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -25,11 +25,9 @@ import java.util.List;
 public class CustomerView {
 
     private Customer customer;
-//    private CustomerDataAccess customerDataAccess;    //nono
     private Text nameText, phoneText, emailText, adressText, cprText;
 
     public Node createView() {
-        setCustomerInfo(customer);
 
         TextField searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
@@ -38,9 +36,10 @@ public class CustomerView {
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
 
+//LISTVIEW ---------------------START
         ListView listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.createCustomerList());        //skal kun snakke med interface - but how
+        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.createCustomerList());        //skal den have sit eget interface?
         ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(customerList);
         listView.setItems(observableCustomerlist);
 
@@ -66,9 +65,9 @@ public class CustomerView {
                 return cell;
             }
         });
+//LISTVIEW ---------------------END
 
-
-        Label emptyLabel = new Label(" ");      //????????
+        Label emptyLabel = new Label(" ");              //????????
 
         HBox topHbox = new HBox(searchTextField,emptyLabel,goButton);
         topHbox.setSpacing(5);
@@ -85,32 +84,29 @@ public class CustomerView {
         userInfoPane.setVgap(16);
         userInfoPane.setHgap(20);
 
-
-//
-//
         Label nameLabel = new Label("Navn: ");
-        GridPane.setConstraints(nameLabel,0,0);
         nameText = new Text();
+        GridPane.setConstraints(nameLabel,0,0);
         GridPane.setConstraints(nameText,1,0);
 
         Label phoneLabel = new Label("Telefon: ");
-        GridPane.setConstraints(phoneLabel,0,1);
         phoneText = new Text();
+        GridPane.setConstraints(phoneLabel,0,1);
         GridPane.setConstraints(phoneText,1,1);
 
         Label emailLabel = new Label("Email: ");
-        GridPane.setConstraints(emailLabel,0,2);
         emailText = new Text();
+        GridPane.setConstraints(emailLabel,0,2);
         GridPane.setConstraints(emailText,1,2);
 
         Label adressLabel = new Label("Adresse: ");
-        GridPane.setConstraints(adressLabel,0,3);
         adressText = new Text();
+        GridPane.setConstraints(adressLabel,0,3);
         GridPane.setConstraints(adressText,1,3);
 
         Label cprLabel = new Label("CPR Nr.: ");
-        GridPane.setConstraints(cprLabel,0,4);
         cprText = new Text();
+        GridPane.setConstraints(cprLabel,0,4);
         GridPane.setConstraints(cprText,1,4);
 
         Label historyLabel = new Label("Historik: ");
@@ -125,14 +121,14 @@ public class CustomerView {
 
         Label customerNumLabel = new Label("Kunde Nr.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
-        Text customerNumText = new Text("01");      //skal det med? er det id?
+        Text customerNumText = new Text("01");                  //skal det med? er det id?
         GridPane.setConstraints(customerNumText,6,1);
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
         GridPane.setConstraints(formerSalesLabel, 5,3);
         Text formerSalesText = new Text("(3)");
         Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIController.instance().switchCenter(new CustomerSalesView().createView()));
+        seButton.setOnAction(Klik -> UIController.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
         GridPane.setConstraints(seButton,7,3);
         GridPane.setConstraints(formerSalesText,6,3);
 
