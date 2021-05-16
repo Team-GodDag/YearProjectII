@@ -1,9 +1,12 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
+import data.CustomerJDBC;
+import data.CustomerJDBCimpl;
 import entities.CustomerEntity;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -11,22 +14,32 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class CustomerView {
 
     CustomerEntity customer;
     Text nameText, phoneText, emailText, adressText, cprText;
 
-
     public Node createView() {
+        setCustomerInfo(customer);
+
         TextField searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
         searchTextField.setPromptText("Søg efter CPR Nummer");
+
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
+
         ListView listView = new ListView();
         listView.setPrefHeight(600);
-        Label emptyLabel = new Label(" ");
+        List<CustomerEntity> customerList = new ArrayList<CustomerEntity>(new CustomerJDBCimpl().getAllCustomers());
+        ObservableList<CustomerEntity> names = FXCollections.observableArrayList(customerList);
+        listView.setItems(names);
+
+        Label emptyLabel = new Label(" ");      //????????
 
         HBox topHbox = new HBox(searchTextField,emptyLabel,goButton);
         topHbox.setSpacing(5);
@@ -130,7 +143,6 @@ public class CustomerView {
         );
 
 
-
         HBox gridBox = new HBox(userInfoPane);
         HBox root = new HBox(listViewBox,gridBox);
         root.setPrefWidth(700);
@@ -139,9 +151,14 @@ public class CustomerView {
 
     private void setCustomerInfo(CustomerEntity customer) {
         this.customer = customer;
-        this.emailText.setText(customer.getEmail());
-
-
+        if(customer == null) {
+            return;
+        }
+        cprText.setText(customer.getCpr());
+        emailText.setText(customer.getEmail());
+        nameText.setText(customer.getFirstName() + " " + customer.getLastName());
+        phoneText.setText(customer.getPhone());
+        adressText.setText(customer.getAddress());
     }
 
 }

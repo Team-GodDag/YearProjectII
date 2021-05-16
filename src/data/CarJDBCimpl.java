@@ -1,25 +1,27 @@
 package data;
 
 import logic.AllCarModels;
-import logic.Car;
+import entities.CarEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CarModel extends Car{ // Henrik
-    Car car = new Car();
+public class CarJDBCimpl extends CarEntity implements CarJDBC { // Henrik
+    CarEntity car = new CarEntity();
 
-    public ArrayList<Car> getAllCarModels() {
+    @Override
+    public ArrayList<CarEntity> getAllCarModels() {
         return getCarModelsByCondition("0 = 0");
     }
 
-    public boolean addNewCarModel(CarModel carModel) {
+    @Override
+    public boolean addNewCarModel(CarJDBCimpl carJDBCimpl) {
         try {
             String sql = "INSERT INTO carmodels VALUES ('" +
-                    carModel.getModel_name() + "', '" +
-                    carModel.getPrice() + "', '" +
-                    carModel.getHorsepower() +")";
+                    carJDBCimpl.getModel_name() + "', '" +
+                    carJDBCimpl.getPrice() + "', '" +
+                    carJDBCimpl.getHorsepower() +")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -28,7 +30,7 @@ public class CarModel extends Car{ // Henrik
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
             if (resultSet.next()){
                 int autoKey = resultSet.getInt(1);
-                carModel.setId(autoKey);
+                carJDBCimpl.setId(autoKey);
             }
             return true;
         }
@@ -38,9 +40,10 @@ public class CarModel extends Car{ // Henrik
         }
     }
 
-    public boolean deleteCarModel(CarModel carModel) {
+    @Override
+    public boolean deleteCarModel(CarJDBCimpl carJDBCimpl) {
         try {
-            String condition = "id=" + carModel.getId();
+            String condition = "id=" + carJDBCimpl.getId();
             String sql = "DELETE FROM carmodels WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -54,14 +57,15 @@ public class CarModel extends Car{ // Henrik
         }
     }
 
-    public boolean updateCarModel(CarModel carModel) {
+    @Override
+    public boolean updateCarModel(CarJDBCimpl carJDBCimpl) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("model_name='" + carModel.getModel_name() + "', ");
-            assignments.append("price='" + carModel.getPrice() + "', ");
-            assignments.append("horsepower='" + carModel.getHorsepower());
+            assignments.append("model_name='" + carJDBCimpl.getModel_name() + "', ");
+            assignments.append("price='" + carJDBCimpl.getPrice() + "', ");
+            assignments.append("horsepower='" + carJDBCimpl.getHorsepower());
 
-            String condition = "id=" + carModel.getId();
+            String condition = "id=" + carJDBCimpl.getId();
 
             String sql = "UPDATE carmodels SET " + assignments +
                     " WHERE " + condition;
@@ -78,7 +82,8 @@ public class CarModel extends Car{ // Henrik
         }
     }
 
-    private ArrayList<Car> getCarModelsByCondition(String condition) {
+    @Override
+    public ArrayList<CarEntity> getCarModelsByCondition(String condition) {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carmodels WHERE " + condition;
@@ -91,7 +96,7 @@ public class CarModel extends Car{ // Henrik
                 String price = resultSet.getString("price");
                 String horsepower = resultSet.getString("horsepower");
 
-                Car carmodel = new Car(id, modelName, price, horsepower);
+                CarEntity carmodel = new CarEntity(id, modelName, price, horsepower);
                 AllCarModels.allCars.add(carmodel);
             }
         } catch (SQLException e) {

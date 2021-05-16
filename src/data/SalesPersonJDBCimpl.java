@@ -1,6 +1,6 @@
 package data;
 
-import logic.SalesPerson;
+import entities.SalesPerson;
 import logic.AllSalesPersons;
 
 import java.sql.ResultSet;
@@ -8,22 +8,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CarSeller extends SalesPerson{ // Henrik
-    CarSeller carSeller = new CarSeller();
+public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC { // Henrik
+    SalesPersonJDBCimpl salesPersonJDBCimpl = new SalesPersonJDBCimpl();
 
+    @Override
     public ArrayList<SalesPerson> getAllSalesPerons() {
         return getCarSellerByCondition("0 = 0");
     }
 
-    public boolean addCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean addCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {
         try {
             String sql = "INSERT INTO carsellers VALUES ('" +
-                    carSeller.getFirstname()    + "', '" +
-                    carSeller.getLastname()     + "', '" +
-                    carSeller.getEmail()        + "', '" +
-                    carSeller.getAddress()      + "', '" +
-                    carSeller.getPhonenumber()  + "', '" +
-                    carSeller.getLimit()        + ")";
+                    salesPersonJDBCimpl.getFirstname()    + "', '" +
+                    salesPersonJDBCimpl.getLastname()     + "', '" +
+                    salesPersonJDBCimpl.getEmail()        + "', '" +
+                    salesPersonJDBCimpl.getAddress()      + "', '" +
+                    salesPersonJDBCimpl.getPhonenumber()  + "', '" +
+                    salesPersonJDBCimpl.getLimit()        + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -32,7 +34,7 @@ public class CarSeller extends SalesPerson{ // Henrik
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
             if (resultSet.next()){
                 int autoKey = resultSet.getInt(1);
-                carSeller.setId(autoKey);
+                salesPersonJDBCimpl.setId(autoKey);
             }
             return true;
         }
@@ -42,9 +44,10 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    public boolean deleteCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean deleteCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {       //bør nok renames
         try {
-            String condition = "id=" + carSeller.getId();
+            String condition = "id=" + salesPersonJDBCimpl.getId();
             String sql = "DELETE FROM carsellers WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -58,17 +61,18 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    public boolean updateCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean updateCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("firstname='" + carSeller.getFirstname() + "', ");
-            assignments.append("lastname='" + carSeller.getLastname() + "', ");
-            assignments.append("email='" + carSeller.getEmail());
-            assignments.append("phonenumber='" + carSeller.getPhonenumber());
-            assignments.append("limit='" + carSeller.getLimit());
+            assignments.append("firstname='" + salesPersonJDBCimpl.getFirstname() + "', ");
+            assignments.append("lastname='" + salesPersonJDBCimpl.getLastname() + "', ");
+            assignments.append("email='" + salesPersonJDBCimpl.getEmail());
+            assignments.append("phonenumber='" + salesPersonJDBCimpl.getPhonenumber());
+            assignments.append("limit='" + salesPersonJDBCimpl.getLimit());
 
 
-            String condition = "id=" + carSeller.getId();
+            String condition = "id=" + salesPersonJDBCimpl.getId();
 
             String sql = "UPDATE carsellers SET " + assignments +
                     " WHERE " + condition;
@@ -85,7 +89,8 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    private ArrayList<SalesPerson> getCarSellerByCondition(String condition) {
+    @Override
+    public ArrayList<SalesPerson> getCarSellerByCondition(String condition) {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;

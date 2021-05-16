@@ -1,6 +1,7 @@
 package logic;
 
-import data.CarSeller;
+import entities.SalesPerson;
+
 import java.util.ArrayList;
 
 public class AllSalesPersons {
