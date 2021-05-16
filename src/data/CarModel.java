@@ -22,7 +22,7 @@ public class CarModel extends Car{ // Henrik
                     carModel.getHorsepower() +")";
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -43,7 +43,7 @@ public class CarModel extends Car{ // Henrik
             String condition = "id=" + carModel.getId();
             String sql = "DELETE FROM carmodels WHERE " + condition;
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -67,7 +67,7 @@ public class CarModel extends Car{ // Henrik
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -82,7 +82,7 @@ public class CarModel extends Car{ // Henrik
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carmodels WHERE " + condition;
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'

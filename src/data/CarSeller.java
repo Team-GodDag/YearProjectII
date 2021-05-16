@@ -1,6 +1,5 @@
 package data;
 
-import logic.Car;
 import logic.SalesPerson;
 import logic.AllSalesPersons;
 
@@ -27,7 +26,7 @@ public class CarSeller extends SalesPerson{ // Henrik
                     carSeller.getLimit() +")";
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -48,7 +47,7 @@ public class CarSeller extends SalesPerson{ // Henrik
             String condition = "id=" + carSeller.getId();
             String sql = "DELETE FROM carsellers WHERE " + condition;
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -75,7 +74,7 @@ public class CarSeller extends SalesPerson{ // Henrik
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -90,7 +89,7 @@ public class CarSeller extends SalesPerson{ // Henrik
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
