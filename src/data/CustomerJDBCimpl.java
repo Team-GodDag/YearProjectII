@@ -1,5 +1,7 @@
 package data;
 
+import entities.CustomerEntity;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,7 +11,7 @@ public class CustomerJDBCimpl implements CustomerJDBC {
 
     @Override
     public ArrayList<CustomerEntity> getAllCustomers() {
-        return getCustomerByCondition("0 = 0");
+        return getCustomersByCondition("0 = 0");
     }
 
     @Override
@@ -17,11 +19,12 @@ public class CustomerJDBCimpl implements CustomerJDBC {
         try {
             String sql = "INSERT INTO customers VALUES ('" +
                     customer.getId()            + "', '" +
-                    customer.getFirstname()     + "', '" +
-                    customer.getLastname()      + "', '" +
+                    customer.getCpr()           + "', '" +
+                    customer.getFirstName()     + "', '" +
+                    customer.getLastName()      + "', '" +
                     customer.getEmail()         + "', '" +
                     customer.getAddress()       + "', '" +
-                    customer.getPhonenumber()   + "', '" +
+                    customer.getPhone()         + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -61,9 +64,9 @@ public class CustomerJDBCimpl implements CustomerJDBC {
     public boolean updateCustomer(CustomerEntity customer) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("cpr='") + customer.getCpr() + "', ");
-            assignments.append("firstname='" + customer.getFirstname() + "', ");
-            assignments.append("lastname='" + customer.getLastname() + "', ");
+            assignments.append("cpr='" + customer.getCpr() + "', ");
+            assignments.append("firstname='" + customer.getFirstName() + "', ");
+            assignments.append("lastname='" + customer.getLastName() + "', ");
             assignments.append("email='" + customer.getEmail());
             assignments.append("address='" + customer.getAddress());
             assignments.append("phonenumber='" + customer.getPhone());

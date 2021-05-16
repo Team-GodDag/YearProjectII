@@ -1,5 +1,7 @@
 package data;
 
+import entities.CustomerEntity;
+
 import java.util.ArrayList;
 
 public interface CustomerJDBC {

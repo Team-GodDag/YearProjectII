@@ -18,12 +18,12 @@ public class CarSeller extends SalesPerson{ // Henrik
     public boolean addCarSeller(CarSeller carSeller) {
         try {
             String sql = "INSERT INTO carsellers VALUES ('" +
-                    carSeller.getFirstname() + "', '" +
-                    carSeller.getLastname() + "', '" +
-                    carSeller.getEmail() + "', '" +
-                    carSeller.getAddress() + "', '" +
-                    carSeller.getPhonenumber() + "', '" +
-                    carSeller.getLimit() +")";
+                    carSeller.getFirstname()    + "', '" +
+                    carSeller.getLastname()     + "', '" +
+                    carSeller.getEmail()        + "', '" +
+                    carSeller.getAddress()      + "', '" +
+                    carSeller.getPhonenumber()  + "', '" +
+                    carSeller.getLimit()        + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
