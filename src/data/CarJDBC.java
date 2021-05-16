@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public interface CarJDBC {
     ArrayList<CarEntity> getAllCarModels();
 
-    boolean addNewCarModel(CarJDBCimpl carJDBCimpl);
+    boolean addCar(CarJDBCimpl carJDBCimpl);
 
-    boolean deleteCarModel(CarJDBCimpl carJDBCimpl);
+    boolean deleteCar(CarJDBCimpl carJDBCimpl);
 
-    boolean updateCarModel(CarJDBCimpl carJDBCimpl);
+    boolean updateCar(CarJDBCimpl carJDBCimpl);
 
-    ArrayList<CarEntity> getCarModelsByCondition(String condition);
+    ArrayList<CarEntity> getCarsByCondition(String condition);
 }

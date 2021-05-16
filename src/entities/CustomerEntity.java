@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.ArrayList;
-
 public class CustomerEntity {     //lavet af Rikke    Skal den bare hedde Customer?
 
     private int id;

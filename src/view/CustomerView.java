@@ -4,15 +4,19 @@ package view;
 import data.CustomerJDBC;
 import data.CustomerJDBCimpl;
 import entities.CustomerEntity;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,21 @@ public class CustomerView {
         List<CustomerEntity> customerList = new ArrayList<CustomerEntity>(new CustomerJDBCimpl().getAllCustomers());
         ObservableList<CustomerEntity> names = FXCollections.observableArrayList(customerList);
         listView.setItems(names);
+
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomerEntity>() {
+            @Override
+            public void changed(ObservableValue<? extends CustomerEntity> observableValue, CustomerEntity prevCustomer, CustomerEntity newCustomer) {
+                setCustomerInfo(newCustomer);
+            }
+        });
+
+        listView.setCellFactory(new Callback<ListView<CustomerEntity>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<CustomerEntity> listView) {
+                return ;
+            }
+        });
+
 
         Label emptyLabel = new Label(" ");      //????????
 

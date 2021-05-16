@@ -12,11 +12,11 @@ public class CarJDBCimpl extends CarEntity implements CarJDBC { // Henrik
 
     @Override
     public ArrayList<CarEntity> getAllCarModels() {
-        return getCarModelsByCondition("0 = 0");
+        return getCarsByCondition("0 = 0");
     }
 
     @Override
-    public boolean addNewCarModel(CarJDBCimpl carJDBCimpl) {
+    public boolean addCar(CarJDBCimpl carJDBCimpl) {
         try {
             String sql = "INSERT INTO carmodels VALUES ('" +
                     carJDBCimpl.getModel_name() + "', '" +
@@ -41,7 +41,7 @@ public class CarJDBCimpl extends CarEntity implements CarJDBC { // Henrik
     }
 
     @Override
-    public boolean deleteCarModel(CarJDBCimpl carJDBCimpl) {
+    public boolean deleteCar(CarJDBCimpl carJDBCimpl) {
         try {
             String condition = "id=" + carJDBCimpl.getId();
             String sql = "DELETE FROM carmodels WHERE " + condition;
@@ -58,7 +58,7 @@ public class CarJDBCimpl extends CarEntity implements CarJDBC { // Henrik
     }
 
     @Override
-    public boolean updateCarModel(CarJDBCimpl carJDBCimpl) {
+    public boolean updateCar(CarJDBCimpl carJDBCimpl) {
         try {
             StringBuffer assignments = new StringBuffer();
             assignments.append("model_name='" + carJDBCimpl.getModel_name() + "', ");
@@ -83,7 +83,7 @@ public class CarJDBCimpl extends CarEntity implements CarJDBC { // Henrik
     }
 
     @Override
-    public ArrayList<CarEntity> getCarModelsByCondition(String condition) {
+    public ArrayList<CarEntity> getCarsByCondition(String condition) {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carmodels WHERE " + condition;

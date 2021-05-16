@@ -5,13 +5,13 @@ import entities.SalesPerson;
 import java.util.ArrayList;
 
 public interface SalesPersonJDBC {
-    ArrayList<SalesPerson> getAllSalesPerons();
+    ArrayList<SalesPerson> getAllSalesPersons();
 
-    boolean addCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl);
+    boolean addSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl);
 
-    boolean deleteCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl);
+    boolean deleteSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl);
 
-    boolean updateCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl);
+    boolean updateSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl);
 
-    ArrayList<SalesPerson> getCarSellerByCondition(String condition);
+    ArrayList<SalesPerson> getSalesPersonByCondition(String condition);
 }

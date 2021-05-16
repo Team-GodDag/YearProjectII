@@ -12,12 +12,12 @@ public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC 
     SalesPersonJDBCimpl salesPersonJDBCimpl = new SalesPersonJDBCimpl();
 
     @Override
-    public ArrayList<SalesPerson> getAllSalesPerons() {
-        return getCarSellerByCondition("0 = 0");
+    public ArrayList<SalesPerson> getAllSalesPersons() {
+        return getSalesPersonByCondition("0 = 0");
     }
 
     @Override
-    public boolean addCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {
+    public boolean addSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl) {
         try {
             String sql = "INSERT INTO carsellers VALUES ('" +
                     salesPersonJDBCimpl.getFirstname()    + "', '" +
@@ -45,7 +45,7 @@ public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC 
     }
 
     @Override
-    public boolean deleteCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {       //bør nok renames
+    public boolean deleteSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl) {       //bør nok renames
         try {
             String condition = "id=" + salesPersonJDBCimpl.getId();
             String sql = "DELETE FROM carsellers WHERE " + condition;
@@ -62,7 +62,7 @@ public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC 
     }
 
     @Override
-    public boolean updateCarSeller(SalesPersonJDBCimpl salesPersonJDBCimpl) {
+    public boolean updateSalesPerson(SalesPersonJDBCimpl salesPersonJDBCimpl) {
         try {
             StringBuffer assignments = new StringBuffer();
             assignments.append("firstname='" + salesPersonJDBCimpl.getFirstname() + "', ");
@@ -90,7 +90,7 @@ public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC 
     }
 
     @Override
-    public ArrayList<SalesPerson> getCarSellerByCondition(String condition) {
+    public ArrayList<SalesPerson> getSalesPersonByCondition(String condition) {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;
@@ -112,7 +112,7 @@ public class SalesPersonJDBCimpl extends SalesPerson implements SalesPersonJDBC 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return AllSalesPersons.allSalesPersons;
+        return AllSalesPersons.allSalesPersons; //skal den være her?
     }
 
 }
