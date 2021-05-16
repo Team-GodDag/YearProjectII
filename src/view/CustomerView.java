@@ -25,6 +25,7 @@ import java.util.List;
 public class CustomerView {
 
     CustomerEntity customer;
+    private CustomerJDBC customerJDBC = new CustomerJDBCimpl();
     Text nameText, phoneText, emailText, adressText, cprText;
 
     public Node createView() {
@@ -39,21 +40,30 @@ public class CustomerView {
 
         ListView listView = new ListView();
         listView.setPrefHeight(600);
-        List<CustomerEntity> customerList = new ArrayList<CustomerEntity>(new CustomerJDBCimpl().getAllCustomers());
-        ObservableList<CustomerEntity> names = FXCollections.observableArrayList(customerList);
-        listView.setItems(names);
+        List<CustomerEntity> customerList = new ArrayList<CustomerEntity>(customerJDBC.getAllCustomers());        //dis correct? deklareret i class fields
+        ObservableList<CustomerEntity> observableCustomerlist = FXCollections.observableArrayList(customerList);
+        listView.setItems(observableCustomerlist);
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomerEntity>() {
             @Override
-            public void changed(ObservableValue<? extends CustomerEntity> observableValue, CustomerEntity prevCustomer, CustomerEntity newCustomer) {
-                setCustomerInfo(newCustomer);
+            public void changed(ObservableValue<? extends CustomerEntity> observableValue, CustomerEntity prevCustomer, CustomerEntity nextCustomer) {
+                setCustomerInfo(nextCustomer);
             }
         });
 
-        listView.setCellFactory(new Callback<ListView<CustomerEntity>, ListCell<String>>() {
+        listView.setCellFactory(new Callback<ListView<CustomerEntity>, ListCell<CustomerEntity>>() {
             @Override
-            public ListCell<String> call(ListView<CustomerEntity> listView) {
-                return ;
+            public ListCell<CustomerEntity> call(ListView<CustomerEntity> names) {
+                ListCell<CustomerEntity> cell = new ListCell<>() {
+                    @Override
+                    protected void updateItem(CustomerEntity customer, boolean bool) {
+                        super.updateItem(customer, bool);
+                        if(customer != null) {
+                            setText(customer.getFirstName() + " " + customer.getLastName());
+                        }
+                    }
+                };
+                return cell;
             }
         });
 
