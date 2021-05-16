@@ -1,11 +1,11 @@
 package entities;
 
-public class CustomerEntity {     //lavet af Rikke    Skal den bare hedde Customer?
+public class Customer {     //lavet af Rikke    Skal den bare hedde Customer?
 
     private int id;
     private String cpr, firstName, lastName, email, address, phone; //skal vel bare være en String, og så kan den blive en Property i logik?
 
-    public CustomerEntity(int id, String cpr, String firstname, String lastname, String email, String address, String phone) {
+    public Customer(int id, String cpr, String firstname, String lastname, String email, String address, String phone) {
         this.id = id;
         this.cpr = cpr;
         this.firstName = firstname;

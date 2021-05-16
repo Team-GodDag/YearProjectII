@@ -5,19 +5,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CarEntity {
+public class Car {
 
     public int id;
     public StringProperty model_name, price, horsepower;
 
-    public CarEntity(int id, String model_name, String price, String horsepower) {
+    public Car(int id, String model_name, String price, String horsepower) {
         this.id = id;
         this.model_name = new SimpleStringProperty(model_name);
         this.price = new SimpleStringProperty(price);
         this.horsepower = new SimpleStringProperty(horsepower);
     }
 
-    public CarEntity(){
+    public Car(){
     }
 
     public void setModel_name(String model_name){

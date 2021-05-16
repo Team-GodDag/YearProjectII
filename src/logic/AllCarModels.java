@@ -1,13 +1,13 @@
 package logic;
 
-import entities.CarEntity;
+import entities.Car;
 
 import java.util.ArrayList;
 
 public class AllCarModels {
-    public static ArrayList<CarEntity> allCars = new ArrayList<>();
+    public static ArrayList<Car> allCars = new ArrayList<>();
 
-    public void addCar(CarEntity car){
+    public void addCar(Car car){
         allCars.add(car);
     }
 }

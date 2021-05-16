@@ -1,6 +1,6 @@
 package data;
 
-import entities.CarEntity;
+import entities.Car;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ public class JDBC { // Henrik
     }
 
 
-    public ArrayList<CarEntity> getCarModelList() {
-        ArrayList<CarEntity> carModelTable = new ArrayList<>();
+    public ArrayList<Car> getCarModelList() {
+        ArrayList<Car> carModelTable = new ArrayList<>();
 
         try {
             String sql = "SELECT * FROM carmodels ORDER BY car_model_id DESC";
@@ -65,7 +65,7 @@ public class JDBC { // Henrik
                 String horsepower = resultSet.getString("horsepower");
 
 
-                CarEntity carModel = new CarEntity(id, modelName, price, horsepower);
+                Car carModel = new Car(id, modelName, price, horsepower);
                 carModelTable.add(carModel);
             }
 

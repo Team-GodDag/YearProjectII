@@ -1,9 +1,10 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
+import data.CustomerDataAccess;
 import data.CustomerJDBC;
-import data.CustomerJDBCimpl;
-import entities.CustomerEntity;
+import entities.Customer;
+import factories.CustomerListFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,7 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,9 +24,9 @@ import java.util.List;
 
 public class CustomerView {
 
-    CustomerEntity customer;
-    private CustomerJDBC customerJDBC = new CustomerJDBCimpl();
-    Text nameText, phoneText, emailText, adressText, cprText;
+    private Customer customer;
+//    private CustomerDataAccess customerDataAccess;    //nono
+    private Text nameText, phoneText, emailText, adressText, cprText;
 
     public Node createView() {
         setCustomerInfo(customer);
@@ -40,23 +40,23 @@ public class CustomerView {
 
         ListView listView = new ListView();
         listView.setPrefHeight(600);
-        List<CustomerEntity> customerList = new ArrayList<CustomerEntity>(customerJDBC.getAllCustomers());        //dis correct? deklareret i class fields
-        ObservableList<CustomerEntity> observableCustomerlist = FXCollections.observableArrayList(customerList);
+        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.createCustomerList());        //skal kun snakke med interface - but how
+        ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(customerList);
         listView.setItems(observableCustomerlist);
 
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomerEntity>() {
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
-            public void changed(ObservableValue<? extends CustomerEntity> observableValue, CustomerEntity prevCustomer, CustomerEntity nextCustomer) {
+            public void changed(ObservableValue<? extends Customer> observableValue, Customer prevCustomer, Customer nextCustomer) {
                 setCustomerInfo(nextCustomer);
             }
         });
 
-        listView.setCellFactory(new Callback<ListView<CustomerEntity>, ListCell<CustomerEntity>>() {
+        listView.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {
             @Override
-            public ListCell<CustomerEntity> call(ListView<CustomerEntity> names) {
-                ListCell<CustomerEntity> cell = new ListCell<>() {
+            public ListCell<Customer> call(ListView<Customer> names) {
+                ListCell<Customer> cell = new ListCell<>() {
                     @Override
-                    protected void updateItem(CustomerEntity customer, boolean bool) {
+                    protected void updateItem(Customer customer, boolean bool) {
                         super.updateItem(customer, bool);
                         if(customer != null) {
                             setText(customer.getFirstName() + " " + customer.getLastName());
@@ -178,7 +178,7 @@ public class CustomerView {
         return root;
     }
 
-    private void setCustomerInfo(CustomerEntity customer) {
+    private void setCustomerInfo(Customer customer) {
         this.customer = customer;
         if(customer == null) {
             return;
