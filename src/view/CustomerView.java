@@ -20,7 +20,6 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class CustomerView {
@@ -45,9 +44,7 @@ public class CustomerView {
         });
 
 
-
-
-//LISTVIEW ---------------------START
+//FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
         List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.getAllCustomers());        //skal den have sit eget interface?
@@ -61,7 +58,7 @@ public class CustomerView {
         });
 
 
-//FILTERED LIST TIL BRUG I SØGEFUNKTION - NOT DONE 17/5
+
         FilteredList<Customer> filteredCustomerList = new FilteredList<>(observableCustomerlist, p -> true);
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredCustomerList.setPredicate(customer -> {
@@ -70,11 +67,10 @@ public class CustomerView {
                 }
 
                 String lowercaseFilter = newValue.toLowerCase();
-//                String searchStr = searchTextField.getText();
                 if (customer.getCpr().toLowerCase().contains(lowercaseFilter)) {
                     return true;
                 } else if(customer.getFirstName().toLowerCase().contains(lowercaseFilter)) {
-                    return true; //filteredCustomerList.setPredicate(predicate -> predicate.getCpr().contains(searchStr));
+                    return true;
                 }
                 return false;
             });
@@ -83,7 +79,7 @@ public class CustomerView {
 
         listView.setItems(sortedCustomerList);
 
-        listView.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {  
+        listView.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {
             @Override
             public ListCell<Customer> call(ListView<Customer> names) {
                 ListCell<Customer> cell = new ListCell<>() {
