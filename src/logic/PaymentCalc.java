@@ -2,11 +2,12 @@ package logic;
 
 import java.text.DecimalFormat;
 
-public class TotalInterest {
+public class PaymentCalc {
 
     private double rkiInterestRate;
     private double downPaymentInterestRate;
     private double paymentYearsInterestRate;
+    private double priceAfterDownPayment;
     private double totalInterest;
 
     public double rkiInterestCalc(String creditRating) {
@@ -87,9 +88,14 @@ public class TotalInterest {
         return Double.valueOf(totalInterest);
 
     }
-    public double totalCarPrice(double carPrice){
+    public double carPriceAfterDownPayment(double carPrice, double downpayment){
+        this.priceAfterDownPayment = carPrice - downpayment;
+        return priceAfterDownPayment;
+    }
 
-       double totalPrice = carPrice * (1 + (totalInterest /100));
+    public double totalCarPrice(double price, double downPayment){
+
+       double totalPrice = (price - downPayment) * (1 + (totalInterest /100));
        return Double.valueOf(totalPrice);
     }
 }

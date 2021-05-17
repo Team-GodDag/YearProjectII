@@ -2,21 +2,13 @@ package view;
 // Start side
 // Viser nuværende kunder i databasen
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import logic.CsvWriter;
-import logic.Dir;
 import logic.WriteCSV;
-
-import java.io.File;
 
 
 public class CustomerView {
@@ -100,7 +92,6 @@ public class CustomerView {
         Button editButton = new Button("  Edit  ");
         //GridPane.setConstraints(editButton,1,6);
         Button saveButton = new Button("  Save  ");
-        saveButton.setOnAction(klick -> WriteCSV.writeCsvFile("Johnny"));
 
 
 
