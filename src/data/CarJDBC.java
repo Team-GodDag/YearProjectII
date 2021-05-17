@@ -18,9 +18,9 @@ public class CarJDBC implements CarDataAccess { // Henrik
     public boolean addCar(Car car) {
         try {
             String sql = "INSERT INTO carmodels VALUES ('" +
-                    car.getModel_name() + "', '" +
-                    car.getPrice() + "', '" +
-                    car.getHorsepower() +")";
+                    car.getModel_name()     + "', '" +
+                    car.getPrice()          + "', '" +
+                    car.getHorsepower()     +")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
