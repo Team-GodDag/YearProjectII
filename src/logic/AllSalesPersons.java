@@ -4,7 +4,7 @@ import entities.SalesPerson;
 
 import java.util.ArrayList;
 
-public class AllSalesPersons {
+public class AllSalesPersons {  //TO BE DELETED
     public static ArrayList<SalesPerson> allSalesPersons = new ArrayList<>();
 
     public void addCar(SalesPerson salesPerson){

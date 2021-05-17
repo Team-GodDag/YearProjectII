@@ -1,7 +1,7 @@
 package view;
 //Viser tilgængelige bil modeller
 import entities.Car;
-import data.JDBC;
+import factories.CarListFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -13,7 +13,7 @@ public class CatalogueView { // Henrik
 
     public VBox createView() {
         TableView table = new TableView();
-        ObservableList<Car> ModelList = FXCollections.observableArrayList(JDBC.instance.getCarModelList()); //exposing data-lag, nono
+        ObservableList<Car> ModelList = FXCollections.observableArrayList(CarListFactory.createCarList()); //exposing data-lag, nono
 
         table.setEditable(false);
         table.setMinWidth(700);
