@@ -1,4 +1,4 @@
-package logic;
+package entities;       //måske POJOs?
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Car {
-
 
     public int id;
     public StringProperty model_name, price, horsepower;
@@ -17,9 +16,10 @@ public class Car {
         this.price = new SimpleStringProperty(price);
         this.horsepower = new SimpleStringProperty(horsepower);
     }
-    public Car(){
 
+    public Car(){
     }
+
     public void setModel_name(String model_name){
         this.model_name.set(model_name);
     }

@@ -1,7 +1,6 @@
 package data;
 
-import logic.Car;
-import logic.SalesPerson;
+import entities.SalesPerson;
 import logic.AllSalesPersons;
 
 import java.sql.ResultSet;
@@ -9,31 +8,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CarSeller extends SalesPerson{ // Henrik
-    CarSeller carSeller = new CarSeller();
+public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAccess { // Henrik
+    SalesPersonJDBC salesPersonJDBC = new SalesPersonJDBC();
 
-    public ArrayList<SalesPerson> getAllSalesPerons() {
-        return getCarSellerByCondition("0 = 0");
+    @Override
+    public ArrayList<SalesPerson> getAllSalesPersons() {
+        return getSalesPersonByCondition("0 = 0");
     }
 
-    public boolean addCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean addSalesPerson(SalesPersonJDBC salesPersonJDBC) {
         try {
             String sql = "INSERT INTO carsellers VALUES ('" +
-                    carSeller.getFirstname() + "', '" +
-                    carSeller.getLastname() + "', '" +
-                    carSeller.getEmail() + "', '" +
-                    carSeller.getAddress() + "', '" +
-                    carSeller.getPhonenumber() + "', '" +
-                    carSeller.getLimit() +")";
+                    salesPersonJDBC.getFirstname()    + "', '" +
+                    salesPersonJDBC.getLastname()     + "', '" +
+                    salesPersonJDBC.getEmail()        + "', '" +
+                    salesPersonJDBC.getAddress()      + "', '" +
+                    salesPersonJDBC.getPhonenumber()  + "', '" +
+                    salesPersonJDBC.getLimit()        + ")";
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
             if (resultSet.next()){
                 int autoKey = resultSet.getInt(1);
-                carSeller.setId(autoKey);
+                salesPersonJDBC.setId(autoKey);
             }
             return true;
         }
@@ -43,12 +44,13 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    public boolean deleteCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean deleteSalesPerson(SalesPersonJDBC salesPersonJDBC) {       //bør nok renames
         try {
-            String condition = "id=" + carSeller.getId();
+            String condition = "id=" + salesPersonJDBC.getId();
             String sql = "DELETE FROM carsellers WHERE " + condition;
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -59,23 +61,24 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    public boolean updateCarSeller(CarSeller carSeller) {
+    @Override
+    public boolean updateSalesPerson(SalesPersonJDBC salesPersonJDBC) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("firstname='" + carSeller.getFirstname() + "', ");
-            assignments.append("lastname='" + carSeller.getLastname() + "', ");
-            assignments.append("email='" + carSeller.getEmail());
-            assignments.append("phonenumber='" + carSeller.getPhonenumber());
-            assignments.append("limit='" + carSeller.getLimit());
+            assignments.append("firstname='" + salesPersonJDBC.getFirstname() + "', ");
+            assignments.append("lastname='" + salesPersonJDBC.getLastname() + "', ");
+            assignments.append("email='" + salesPersonJDBC.getEmail());
+            assignments.append("phonenumber='" + salesPersonJDBC.getPhonenumber());
+            assignments.append("limit='" + salesPersonJDBC.getLimit());
 
 
-            String condition = "id=" + carSeller.getId();
+            String condition = "id=" + salesPersonJDBC.getId();
 
             String sql = "UPDATE carsellers SET " + assignments +
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -86,11 +89,12 @@ public class CarSeller extends SalesPerson{ // Henrik
         }
     }
 
-    private ArrayList<SalesPerson> getCarSellerByCondition(String condition) {
+    @Override
+    public ArrayList<SalesPerson> getSalesPersonByCondition(String condition) {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;
-            Statement statement = DataLayer.instance.connection.createStatement();
+            Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
@@ -108,7 +112,7 @@ public class CarSeller extends SalesPerson{ // Henrik
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return AllSalesPersons.allSalesPersons;
+        return AllSalesPersons.allSalesPersons; //skal den være her?
     }
 
 }

@@ -1,4 +1,4 @@
-package logic;
+package entities;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -18,8 +18,8 @@ public class SalesPerson {
     }
 
     public SalesPerson(){
-
     }
+    
     public int getId() {
         return id;
     }

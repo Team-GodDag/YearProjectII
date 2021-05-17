@@ -1,5 +1,7 @@
 package logic;
 
+import entities.Car;
+
 import java.util.ArrayList;
 
 public class AllCarModels {

@@ -1,17 +1,16 @@
 package data;
 
-import logic.AllCarModels;
-import logic.Car;
+import entities.Car;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DataLayer { // Henrik
+public class JDBC { // Henrik
 
-    public static DataLayer instance = new DataLayer("YearProjectDB");
+    public static JDBC instance = new JDBC("YearProjectDB");
     protected Connection connection;
 
-    public  DataLayer(String databaseName) {
+    public JDBC(String databaseName) {
         loadJdbcDriver();
         openConnection("YearProjectDB");
     }
