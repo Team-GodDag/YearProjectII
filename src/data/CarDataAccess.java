@@ -5,13 +5,13 @@ import entities.Car;
 import java.util.ArrayList;
 
 public interface CarDataAccess {
-    ArrayList<Car> getAllCarModels();
+    ArrayList<Car> getAllCars();
 
-    boolean addCar(CarJDBC carJDBC);
+    boolean addCar(Car car);
 
-    boolean deleteCar(CarJDBC carJDBC);
+    boolean deleteCar(Car car);
 
-    boolean updateCar(CarJDBC carJDBC);
+    boolean updateCar(Car car);
 
     ArrayList<Car> getCarsByCondition(String condition);
 }

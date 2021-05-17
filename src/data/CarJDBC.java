@@ -7,21 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CarJDBC extends Car implements CarDataAccess { // Henrik
-    Car car = new Car();
+public class CarJDBC implements CarDataAccess { // Henrik
 
     @Override
-    public ArrayList<Car> getAllCarModels() {
+    public ArrayList<Car> getAllCars() {
         return getCarsByCondition("0 = 0");
     }
 
     @Override
-    public boolean addCar(CarJDBC carJDBC) {
+    public boolean addCar(Car car) {
         try {
             String sql = "INSERT INTO carmodels VALUES ('" +
-                    carJDBC.getModel_name() + "', '" +
-                    carJDBC.getPrice() + "', '" +
-                    carJDBC.getHorsepower() +")";
+                    car.getModel_name() + "', '" +
+                    car.getPrice() + "', '" +
+                    car.getHorsepower() +")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -30,7 +29,7 @@ public class CarJDBC extends Car implements CarDataAccess { // Henrik
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
             if (resultSet.next()){
                 int autoKey = resultSet.getInt(1);
-                carJDBC.setId(autoKey);
+                car.setId(autoKey);
             }
             return true;
         }
@@ -41,9 +40,9 @@ public class CarJDBC extends Car implements CarDataAccess { // Henrik
     }
 
     @Override
-    public boolean deleteCar(CarJDBC carJDBC) {
+    public boolean deleteCar(Car car) {
         try {
-            String condition = "id=" + carJDBC.getId();
+            String condition = "id=" + car.getId();
             String sql = "DELETE FROM carmodels WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -58,14 +57,14 @@ public class CarJDBC extends Car implements CarDataAccess { // Henrik
     }
 
     @Override
-    public boolean updateCar(CarJDBC carJDBC) {
+    public boolean updateCar(Car car) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("model_name='" + carJDBC.getModel_name() + "', ");
-            assignments.append("price='" + carJDBC.getPrice() + "', ");
-            assignments.append("horsepower='" + carJDBC.getHorsepower());
+            assignments.append("model_name='"   + car.getModel_name() + "', ");
+            assignments.append("price='"        + car.getPrice() + "', ");
+            assignments.append("horsepower='"   + car.getHorsepower());
 
-            String condition = "id=" + carJDBC.getId();
+            String condition = "id=" + car.getId();
 
             String sql = "UPDATE carmodels SET " + assignments +
                     " WHERE " + condition;
@@ -91,10 +90,10 @@ public class CarJDBC extends Car implements CarDataAccess { // Henrik
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
-                int id = resultSet.getInt("car_model_id");
-                String modelName = resultSet.getString("model_name");
-                String price = resultSet.getString("price");
-                String horsepower = resultSet.getString("horsepower");
+                int id              = resultSet.getInt("car_model_id");
+                String modelName    = resultSet.getString("model_name");
+                String price        = resultSet.getString("price");
+                String horsepower   = resultSet.getString("horsepower");
 
                 Car carmodel = new Car(id, modelName, price, horsepower);
                 AllCarModels.allCars.add(carmodel);
