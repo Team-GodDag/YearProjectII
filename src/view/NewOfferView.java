@@ -1,6 +1,13 @@
 package view;
 // når der skal oprettes et tilbud/ordre
+import data.OfferDataAccess;
+import data.OfferJDBC;
+import entities.Car;
+import factories.CarListFactory;
+import factories.SalesPersonListFactory;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,8 +34,6 @@ public class NewOfferView {
     SaveToCsv saveToCsv = new SaveToCsv();
     NotifyWindow notifyWindow = new NotifyWindow();
 
-
-
     PeriodCalculator periodCalculator = new PeriodCalculator();
     PriceFormat priceFormat = new PriceFormat();
     SalesLimit salesLimit = new SalesLimit();
@@ -36,8 +41,12 @@ public class NewOfferView {
     PaymentCalc paymentCalc = new PaymentCalc();
     WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();
 
+    TextField nameTextField, priceTextField;
+    Text creditRatingText;
 
-    public Node createView(){
+
+
+    public Node createView() {
         Stage window = new Stage();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
@@ -101,7 +110,7 @@ public class NewOfferView {
 
 
 
-        Text creditRatingText = new Text();
+        creditRatingText = new Text();
         creditRatingText.setFont(Font.font("Verdana", FontWeight.LIGHT, FontPosture.REGULAR, 18));
         creditRatingText.setFill(Color.GREEN);
 
@@ -114,7 +123,7 @@ public class NewOfferView {
 
 
         Label nameLabel = new Label("Name: ");
-        TextField nameTextField = new TextField();
+        nameTextField = new TextField();
         nameTextField.setPromptText("Name");
         GridPane.setConstraints(nameLabel,0,4);
         GridPane.setConstraints(nameTextField,1,4);
@@ -160,13 +169,21 @@ public class NewOfferView {
         GridPane.setConstraints(zipCodeTextField,1,8);
 
         Label carModelLabel = new Label("Car Model: ");
-        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList("Slow", "Slower", "Henrik"));
+        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.createCarList()));
         carModelCombobox.setPromptText("Car Model");
         GridPane.setConstraints(carModelLabel,0,9);
         GridPane.setConstraints(carModelCombobox,1,9);
+        carModelCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+                @Override
+                public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+                    setCarInfo((Car)newValue);
+
+                }
+            }
+        );
 
         Label priceLabel = new Label("Price: ");
-        TextField priceTextField = new TextField();
+        priceTextField = new TextField();
         priceTextField.setPromptText("Price");
         GridPane.setConstraints(priceLabel,0,10);
         GridPane.setConstraints(priceTextField,1,10);
@@ -209,7 +226,7 @@ public class NewOfferView {
         GridPane.setConstraints(endDatePicker,1,13);
 
         Label salesPersonLabel = new Label("Sales Person: ");
-        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList("John", "Carsten", "Henning"));
+        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonListFactory.createSalesPersonList()));
         salesPersonCombobox.setPromptText("Sales Person:");
         GridPane.setConstraints(salesPersonLabel,0,14);
         GridPane.setConstraints(salesPersonCombobox,1,14);
@@ -473,9 +490,12 @@ public class NewOfferView {
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
+            paymentCalc.setDownPayment(downPaymentTextField.getText());
+
         });
         acceptBtn.setOnAction(click -> {
             if( (Double.valueOf(priceTextField.getText()) - Double.valueOf(downPaymentTextField.getText()) ) >= 1000000 ){
+//************                OfferDataAccess ofda = new OfferJDBC().addOffer()
                 notifyWindow.notifySalesManager(salesPersonCombobox.getValue().toString());
             }else{
                 notifyWindow.acceptOffer(salesPersonCombobox.getValue().toString());
@@ -505,5 +525,9 @@ public class NewOfferView {
         HBox root = new HBox(salesGrid);
         root.setPrefWidth(700);
         return root;
+    }
+
+    private void setCarInfo(Car car) {
+        priceTextField.setText(priceFormat.formatter(car.getPrice()));
     }
 }

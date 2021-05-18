@@ -2,75 +2,88 @@ package entities;       //måske POJOs?
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import logic.PaymentCalc;
 
 public class Offer { // Henrik
 
-    public int id;
-    public StringProperty customer_id, credit_rating, seller_id, car_model_id, car_price, payment, dateOfSale, dateOfPayStart, dateOfPayEnd;
+    public int id, customerId, salesPersonId, carId;
+    public double rkiInterestRate, payment;
+    public StringProperty car_price, dateOfSale, dateOfPayStart, dateOfPayEnd, approvedBy;
 
-    public Offer(int id, String customer_id, String credit_rating, String seller_id, String car_model_id,String car_price,String payment, String dateOfSale, String dateOfPayStart, String dateOfPayEnd) {
+    public Offer(int id, int customer_id, double rkiInterestRate, int seller_id, int car_model_id, String car_price, double payment, String dateOfSale, String dateOfPayStart, String dateOfPayEnd) {
         this.id = id;
-        this.customer_id = new SimpleStringProperty(customer_id);
-        this.credit_rating = new SimpleStringProperty(credit_rating);
-        this.seller_id = new SimpleStringProperty(seller_id);
-        this.car_model_id = new SimpleStringProperty(car_model_id);
+        this.customerId = customer_id;
+        this.rkiInterestRate = rkiInterestRate;
+        this.salesPersonId = seller_id;
+        this.carId = car_model_id;
         this.car_price = new SimpleStringProperty(car_price);
-        this.payment = new SimpleStringProperty(payment);
+        this.payment = payment;
         this.dateOfSale = new SimpleStringProperty(dateOfSale);
         this.dateOfPayStart = new SimpleStringProperty(dateOfPayStart);
         this.dateOfPayEnd = new SimpleStringProperty(dateOfPayEnd);
 
     }
 
-    public Offer(){
+    public Offer(Customer customer, Car car, SalesPerson salesPerson, PaymentCalc paymentCalc, String dateOfSale, String approvedBy) {
+        this.customerId = customer.getId();
+        this.rkiInterestRate = paymentCalc.getInterestRate();
+        this.salesPersonId = salesPerson.getId();
+        this.carId = car.getId();
+        this.car_price = car.priceProperty();
+        this.payment = paymentCalc.getDownPayment();
+        this.dateOfSale = new SimpleStringProperty(dateOfSale);
+        this.approvedBy = new SimpleStringProperty(approvedBy);
     }
 
-    public String getCustomer_id() {
-        return customer_id.get();
+    public Offer() {
     }
 
-    public StringProperty customer_idProperty() {
-        return customer_id;
+    public int getId() {
+        return id;
     }
 
-    public void setCustomer_id(String customer_id) {
-        this.customer_id.set(customer_id);
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCredit_rating() {
-        return credit_rating.get();
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public StringProperty credit_ratingProperty() {
-        return credit_rating;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public void setCredit_rating(String credit_rating) {
-        this.credit_rating.set(credit_rating);
+    public int getSalesPersonId() {
+        return salesPersonId;
     }
 
-    public String getSeller_id() {
-        return seller_id.get();
+    public void setSalesPersonId(int salesPersonId) {
+        this.salesPersonId = salesPersonId;
     }
 
-    public StringProperty seller_idProperty() {
-        return seller_id;
+    public int getCarId() {
+        return carId;
     }
 
-    public void setSeller_id(String seller_id) {
-        this.seller_id.set(seller_id);
+    public void setCarId(int carId) {
+        this.carId = carId;
     }
 
-    public String getCar_model_id() {
-        return car_model_id.get();
+    public double getRkiInterestRate() {
+        return rkiInterestRate;
     }
 
-    public StringProperty car_model_idProperty() {
-        return car_model_id;
+    public void setRkiInterestRate(double rkiInterestRate) {
+        this.rkiInterestRate = rkiInterestRate;
     }
 
-    public void setCar_model_id(String car_model_id) {
-        this.car_model_id.set(car_model_id);
+    public double getPayment() {
+        return payment;
+    }
+
+    public void setPayment(double payment) {
+        this.payment = payment;
     }
 
     public String getCar_price() {
@@ -83,18 +96,6 @@ public class Offer { // Henrik
 
     public void setCar_price(String car_price) {
         this.car_price.set(car_price);
-    }
-
-    public String getPayment() {
-        return payment.get();
-    }
-
-    public StringProperty paymentProperty() {
-        return payment;
-    }
-
-    public void setPayment(String payment) {
-        this.payment.set(payment);
     }
 
     public String getDateOfSale() {
@@ -133,12 +134,15 @@ public class Offer { // Henrik
         this.dateOfPayEnd.set(dateOfPayEnd);
     }
 
-    public int getId() {
-        return id;
+    public String getApprovedBy() {
+        return approvedBy.get();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public StringProperty approvedByProperty() {
+        return approvedBy;
     }
 
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy.set(approvedBy);
+    }
 }

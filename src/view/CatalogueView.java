@@ -13,7 +13,7 @@ public class CatalogueView { // Henrik
 
     public VBox createView() {
         TableView table = new TableView();
-        ObservableList<Car> ModelList = FXCollections.observableArrayList(CarListFactory.createCarList()); //exposing data-lag, nono
+        ObservableList<Car> ModelList = FXCollections.observableArrayList(CarListFactory.createCarList());
 
         table.setEditable(false);
         table.setMinWidth(700);

@@ -11,7 +11,7 @@ public interface OfferDataAccess {
 
     boolean deleteOffer(Offer offer);
 
-    boolean updateOffer(Offer offer);
+//    boolean updateOffer(Offer offer);
 
     ArrayList<Offer> getOffersByCondition(String condition);
 }

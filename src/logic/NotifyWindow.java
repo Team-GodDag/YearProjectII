@@ -1,7 +1,7 @@
 package logic;
 
 
-import javax.swing.*;
+import javax.swing.*;   //javafx alertbox flyttes til view
 
 
 public class NotifyWindow {

@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAccess { // Henrik
-    SalesPersonJDBC salesPersonJDBC = new SalesPersonJDBC();
 
     @Override
     public ArrayList<SalesPerson> getAllSalesPersons() {
@@ -91,6 +90,7 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
 
     @Override
     public ArrayList<SalesPerson> getSalesPersonByCondition(String condition) {
+        ArrayList<SalesPerson> salespersons = new ArrayList<>();
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;
@@ -107,12 +107,12 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
                 String limit = resultSet.getString("limit");
 
                 SalesPerson salesPerson = new SalesPerson(id, firstname, lastname, email ,address , phonenumber, limit );
-                AllSalesPersons.allSalesPersons.add(salesPerson);
+                salespersons.add(salesPerson);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return AllSalesPersons.allSalesPersons; //skal den være her?
+        return salespersons;
     }
 
 }

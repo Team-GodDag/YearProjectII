@@ -1,6 +1,5 @@
 package data;
 
-import logic.AllCarModels;
 import entities.Car;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +19,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
             String sql = "INSERT INTO carmodels VALUES ('" +
                     car.getModel_name()     + "', '" +
                     car.getPrice()          + "', '" +
-                    car.getHorsepower()     +")";
+                    car.getHorsepower()     + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -83,6 +82,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
 
     @Override
     public ArrayList<Car> getCarsByCondition(String condition) {
+        ArrayList<Car> cars = new ArrayList<>();
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carmodels WHERE " + condition;
@@ -96,11 +96,13 @@ public class CarJDBC implements CarDataAccess { // Henrik
                 String horsepower   = resultSet.getString("horsepower");
 
                 Car car = new Car(id, modelName, price, horsepower);
+                cars.add(car);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return AllCarModels.allCars;
+
+        return cars;
     }
 
 }

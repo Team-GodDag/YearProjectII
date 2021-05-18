@@ -99,4 +99,9 @@ public class SalesPerson {
     public void setLimit(String limit) {
         this.limit.set(limit);
     }
+
+    @Override
+    public String toString() {
+        return firstname.get() + " " + lastname.get();
+    }
 }

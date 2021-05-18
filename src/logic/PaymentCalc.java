@@ -10,8 +10,9 @@ public class PaymentCalc {
     private double priceAfterDownPayment;
     private double totalInterest;
 
-    public double rkiInterestCalc(String creditRating) {
+    private double downPayment = 0;
 
+    public double rkiInterestCalc(String creditRating) {
 
         double rkiInterestRate = 0.0;
         DecimalFormat df = new DecimalFormat("#,##");
@@ -97,5 +98,17 @@ public class PaymentCalc {
 
        double totalPrice = (price - downPayment) * (1 + (totalInterest /100));
        return Double.valueOf(totalPrice);
+    }
+
+    public double getInterestRate() {
+        return rkiInterestRate;
+    }
+
+    public double getDownPayment() {
+        return downPayment;
+    }
+
+    public void setDownPayment(String downpayMent) {
+        this.downPayment = Double.valueOf(downpayMent);
     }
 }

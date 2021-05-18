@@ -94,7 +94,7 @@ public class CustomerJDBC implements CustomerDataAccess {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         System.out.println("condition: " + condition);
         try {
-            String sql = "SELECT *, CAST(cpr AS NVARCHAR) FROM customers WHERE " + condition;
+            String sql = "SELECT * FROM customers WHERE " + condition;
             Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
