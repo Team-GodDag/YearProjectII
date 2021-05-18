@@ -16,10 +16,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import logic.WriteCSV;
 import javafx.util.Callback;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class CustomerView {
@@ -167,7 +168,11 @@ public class CustomerView {
         Button editButton = new Button("  Edit  ");
         //GridPane.setConstraints(editButton,1,6);
         Button saveButton = new Button("  Save  ");
-        saveButton.setDisable(true);
+
+
+
+
+        //saveButton.setDisable(true);
         // GridPane.setConstraints(saveButton,2,6);
         HBox crudBox = new HBox(editButton,saveButton);
         crudBox.setSpacing(5);
@@ -202,6 +207,7 @@ public class CustomerView {
 
         HBox gridBox = new HBox(userInfoPane);
         HBox root = new HBox(listViewBox,gridBox);
+
         root.setPrefWidth(700);
         return root;
     }

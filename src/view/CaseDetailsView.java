@@ -53,7 +53,8 @@ public class CaseDetailsView {
         Label endDateLbl = new Label("End date:");
         Text endDateTxt = new Text();
 
-        Button printBtn = new Button("Print");
+        Button printBtn = new Button("Print as PDF");
+        Button csvBtn = new Button("Save as CSV");
 
         GridPane root = new GridPane();
         root.addRow(0, caseNoLbl, caseNoTxt, carPriceLbl, carPriceTxt);
@@ -63,7 +64,7 @@ public class CaseDetailsView {
         root.addRow(4, creditWorthLbl, creditWorthTxt, startDateLbl, startDateTxt);
         root.addRow(5, carModelLbl, carModelTxt, endDateLbl, endDateTxt);
         root.addRow(6, approvedByLbl, approvedByTxt);
-        root.addRow(7, printBtn);
+        root.addRow(7, printBtn, csvBtn);
 
         root.setHgap(50);
         root.setVgap(20);
