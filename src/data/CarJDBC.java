@@ -95,8 +95,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
                 String price        = resultSet.getString("price");
                 String horsepower   = resultSet.getString("horsepower");
 
-                Car carmodel = new Car(id, modelName, price, horsepower);
-                AllCarModels.allCars.add(carmodel);
+                Car car = new Car(id, modelName, price, horsepower);
             }
         } catch (SQLException e) {
             e.printStackTrace();

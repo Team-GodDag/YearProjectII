@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class CarListFactory {
 
-    public static ArrayList<Car> createCarList() {
+    public static ArrayList<Car> createCarList() {      //skal der fiksfakses med
         return new CarJDBC().getAllCars();
     }
 }

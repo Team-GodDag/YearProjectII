@@ -89,23 +89,23 @@ public class CustomerJDBC implements CustomerDataAccess {
         }
     }
 
-    @Override
+//    @Override
     public ArrayList<Customer> getCustomersByCondition(String condition) {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         System.out.println("condition: " + condition);
         try {
-            String sql = "SELECT * FROM customers WHERE " + condition;
+            String sql = "SELECT *, CAST(cpr AS NVARCHAR) FROM customers WHERE " + condition;
             Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
-            while (resultSet.next()) {// iteration starter 'before first'
+            while (resultSet.next()) {
                 int id              = resultSet.getInt("customer_id");
                 String cpr          = resultSet.getString("cpr");
                 String firstName    = resultSet.getString("firstname");
                 String lastName     = resultSet.getString("lastname");
                 String email        = resultSet.getString("email");
                 String address      = resultSet.getString("address");
-                String phone  = resultSet.getString("phonenumber");
+                String phone        = resultSet.getString("phonenumber");
 
                 Customer customer = new Customer(id, cpr, firstName, lastName, email ,address , phone);
                 customers.add(customer);
@@ -115,4 +115,16 @@ public class CustomerJDBC implements CustomerDataAccess {
         }
         return customers;
     }
+
+
+    public Customer getCustomerByCpr(String cpr) {
+        ArrayList<Customer> result = getCustomersByCondition("cpr=" + cpr);
+
+        if (result.size() > 0)
+            return result.get(0);
+        else
+            return null;
+    }
+
+
 }

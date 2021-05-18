@@ -1,14 +1,14 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
-import data.CustomerDataAccess;
-import data.CustomerJDBC;
 import entities.Customer;
 import factories.CustomerListFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -26,22 +26,29 @@ public class CustomerView {
 
     private Customer customer;
     private Text nameText, phoneText, emailText, adressText, cprText;
+    private TextField searchTextField;
+    private ListView listView;
 
     public Node createView() {
 
-        TextField searchTextField = new TextField();
+        searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
         searchTextField.setPromptText("Søg efter CPR Nummer");
 
+
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
+        goButton.setOnAction(click -> {
+            Customer searchedCustomer = CustomerListFactory.getCustomerByCpr(searchTextField.getText());
+            setCustomerInfo(searchedCustomer);
+        });
 
-//LISTVIEW ---------------------START
-        ListView listView = new ListView();
+
+//FILTERED LISTVIEW ---------------------START
+        listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.createCustomerList());        //skal den have sit eget interface?
+        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.getAllCustomers());        //skal den have sit eget interface?
         ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(customerList);
-        listView.setItems(observableCustomerlist);
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
@@ -49,6 +56,28 @@ public class CustomerView {
                 setCustomerInfo(nextCustomer);
             }
         });
+
+
+
+        FilteredList<Customer> filteredCustomerList = new FilteredList<>(observableCustomerlist, p -> true);
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredCustomerList.setPredicate(customer -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowercaseFilter = newValue.toLowerCase();
+                if (customer.getCpr().toLowerCase().contains(lowercaseFilter)) {
+                    return true;
+                } else if(customer.getFirstName().toLowerCase().contains(lowercaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<Customer> sortedCustomerList = new SortedList<>(filteredCustomerList);
+
+        listView.setItems(sortedCustomerList);
 
         listView.setCellFactory(new Callback<ListView<Customer>, ListCell<Customer>>() {
             @Override
@@ -59,12 +88,15 @@ public class CustomerView {
                         super.updateItem(customer, bool);
                         if(customer != null) {
                             setText(customer.getFirstName() + " " + customer.getLastName());
+                        } else {
+                            setText("");
                         }
                     }
                 };
                 return cell;
             }
         });
+
 //LISTVIEW ---------------------END
 
         Label emptyLabel = new Label(" ");              //????????

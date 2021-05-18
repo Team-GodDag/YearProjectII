@@ -13,5 +13,7 @@ public interface CustomerDataAccess {
 
     boolean updateCustomer(Customer customer);
 
-    ArrayList<Customer> getCustomersByCondition(String condition);
+    Customer getCustomerByCpr(String cpr);
+
+    //ArrayList<Customer> getCustomersByCondition(String condition);
 }
