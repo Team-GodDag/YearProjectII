@@ -27,23 +27,6 @@ public class PeriodCalculator {
         this.timeDifferenceInYears = (differenceInDays / 365);
 
         return timeDifferenceInYears;
-
-
-
-//        LocalDate start = LocalDate.parse(startDate);
-//        LocalDate end = LocalDate.parse(endDate);
-//        long p = ChronoUnit.DAYS.between(start, end);
-//
-//        System.out.println("P" + p);
-//        System.out.println("EndDATE" + end);
-//
-//        Duration duration = Duration.between(start, end);
-//        double timeDifferenceInDays = duration.toDays();
-//        this.timeDifferenceInYears = (timeDifferenceInDays / 365);
-//        System.out.println(timeDifferenceInDays);
-       // System.out.println(timeDifferenceInYears);
-
-
     }
 }
 

@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 
 public class WriteOnlyNumbers {
 
-    public void numberInput(final TextField tf) {
+    public void input(final TextField tf) {
         tf.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,

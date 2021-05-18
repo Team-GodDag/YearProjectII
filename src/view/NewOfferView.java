@@ -1,8 +1,6 @@
 package view;
 // når der skal oprettes et tilbud/ordre
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -22,16 +20,18 @@ import logic.*;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class NewOfferView {
     SaveToCsv saveToCsv = new SaveToCsv();
+    NotifyWindow notifyWindow = new NotifyWindow();
 
 
 
     PeriodCalculator periodCalculator = new PeriodCalculator();
     PriceFormat priceFormat = new PriceFormat();
-    ApprovelText approvelText = new ApprovelText();
+    SalesLimit salesLimit = new SalesLimit();
     MonthPayCalc monthPayCalc = new MonthPayCalc();
     PaymentCalc paymentCalc = new PaymentCalc();
     WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();
@@ -57,7 +57,7 @@ public class NewOfferView {
         topLine.setStroke(Color.SILVER);
         salesGrid.add(topLine,0,1,13,1);
 
-        Line buttomLine = new Line(100,150,1125,150);
+        Line buttomLine = new Line(100,150,1095,150);
         buttomLine.setStroke(Color.SILVER);
         salesGrid.add(buttomLine,0,16,13,1);
 
@@ -87,7 +87,7 @@ public class NewOfferView {
         Label cprLabel = new Label("CPR: ");
         GridPane.setConstraints(cprLabel,0,0);
         TextField cprTextField = new TextField("");
-        writeOnlyNumbers.numberInput(cprTextField);
+        writeOnlyNumbers.input(cprTextField);
         textFieldCheck.addTextLimiter(cprTextField,10);
 
         cprTextField.setTranslateX(40);
@@ -131,6 +131,9 @@ public class NewOfferView {
 
         Label phoneLabel = new Label("Phone: ");
         TextField phoneTextField = new TextField();
+        phoneTextField.setPromptText("Phone Number");
+        writeOnlyNumbers.input(phoneTextField);
+        textFieldCheck.addTextLimiter(phoneTextField,8);
 
 
         GridPane.setConstraints(phoneLabel,0,5);
@@ -152,6 +155,7 @@ public class NewOfferView {
         TextField zipCodeTextField = new TextField();
         zipCodeTextField.setPromptText("Zip Code");
         textFieldCheck.addTextLimiter(zipCodeTextField,4);
+        writeOnlyNumbers.input(zipCodeTextField);
         GridPane.setConstraints(zipCodeLabel,0,8);
         GridPane.setConstraints(zipCodeTextField,1,8);
 
@@ -170,6 +174,15 @@ public class NewOfferView {
         Label downPaymentLabel = new Label("Down Payment: ");
         TextField downPaymentTextField = new TextField();
         downPaymentTextField.setPromptText("Down Payment:");
+        writeOnlyNumbers.input(downPaymentTextField);
+        downPaymentTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue) { //when focus lost
+                if(Double.valueOf(downPaymentTextField.getText()) > Double.valueOf(priceTextField.getText())  ){
+                    downPaymentTextField.setText("");
+                }
+            }
+        });
+
         GridPane.setConstraints(downPaymentLabel,0,11);
         GridPane.setConstraints(downPaymentTextField,1,11);
 
@@ -178,10 +191,20 @@ public class NewOfferView {
         startDatePicker.setPromptText("Pick Start Date");
         GridPane.setConstraints(startLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
-
         Label endLabel = new Label("End Date: ");
         DatePicker endDatePicker = new DatePicker();
         endDatePicker.setPromptText("Pick End Date");
+
+        endDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate endDate, boolean empty) {
+                if (endDate.isBefore(startDatePicker.getValue())) {
+                    setStyle("-fx-background-color: #ffc0cb; -fx-text-fill: darkgray;");
+                    setDisable(true);
+                }
+            }
+        });
+
         GridPane.setConstraints(endLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
 
@@ -321,9 +344,11 @@ public class NewOfferView {
 
 
         Button acceptBtn = new Button("Accept Offer");
+        acceptBtn.setDisable(true);
 //        acceptBtn.setTranslateX(520);
 //        acceptBtn.setTranslateY(598);
         Button csvBtn = new Button("Save as CSV");
+        csvBtn.setDisable(true);
         GridPane.setConstraints(csvBtn,7,17);
         GridPane.setConstraints(acceptBtn,8,17);
 
@@ -402,23 +427,29 @@ public class NewOfferView {
         getButton.disableProperty().bind(cprBooleanBind);
 
 
-        BooleanBinding calcBind = cprBooleanBind
-                .or(creditRatingText.textProperty().isEmpty())
-
-                //.or(installmentPeriodCombobox.valueProperty().isNull())
-                .or(salesPersonCombobox.valueProperty().isNull());
+        BooleanBinding calcBind = (
+                creditRatingText.textProperty().isEmpty()
+                .or(nameTextField.textProperty().isEmpty())
+                .or(phoneTextField.textProperty().isEmpty())
+                .or(emailTextField.textProperty().isEmpty())
+                .or(adressTextField.textProperty().isEmpty())
+                .or(zipCodeTextField.textProperty().isEmpty())
+                .or(carModelCombobox.valueProperty().isNull())
+                .or(priceTextField.textProperty().isEmpty())
+                .or(downPaymentTextField.textProperty().isEmpty())
+                .or(startDatePicker.valueProperty().isNull())
+                .or(endDatePicker.valueProperty().isNull())
+                .or(salesPersonCombobox.valueProperty().isNull())
+        );
         calcQuoteButton.disableProperty().bind(calcBind);
+
+        getButton.setOnAction(click -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));
         clearButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));
 
 
 
-//        getButton.setOnAction(click -> {
-//            if(cprTextField.getText().length() != 8){
-//                creditRatingText.setText("Incorrect CPR Number, Plase Try Again");
-//            }
-//            creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText())));
-//        });
-        getButton.setOnAction(click -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));
+
+
         calcQuoteButton.setOnAction(click -> {
             creditRatingTxt.setText(creditRatingText.getText());
             bankInterestTxt.setText((paymentCalc.rkiInterestCalc(creditRatingTxt.getText())) + " %");
@@ -429,19 +460,28 @@ public class NewOfferView {
             buyerTxt.setText(nameTextField.getText());
             payPeriodTxt.setText(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString()) + " Years");
             offerSalesPersTxt.setText(salesPersonCombobox.getValue().toString());
-            //cprTxt.setText(cprTextField.getText());
             carModelTxt.setText(carModelCombobox.getValue().toString());
             periodPayInterestTxt.setText(paymentCalc.periodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())) + " %");
             totalInterestRateTxt.setText(paymentCalc.calculateTotalInterest() + " %");
             totalInterestRateTxt.setUnderline(true);
             totalPriceTxt.setText(priceFormat.formatter(paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))) + " Kr.");
             totalPriceTxt.setUnderline(true);
-            approvedByTxt.setText(approvelText.approvel(Double.valueOf(priceTextField.getText()),salesPersonCombobox.getValue().toString()));
+            approvedByTxt.setText(salesLimit.approvel(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()), salesPersonCombobox.getValue().toString()));
             monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(startDatePicker.getValue().toString(),endDatePicker.getValue().toString(),paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText())))) + " Kr.");
             monthPayTxt.setUnderline(true);
             priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalc.carPriceAfterDownPayment(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))) + " Kr.");
             priceAfterDownPayTxt.setUnderline(true);
+            csvBtn.setDisable(false);
+            acceptBtn.setDisable(false);
         });
+        acceptBtn.setOnAction(click -> {
+            if( (Double.valueOf(priceTextField.getText()) - Double.valueOf(downPaymentTextField.getText()) ) >= 1000000 ){
+                notifyWindow.notifySalesManager(salesPersonCombobox.getValue().toString());
+            }else{
+                notifyWindow.acceptOffer(salesPersonCombobox.getValue().toString());
+            }
+        });
+
         csvBtn.setOnAction(click -> {
             FileChooser fileChooser = new FileChooser();
 
