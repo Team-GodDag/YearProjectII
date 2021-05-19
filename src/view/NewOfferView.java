@@ -138,9 +138,9 @@ public class NewOfferView {
 //            }
 //        });
 
-        Label phoneLabel = new Label("Phone: ");
+        Label phoneLabel = new Label("Telefon: ");
         TextField phoneTextField = new TextField();
-        phoneTextField.setPromptText("Phone Number");
+        phoneTextField.setPromptText("Telefon Nr.");
         writeOnlyNumbers.input(phoneTextField);
         textFieldCheck.addTextLimiter(phoneTextField,8);
 
@@ -154,23 +154,23 @@ public class NewOfferView {
         GridPane.setConstraints(emailLabel,0,6);
         GridPane.setConstraints(emailTextField,1,6);
 
-        Label adressLabel = new Label("Adress: ");
+        Label adressLabel = new Label("Adresse: ");
         TextField adressTextField = new TextField();
-        adressTextField.setPromptText("Adress");
+        adressTextField.setPromptText("Adresse");
         GridPane.setConstraints(adressLabel,0,7);
         GridPane.setConstraints(adressTextField,1,7);
 
-        Label zipCodeLabel = new Label("Zip Code: ");
+        Label zipCodeLabel = new Label("Postnummer: ");
         TextField zipCodeTextField = new TextField();
-        zipCodeTextField.setPromptText("Zip Code");
+        zipCodeTextField.setPromptText("Postnummer");
         textFieldCheck.addTextLimiter(zipCodeTextField,4);
         writeOnlyNumbers.input(zipCodeTextField);
         GridPane.setConstraints(zipCodeLabel,0,8);
         GridPane.setConstraints(zipCodeTextField,1,8);
 
-        Label carModelLabel = new Label("Car Model: ");
+        Label carModelLabel = new Label("Bil Model: ");
         ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.createCarList()));
-        carModelCombobox.setPromptText("Car Model");
+        carModelCombobox.setPromptText("Bil Model");
         GridPane.setConstraints(carModelLabel,0,9);
         GridPane.setConstraints(carModelCombobox,1,9);
         carModelCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -182,15 +182,15 @@ public class NewOfferView {
             }
         );
 
-        Label priceLabel = new Label("Price: ");
+        Label priceLabel = new Label("Pris: ");
         priceTextField = new TextField();
-        priceTextField.setPromptText("Price");
+        priceTextField.setPromptText("Pris");
         GridPane.setConstraints(priceLabel,0,10);
         GridPane.setConstraints(priceTextField,1,10);
 
-        Label downPaymentLabel = new Label("Down Payment: ");
+        Label downPaymentLabel = new Label("Udbetaling: ");
         TextField downPaymentTextField = new TextField();
-        downPaymentTextField.setPromptText("Down Payment:");
+        downPaymentTextField.setPromptText("Udbetaling:");
         writeOnlyNumbers.input(downPaymentTextField);
         downPaymentTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {
             if (!newValue) { //when focus lost
@@ -203,14 +203,14 @@ public class NewOfferView {
         GridPane.setConstraints(downPaymentLabel,0,11);
         GridPane.setConstraints(downPaymentTextField,1,11);
 
-        Label startLabel = new Label("Start Date: ");
+        Label startLabel = new Label("Start Dato: ");
         DatePicker startDatePicker = new DatePicker();
-        startDatePicker.setPromptText("Pick Start Date");
+        startDatePicker.setPromptText("Vælg Start Dato");
         GridPane.setConstraints(startLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
-        Label endLabel = new Label("End Date: ");
+        Label endLabel = new Label("Slut Dato: ");
         DatePicker endDatePicker = new DatePicker();
-        endDatePicker.setPromptText("Pick End Date");
+        endDatePicker.setPromptText("Vælg Slut Dato");
 
         endDatePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
@@ -225,13 +225,13 @@ public class NewOfferView {
         GridPane.setConstraints(endLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
 
-        Label salesPersonLabel = new Label("Sales Person: ");
+        Label salesPersonLabel = new Label("Salgsperson: ");
         ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonListFactory.createSalesPersonList()));
-        salesPersonCombobox.setPromptText("Sales Person:");
+        salesPersonCombobox.setPromptText("Salgsperson:");
         GridPane.setConstraints(salesPersonLabel,0,14);
         GridPane.setConstraints(salesPersonCombobox,1,14);
 
-        Button calcQuoteButton = new Button("Calculate Sales Offer");
+        Button calcQuoteButton = new Button("Udregn Tilbud");
 
 
         GridPane.setConstraints(calcQuoteButton,0,17);
@@ -255,17 +255,17 @@ public class NewOfferView {
 //        GridPane.setConstraints(caseNoLbl,7,4);
 //        GridPane.setConstraints(caseNoTxt,8,4);
 
-        Label createdLbl = new Label("Created:");
+        Label createdLbl = new Label("Oprettet:");
         Text createdTxt = new Text();
         GridPane.setConstraints(createdLbl,7,4);
         GridPane.setConstraints(createdTxt,8,4);
 
-        Label buyerLbl = new Label("Buyer:");
+        Label buyerLbl = new Label("Køber:");
         Text buyerTxt = new Text();
         GridPane.setConstraints(buyerLbl,7,5);
         GridPane.setConstraints(buyerTxt,8,5);
 
-        Label carModelLbl = new Label("Car model:");
+        Label carModelLbl = new Label("Bil Model:");
         Text carModelTxt = new Text();
         GridPane.setConstraints(carModelLbl,7,6);
         GridPane.setConstraints(carModelTxt,8,6);
@@ -275,12 +275,12 @@ public class NewOfferView {
         GridPane.setConstraints(carPriceLbl,7,7);
         GridPane.setConstraints(carPriceTxt,8,7,2,1);
 
-        Label downPayLbl = new Label("Down payment:");
+        Label downPayLbl = new Label("Udbetaling:");
         Text downPayTxt = new Text("");
         GridPane.setConstraints(downPayLbl,7,8);
         GridPane.setConstraints(downPayTxt,8,8);
 
-        Label payPeriodLbl = new Label("Payment Period:");
+        Label payPeriodLbl = new Label("Betalings Periode:");
         Text payPeriodTxt = new Text("");
         GridPane.setConstraints(payPeriodLbl,7,9);
         GridPane.setConstraints(payPeriodTxt,8,9);
@@ -470,9 +470,9 @@ public class NewOfferView {
         calcQuoteButton.setOnAction(click -> {
             creditRatingTxt.setText(creditRatingText.getText());
             bankInterestTxt.setText((paymentCalc.rkiInterestCalc(creditRatingTxt.getText())) + " %");
-            carPriceTxt.setText(priceFormat.formatter(priceTextField.getText()) + " Kr.");
+            carPriceTxt.setText(priceFormat.formatter(priceTextField.getText()));
             downPayTxt.setText(priceFormat.formatter(downPaymentTextField.getText())+ " Kr.");
-            downPayInterestTxt.setText(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))+ " %");
+            downPayInterestTxt.setText(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))+ " ");
             createdTxt.setText(dateFormat.format(date));
             buyerTxt.setText(nameTextField.getText());
             payPeriodTxt.setText(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString()) + " Years");
@@ -528,6 +528,6 @@ public class NewOfferView {
     }
 
     private void setCarInfo(Car car) {
-        priceTextField.setText(priceFormat.formatter(car.getPrice()));
+        priceTextField.setText(car.getPrice());
     }
 }
