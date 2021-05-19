@@ -91,6 +91,13 @@ public class PaymentCalc {
         return Double.valueOf(totalInterest);
 
     }
+    public double calculateTotalInterests(double rkiAndBankInterestRate,double paymentPeriodInterestRate,double downPaymentInterestRate){
+        //double totalInterest = rkiAndBankInterestRate + paymentPeriodInterestRate + downPaymentInterestRate;
+        //System.out.println(totalInterest);
+        this.totalInterest = Double.valueOf(rkiAndBankInterestRate+paymentPeriodInterestRate+downPaymentInterestRate);
+        return Double.valueOf(totalInterest);
+
+    }
     public double carPriceAfterDownPayment(double carPrice, double downPayment){
         if(downPayment>carPrice){
             return -1;

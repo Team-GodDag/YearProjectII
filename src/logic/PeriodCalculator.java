@@ -20,7 +20,6 @@ public class PeriodCalculator {
 
         String dateString1FromJDatePicker = startDate;
         String dateString2FromJDatePicker = endDate;
-
         LocalDate from = LocalDate.parse(dateString1FromJDatePicker);
         LocalDate to = LocalDate.parse(dateString2FromJDatePicker);
         int differenceInDays = (int) ChronoUnit.DAYS.between(from, to);
