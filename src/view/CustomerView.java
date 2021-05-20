@@ -16,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import logic.WriteCSV;
 import javafx.util.Callback;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 public class CustomerView {
 
     private Customer customer;
-    private Text nameText, phoneText, emailText, adressText, cprText;
+    private Text nameText, phoneText, emailText, adressText, cprText, historyText, customerNumText;
     private TextField searchTextField;
     private ListView listView;
 
@@ -144,17 +143,17 @@ public class CustomerView {
 
         Label historyLabel = new Label("Historik: ");
         GridPane.setConstraints(historyLabel,0,5);
-        Text historyText = new Text("Han er rig, no worries");
+        historyText = new Text();
         GridPane.setConstraints(historyText,1,5);
 
-        Label rkiLabel = new Label("RKI Kategori: ");
-        GridPane.setConstraints(rkiLabel,5,0);
-        Text rkiText = new Text("A");
-        GridPane.setConstraints(rkiText,6,0);
+//        Label rkiLabel = new Label("RKI Kategori: ");             //SKAL VEL IKKE VÆRE HERINDE
+//        GridPane.setConstraints(rkiLabel,5,0);
+//        Text rkiText = new Text("A");
+//        GridPane.setConstraints(rkiText,6,0);
 
         Label customerNumLabel = new Label("Kunde Nr.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
-        Text customerNumText = new Text("01");                  //skal det med? er det id?
+        customerNumText = new Text();                  //skal det med? er det id?
         GridPane.setConstraints(customerNumText,6,1);
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
@@ -194,8 +193,8 @@ public class CustomerView {
                 cprText,
                 historyLabel,
                 historyText,
-                rkiLabel,
-                rkiText,
+//                rkiLabel,
+//                rkiText,
                 customerNumLabel,
                 customerNumText,
                 formerSalesLabel,
@@ -222,6 +221,17 @@ public class CustomerView {
         nameText.setText(customer.getFirstName() + " " + customer.getLastName());
         phoneText.setText(customer.getPhone());
         adressText.setText(customer.getAddress());
+        historyText.setText(checkCustomerHistory(customer));
+        customerNumText.setText(String.valueOf(customer.getId()));
+
+    }
+
+    public String checkCustomerHistory(Customer customer) {
+        if(customer.isGoodGuy() == false) {
+            return "Dårlig";
+        } else {
+            return "God";
+        }
     }
 
 }

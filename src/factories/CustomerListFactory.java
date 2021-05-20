@@ -14,4 +14,10 @@ public class CustomerListFactory {              //skal den ligge i logic?
     public static Customer getCustomerByCpr(String cpr) {
         return new CustomerJDBC().getCustomerByCpr(cpr);
     }
+
+    public static void addCustomer(Customer customer) {
+        new CustomerJDBC().addCustomer(customer);
+    }
+
+
 }

@@ -64,11 +64,11 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
     public boolean updateSalesPerson(SalesPersonJDBC salesPersonJDBC) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("firstname='" + salesPersonJDBC.getFirstname() + "', ");
-            assignments.append("lastname='" + salesPersonJDBC.getLastname() + "', ");
-            assignments.append("email='" + salesPersonJDBC.getEmail());
-            assignments.append("phonenumber='" + salesPersonJDBC.getPhonenumber());
-            assignments.append("limit='" + salesPersonJDBC.getLimit());
+            assignments.append("firstname='"    + salesPersonJDBC.getFirstname()    + "', ");
+            assignments.append("lastname='"     + salesPersonJDBC.getLastname()     + "', ");
+            assignments.append("email='"        + salesPersonJDBC.getEmail()        + "', ");
+            assignments.append("phonenumber='"  + salesPersonJDBC.getPhonenumber()  + "', ");
+            assignments.append("limit='"        + salesPersonJDBC.getLimit());
 
 
             String condition = "id=" + salesPersonJDBC.getId();

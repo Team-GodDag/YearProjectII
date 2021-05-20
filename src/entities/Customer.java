@@ -1,19 +1,29 @@
 package entities;
 
-public class Customer {     //lavet af Rikke    Skal den bare hedde Customer?
+public class Customer {
+    //lavet af Rikke    Skal den bare hedde Customer?
 
     private int id;
     private String cpr, firstName, lastName, email, address, phone; //skal vel bare være en String, og så kan den blive en Property i logik?
+    private boolean isGoodGuy;
 
-    public Customer(int id, String cpr, String firstname, String lastname, String email, String address, String phone) {
+    public Customer(int id, String cpr, String firstname, String lastname, String email, String address, String phone, boolean isGoodGuy) {
         this.id = id;
         this.cpr = cpr;
         this.firstName = firstname;
         this.lastName = lastname;
         this.email = email;
         this.address = address;
+//        this.zip = zip;
         this.phone = phone;
+        this.isGoodGuy = isGoodGuy;
     }
+
+    public Customer(String cpr, String firstName, String lastName, String email, String address, String phone) {
+        this(0, cpr, firstName, lastName, email, address, phone, true);
+
+    }
+
 
     //GETTERS
     public int getId() {
@@ -23,7 +33,6 @@ public class Customer {     //lavet af Rikke    Skal den bare hedde Customer?
     public void setId(int id) {
         this.id = id;
     }
-
     public String getCpr() {
         return cpr;
     }
@@ -48,11 +57,15 @@ public class Customer {     //lavet af Rikke    Skal den bare hedde Customer?
         return phone;
     }
 
+    public boolean isGoodGuy() {
+        return isGoodGuy;
+    }
+
     //SETTERS
+
     public void setCpr(String cpr) {
         this.cpr = cpr;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -71,6 +84,10 @@ public class Customer {     //lavet af Rikke    Skal den bare hedde Customer?
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setGoodGuy(boolean goodGuy) {
+        isGoodGuy = goodGuy;
     }
 
 }

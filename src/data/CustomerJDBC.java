@@ -18,20 +18,21 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean addCustomer(Customer customer) {
         try {
             String sql = "INSERT INTO customers VALUES ('" +
-                    customer.getId()            + "', '" +
+//                    customer.getId()            + "', '" +          //autogenereret
                     customer.getCpr()           + "', '" +
                     customer.getFirstName()     + "', '" +
                     customer.getLastName()      + "', '" +
                     customer.getEmail()         + "', '" +
                     customer.getAddress()       + "', '" +
-                    customer.getPhone()         + ")";
+                    customer.getPhone()         + "', " +
+                    customer.isGoodGuy()        + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 int autoKey = resultSet.getInt(1);
                 customer.setId(autoKey);
             }
@@ -64,12 +65,13 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean updateCustomer(Customer customer) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("cpr='"          + customer.getCpr() + "', ");
-            assignments.append("firstname='"    + customer.getFirstName() + "', ");
-            assignments.append("lastname='"     + customer.getLastName() + "', ");
-            assignments.append("email='"        + customer.getEmail());
-            assignments.append("address='"      + customer.getAddress());
-            assignments.append("phonenumber='"  + customer.getPhone());
+            assignments.append("cpr='"              + customer.getCpr()         + "', ");
+            assignments.append("firstname='"        + customer.getFirstName()   + "', ");
+            assignments.append("lastname='"         + customer.getLastName()    + "', ");
+            assignments.append("email='"            + customer.getEmail()       + "', ");
+            assignments.append("address='"          + customer.getAddress()     + "', ");
+            assignments.append("phonenumber='"      + customer.getPhone()       + "', ");
+            assignments.append("customerhistory='"  + customer.isGoodGuy());
 
 
             String condition = "id=" + customer.getId();
@@ -106,8 +108,9 @@ public class CustomerJDBC implements CustomerDataAccess {
                 String email        = resultSet.getString("email");
                 String address      = resultSet.getString("address");
                 String phone        = resultSet.getString("phonenumber");
+                boolean isGoodGuy   = resultSet.getBoolean("customerhistory");
 
-                Customer customer = new Customer(id, cpr, firstName, lastName, email ,address , phone);
+                Customer customer = new Customer(id, cpr, firstName, lastName, email, address, phone, isGoodGuy);
                 customers.add(customer);
             }
         } catch (SQLException e) {
