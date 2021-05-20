@@ -4,9 +4,10 @@ import java.text.DecimalFormat;
 
 public class PaymentCalc {
 
-    private double rkiInterestRate;
+    private double rkiAndBankInterestRate;
+    private double bankInterestRate;
     private double downPaymentInterestRate;
-    private double paymentYearsInterestRate;
+    private double paymentPeriodInterestRate;
     private double priceAfterDownPayment;
     private double totalInterest;
 
@@ -14,101 +15,158 @@ public class PaymentCalc {
 
     public double rkiInterestCalc(String creditRating) {
 
-        double rkiInterestRate = 0.0;
+        rkiAndBankInterestRate = 0.0;
+        bankInterestRate = InterestRate.i().todaysRate();
         DecimalFormat df = new DecimalFormat("#,##");
 
-        //double rkiInterestRate;
+        //double rkiAndBankInterestRate;
 
         if (creditRating == "A") {
-            rkiInterestRate = InterestRate.i().todaysRate();
-            rkiInterestRate += 1;
-            this.rkiInterestRate = Double.valueOf(df.format(rkiInterestRate));
-            System.out.println(rkiInterestRate);
-            //return rkiInterestRate;
+            rkiAndBankInterestRate = InterestRate.i().todaysRate();
+            rkiAndBankInterestRate += 1;
+            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+            System.out.println(rkiAndBankInterestRate);
+            //return rkiAndBankInterestRate;
 
         } if(creditRating == "B") {
-            rkiInterestRate = InterestRate.i().todaysRate();
-            rkiInterestRate += 2;
-            this.rkiInterestRate = Double.valueOf(df.format(rkiInterestRate));
-            System.out.println(rkiInterestRate);
-            //return rkiInterestRate;
+            rkiAndBankInterestRate = InterestRate.i().todaysRate();
+            rkiAndBankInterestRate += 2;
+            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+            System.out.println(rkiAndBankInterestRate);
+            //return rkiAndBankInterestRate;
 
         }if(creditRating == "C") {
-            rkiInterestRate = InterestRate.i().todaysRate();
-            rkiInterestRate += 3;
-            this.rkiInterestRate = Double.valueOf(df.format(rkiInterestRate));
-            System.out.println(rkiInterestRate);
-            //return rkiInterestRate;
+            rkiAndBankInterestRate = InterestRate.i().todaysRate();
+            rkiAndBankInterestRate += 3;
+            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+            System.out.println(rkiAndBankInterestRate);
+            //return rkiAndBankInterestRate;
 
         }else{
-            this.rkiInterestRate = Double.valueOf(df.format(rkiInterestRate));
-            System.out.println(rkiInterestRate);
-           // return rkiInterestRate;
+            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+            System.out.println(rkiAndBankInterestRate);
+           // return rkiAndBankInterestRate;
         }
-        return this.rkiInterestRate = Double.valueOf(df.format(rkiInterestRate));
+        return this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
     }
 
     public  double downPaymentCalc(Double price, Double downPayment){
 
         double downPaymentInterestRate = 0.0;
-        //String result;
-
-        if( (downPayment/price) < 0.5 ){
-            downPaymentInterestRate = 1.0;
-            //result = String.valueOf(downPaymentInterestRate);
+        if(price>=downPayment) {
+            if ((downPayment / price) < 0.5) {
+                downPaymentInterestRate = 1.0;
+                this.downPaymentInterestRate = Double.valueOf(downPaymentInterestRate);
+                System.out.println(downPaymentInterestRate);
+                return Double.valueOf(downPaymentInterestRate);
+            }
             this.downPaymentInterestRate = Double.valueOf(downPaymentInterestRate);
-            System.out.println(downPaymentInterestRate);
             return Double.valueOf(downPaymentInterestRate);
-        }
-        //result = String.valueOf(downPaymentInterestRate);
-        System.out.println("FEJL");
-        this.downPaymentInterestRate = Double.valueOf(downPaymentInterestRate);
-        System.out.println(downPaymentInterestRate);
-        return Double.valueOf(downPaymentInterestRate);
-
+        }else
+            return -1;
 
     }
 
     public double periodInterestRate(int paymentYears){
-        double paymentYearsInterestRate = 0.0;
-        if(paymentYears > 3) {
-            paymentYearsInterestRate = 1;
-            this.paymentYearsInterestRate = Double.valueOf(paymentYearsInterestRate);
-            System.out.println(paymentYearsInterestRate);
-            return Double.valueOf(paymentYearsInterestRate);
+        paymentPeriodInterestRate = 0.0;
+        if(paymentYears<0){
+            return -1;
+        }else {
+            if (paymentYears > 3) {
+                paymentPeriodInterestRate = 1;
+                this.paymentPeriodInterestRate = Double.valueOf(paymentPeriodInterestRate);
+                System.out.println(paymentPeriodInterestRate);
+                return Double.valueOf(paymentPeriodInterestRate);
+            }
+            this.paymentPeriodInterestRate = Double.valueOf(paymentPeriodInterestRate);
+            System.out.println(paymentPeriodInterestRate);
+            return Double.valueOf(paymentPeriodInterestRate);
         }
-        this.paymentYearsInterestRate = Double.valueOf(paymentYearsInterestRate);
-        System.out.println(paymentYearsInterestRate);
-        return Double.valueOf(paymentYearsInterestRate);
     }
 
     public double calculateTotalInterest(){
-        double totalInterest = rkiInterestRate + paymentYearsInterestRate + downPaymentInterestRate;
+        double totalInterest = rkiAndBankInterestRate + paymentPeriodInterestRate + downPaymentInterestRate;
         System.out.println(totalInterest);
         this.totalInterest = Double.valueOf(totalInterest);
         return Double.valueOf(totalInterest);
 
     }
-    public double carPriceAfterDownPayment(double carPrice, double downpayment){
-        this.priceAfterDownPayment = carPrice - downpayment;
+    public double calculateTotalInterests(double rkiAndBankInterestRate,double paymentPeriodInterestRate,double downPaymentInterestRate){
+        //double totalInterest = rkiAndBankInterestRate + paymentPeriodInterestRate + downPaymentInterestRate;
+        //System.out.println(totalInterest);
+        this.totalInterest = Double.valueOf(rkiAndBankInterestRate+paymentPeriodInterestRate+downPaymentInterestRate);
+        return Double.valueOf(totalInterest);
+
+    }
+    public double carPriceAfterDownPayment(double carPrice, double downPayment){
+        if(downPayment>carPrice){
+            return -1;
+        }
+        this.priceAfterDownPayment = carPrice - downPayment;
         return priceAfterDownPayment;
     }
 
     public double totalCarPrice(double price, double downPayment){
-
+        if(downPayment>price){
+            return -1;
+        }
        double totalPrice = (price - downPayment) * (1 + (totalInterest /100));
        return Double.valueOf(totalPrice);
     }
 
     public double getInterestRate() {
-        return rkiInterestRate;
+        return rkiAndBankInterestRate;
     }
 
     public double getDownPayment() {
         return downPayment;
     }
 
+    public double getRkiAndBankInterestRate() {
+        return rkiAndBankInterestRate;
+    }
+
+    public void setDownPaymentInterestRate(double downPaymentInterestRate) {
+        this.downPaymentInterestRate = downPaymentInterestRate;
+    }
+
+    public void setPaymentPeriodInterestRate(double paymentPeriodInterestRate) {
+        this.paymentPeriodInterestRate = paymentPeriodInterestRate;
+    }
+
+    public void setPriceAfterDownPayment(double priceAfterDownPayment) {
+        this.priceAfterDownPayment = priceAfterDownPayment;
+    }
+
+    public void setTotalInterest(double totalInterest) {
+        this.totalInterest = totalInterest;
+    }
+
+    public void setDownPayment(double downPayment) {
+        this.downPayment = downPayment;
+    }
+
     public void setDownPayment(String downpayMent) {
         this.downPayment = Double.valueOf(downpayMent);
+    }
+
+    public double getBankInterestRate() {
+        return bankInterestRate;
+    }
+
+    public double getDownPaymentInterestRate() {
+        return downPaymentInterestRate;
+    }
+
+    public double getPaymentPeriodInterestRate() {
+        return paymentPeriodInterestRate;
+    }
+
+    public double getPriceAfterDownPayment() {
+        return priceAfterDownPayment;
+    }
+
+    public double getTotalInterest() {
+        return totalInterest;
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class AllSalesPersons {  //TO BE DELETED
     public static ArrayList<SalesPerson> allSalesPersons = new ArrayList<>();
 
-    public void addCar(SalesPerson salesPerson){
+    public void addSalesPerson(SalesPerson salesPerson){
         allSalesPersons.add(salesPerson);
     }
 }
