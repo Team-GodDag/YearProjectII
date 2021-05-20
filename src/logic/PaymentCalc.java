@@ -1,5 +1,7 @@
 package logic;
 
+import data.InterestRate;
+
 import java.text.DecimalFormat;
 
 public class PaymentCalc {
@@ -106,7 +108,7 @@ public class PaymentCalc {
         return priceAfterDownPayment;
     }
 
-    public double totalCarPrice(double price, double downPayment){
+    public double totalCarPrice(double price, double downPayment, double totalInterest){
         if(downPayment>price){
             return -1;
         }

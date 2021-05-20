@@ -1,4 +1,4 @@
-package logic;
+package data;
 
 import java.time.LocalDate;
 import java.util.Random;
