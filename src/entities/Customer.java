@@ -1,5 +1,6 @@
 package entities;
 
+
 public class Customer {
     //lavet af Rikke    Skal den bare hedde Customer?
 
@@ -14,7 +15,6 @@ public class Customer {
         this.lastName = lastname;
         this.email = email;
         this.address = address;
-//        this.zip = zip;
         this.phone = phone;
         this.isGoodGuy = isGoodGuy;
     }
@@ -57,8 +57,12 @@ public class Customer {
         return phone;
     }
 
-    public boolean isGoodGuy() {
-        return isGoodGuy;
+    public int isGoodGuy() {
+        if(isGoodGuy == true) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     //SETTERS

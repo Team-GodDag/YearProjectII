@@ -2,6 +2,7 @@ package data;
 
 import entities.Customer;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,7 +19,6 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean addCustomer(Customer customer) {
         try {
             String sql = "INSERT INTO customers VALUES ('" +
-//                    customer.getId()            + "', '" +          //autogenereret
                     customer.getCpr()           + "', '" +
                     customer.getFirstName()     + "', '" +
                     customer.getLastName()      + "', '" +
@@ -91,7 +91,6 @@ public class CustomerJDBC implements CustomerDataAccess {
         }
     }
 
-//    @Override
     public ArrayList<Customer> getCustomersByCondition(String condition) {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         System.out.println("condition: " + condition);
