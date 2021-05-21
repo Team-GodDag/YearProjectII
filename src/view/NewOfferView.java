@@ -1,6 +1,7 @@
 package view;
 // når der skal oprettes et tilbud/ordre
 
+import data.CreditRator;
 import entities.Car;
 import factories.CarListFactory;
 import factories.SalesPersonListFactory;
@@ -28,6 +29,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
     SaveToCsv saveToCsv = new SaveToCsv();
@@ -420,43 +422,39 @@ public class NewOfferView {
         );
         calcQuoteButton.disableProperty().bind(calcBind);
 
-        getButton.setOnAction(click -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));
 
+        getButton.setOnAction(click -> CompletableFuture.runAsync(() -> {
+            creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText())));
+        }));
 
         clearButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));
 
         calcQuoteButton.setOnAction(click -> {
             creditRatingTxt.setText(creditRatingText.getText());
-            bankInterestTxt.setText(String.valueOf(paymentCalc.rkiInterestCalc(creditRatingTxt.getText())));
-            carPriceTxt.setText(priceFormat.formatter(priceTextField.getText()));
-            downPayTxt.setText(priceFormat.formatter(downPaymentTextField.getText()));
-            downPayInterestTxt.setText(String.valueOf(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))));
+            bankInterestTxt.setText((paymentCalc.rkiInterestCalc(creditRatingTxt.getText())) + " %");
+            carPriceTxt.setText(priceFormat.formatter(priceTextField.getText()) + " Kr.");
+            downPayTxt.setText(priceFormat.formatter(downPaymentTextField.getText())+ " Kr.");
+            downPayInterestTxt.setText(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))+ " %");
             createdTxt.setText(dateFormat.format(date));
             buyerTxt.setText(nameTextField.getText());
-            payPeriodTxt.setText(String.valueOf(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())));
+            payPeriodTxt.setText(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString()) + " Years");
             offerSalesPersTxt.setText(salesPersonCombobox.getValue().toString());
             carModelTxt.setText(carModelCombobox.getValue().toString());
-            periodPayInterestTxt.setText(String.valueOf(paymentCalc.periodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString()))));
+            periodPayInterestTxt.setText(paymentCalc.periodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())) + " %");
             totalInterestRateTxt.setText(String.valueOf(paymentCalc.calculateTotalInterest()));
             totalInterestRateTxt.setUnderline(true);
-            totalPriceTxt.setText(priceFormat.formatter(paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))));
+            totalPriceTxt.setText(String.valueOf(paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()),Double.valueOf(totalInterestRateTxt.getText()))));
             totalPriceTxt.setUnderline(true);
             approvedByTxt.setText(salesLimit.approval(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()), salesPersonCombobox.getValue().toString()));
-            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(startDatePicker.getValue().toString(),endDatePicker.getValue().toString(),paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText())))));
+            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(startDatePicker.getValue().toString(),endDatePicker.getValue().toString(),paymentCalc.totalCarPrice(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()),Double.valueOf(totalInterestRateTxt.getText())))) + " Kr.");
             monthPayTxt.setUnderline(true);
-            priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalc.carPriceAfterDownPayment(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))));
+            priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalc.carPriceAfterDownPayment(Double.valueOf(priceTextField.getText()),Double.valueOf(downPaymentTextField.getText()))) + " Kr.");
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
-            paymentCalc.setDownPayment(downPaymentTextField.getText());
-            paymentCalc.setDownPaymentInterestRate(Double.valueOf(downPayInterestTxt.getText()));
-            paymentCalc.setPaymentPeriodInterestRate(Double.valueOf(periodPayInterestTxt.getText()));
-            //paymentCalc.setPriceAfterDownPayment(Double.valueOf(priceAfterDownPayTxt.getText()));
-            paymentCalc.setTotalInterest(Double.valueOf(totalInterestRateTxt.getText()));
-            paymentCalc.getBankInterestRate();
-            System.out.println("interest rate test" + paymentCalc.getInterestRate());
-
+            paymentCalc.setDownPayment(Double.valueOf(downPaymentTextField.getText())); /////!!!!!!
         });
+
         acceptBtn.setOnAction(click -> {
             if( (Double.valueOf(priceTextField.getText()) - Double.valueOf(downPaymentTextField.getText()) ) >= 1000000 ){
 //************                OfferDataAccess ofda = new OfferJDBC().addOffer()
