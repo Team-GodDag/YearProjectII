@@ -13,4 +13,8 @@ public class OfferListFactory {
     public static ArrayList<Offer> createCarList() {
         return new OfferJDBC().getAllOffers();
     }
+
+    public static void addOffer(Offer offer) {
+        new OfferJDBC().addOffer(offer);
+    }
 }

@@ -2,7 +2,6 @@ package data;
 
 import entities.Customer;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,7 +24,7 @@ public class CustomerJDBC implements CustomerDataAccess {
                     customer.getEmail()         + "', '" +
                     customer.getAddress()       + "', '" +
                     customer.getPhone()         + "', " +
-                    customer.isGoodGuy()        + ")";
+                    customer.isGoodGuyBit()     + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -71,7 +70,7 @@ public class CustomerJDBC implements CustomerDataAccess {
             assignments.append("email='"            + customer.getEmail()       + "', ");
             assignments.append("address='"          + customer.getAddress()     + "', ");
             assignments.append("phonenumber='"      + customer.getPhone()       + "', ");
-            assignments.append("customerhistory='"  + customer.isGoodGuy());
+            assignments.append("customerhistory='"  + customer.isGoodGuyBit());
 
 
             String condition = "id=" + customer.getId();

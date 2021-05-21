@@ -8,12 +8,13 @@ import javafx.beans.property.StringProperty;
 public class Car {
 
     public int id;
-    public StringProperty model_name, price, horsepower;
+    public StringProperty model_name, horsepower;
+    double price;
 
-    public Car(int id, String model_name, String price, String horsepower) {
+    public Car(int id, String model_name, double price, String horsepower) {
         this.id = id;
         this.model_name = new SimpleStringProperty(model_name);
-        this.price = new SimpleStringProperty(price);
+        this.price = price;
         this.horsepower = new SimpleStringProperty(horsepower);
     }
 
@@ -32,12 +33,12 @@ public class Car {
         return model_name;
     }
 
-    public StringProperty priceProperty() {
+    public double getPrice() {
         return price;
     }
 
-    public String getPrice() {
-        return price.get();
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public StringProperty horsepowerProperty() {

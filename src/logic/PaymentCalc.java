@@ -35,14 +35,14 @@ public class PaymentCalc {
             System.out.println(rkiAndBankInterestRate);
             //return rkiAndBankInterestRate;
 
-        }if(creditRating == "C") {
+        } if(creditRating == "C") {
             rkiAndBankInterestRate = InterestRate.i().todaysRate();
             rkiAndBankInterestRate += 3;
             this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
             //return rkiAndBankInterestRate;
 
-        }else{
+        } else {
             this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
            // return rkiAndBankInterestRate;
@@ -50,7 +50,7 @@ public class PaymentCalc {
         return this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
     }
 
-    public  double downPaymentCalc(Double price, Double downPayment){
+    public double downPaymentCalc(Double price, Double downPayment){
 
         double downPaymentInterestRate = 0.0;
         if(price>=downPayment) {

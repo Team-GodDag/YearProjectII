@@ -4,39 +4,94 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import logic.PaymentCalc;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class Offer { // Henrik
 
-    public int id, customerId, salesPersonId, carId;
-    public double rkiInterestRate, payment;
-    public StringProperty car_price, dateOfSale, dateOfPayStart, dateOfPayEnd, approvedBy;
+    public int id, customerId, salesPersonId, carId, approvedBy;
+    public double payment, carPrice, downpaymentIntRate, todaysBankRate, paymentPeriodIntRate;
+    public String creditRating;
+    public Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
-    public Offer(int id, int customer_id, double rkiInterestRate, int seller_id, int car_model_id, String car_price, double payment, String dateOfSale, String dateOfPayStart, String dateOfPayEnd) {
+    public Offer(int id, int customerId, String creditRating, int salesPersonId, int carId, double carPrice, double payment, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd, int approvedBy, double todaysBankRate, double downpaymentIntRate, double paymentPeriodIntRate) {
         this.id = id;
-        this.customerId = customer_id;
-        this.rkiInterestRate = rkiInterestRate;
-        this.salesPersonId = seller_id;
-        this.carId = car_model_id;
-        this.car_price = new SimpleStringProperty(car_price);
+        this.customerId = customerId;
+        this.creditRating = creditRating;
+        this.salesPersonId = salesPersonId;
+        this.carId = carId;
+        this.carPrice = carPrice;
         this.payment = payment;
-        this.dateOfSale = new SimpleStringProperty(dateOfSale);
-        this.dateOfPayStart = new SimpleStringProperty(dateOfPayStart);
-        this.dateOfPayEnd = new SimpleStringProperty(dateOfPayEnd);
+        this.dateOfSale = dateOfSale;
+        this.dateOfPayStart = dateOfPayStart;
+        this.dateOfPayEnd = dateOfPayEnd;
+        this.approvedBy = approvedBy;
+        this.todaysBankRate = todaysBankRate;
+        this.downpaymentIntRate = downpaymentIntRate;
+        this.paymentPeriodIntRate = paymentPeriodIntRate;
 
     }
 
-    public Offer(Customer customer, Car car, SalesPerson salesPerson, PaymentCalc paymentCalc, String dateOfSale, String approvedBy) {
+    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, PaymentCalc paymentCalc, Date dateOfSale, Date startPayDate, Date endPayDate, SalesPerson approvedBy) {
+        this.id = 0;
         this.customerId = customer.getId();
-        this.rkiInterestRate = paymentCalc.getInterestRate();
         this.salesPersonId = salesPerson.getId();
+        this.creditRating = creditRating;
         this.carId = car.getId();
-        this.car_price = car.priceProperty();
+        this.carPrice = car.getPrice();
         this.payment = paymentCalc.getDownPayment();
-        this.dateOfSale = new SimpleStringProperty(dateOfSale);
-        this.approvedBy = new SimpleStringProperty(approvedBy);
+        this.todaysBankRate = paymentCalc.getBankInterestRate();
+        this.dateOfSale = dateOfSale;
+        this.dateOfPayStart = startPayDate;
+        this.dateOfPayEnd = endPayDate;
+        this.approvedBy = approvedBy.getId();
+        this.paymentPeriodIntRate = paymentCalc.getPaymentPeriodInterestRate();
+    }
+
+    public double getDownpaymentIntRate() {
+        return downpaymentIntRate;
+    }
+
+    public void setDownpaymentIntRate(double downpaymentIntRate) {
+        this.downpaymentIntRate = downpaymentIntRate;
+    }
+
+    public double getTodaysBankRate() {
+        return todaysBankRate;
+    }
+
+    public void setTodaysBankRate(double todaysBankRate) {
+        this.todaysBankRate = todaysBankRate;
+    }
+
+    public double getPaymentPeriodIntRate() {
+        return paymentPeriodIntRate;
+    }
+
+    public void setPaymentPeriodIntRate(double paymentPeriodIntRate) {
+        this.paymentPeriodIntRate = paymentPeriodIntRate;
+    }
+
+    public String getCreditRating() {
+        return creditRating;
+    }
+
+    public void setCreditRating(String creditRating) {
+        this.creditRating = creditRating;
     }
 
     public Offer() {
     }
+
+    public Date getDateOfSale() {
+        return dateOfSale;
+    }
+
+    public void setDateOfSale(Date dateOfSale) {
+        this.dateOfSale = dateOfSale;
+    }
+
+
 
     public int getId() {
         return id;
@@ -70,14 +125,6 @@ public class Offer { // Henrik
         this.carId = carId;
     }
 
-    public double getRkiInterestRate() {
-        return rkiInterestRate;
-    }
-
-    public void setRkiInterestRate(double rkiInterestRate) {
-        this.rkiInterestRate = rkiInterestRate;
-    }
-
     public double getPayment() {
         return payment;
     }
@@ -86,63 +133,37 @@ public class Offer { // Henrik
         this.payment = payment;
     }
 
-    public String getCar_price() {
-        return car_price.get();
+    public double getCarPrice() {
+        return carPrice;
     }
 
-    public StringProperty car_priceProperty() {
-        return car_price;
+    public void setCarPrice(double carPrice) {
+        this.carPrice = carPrice;
     }
 
-    public void setCar_price(String car_price) {
-        this.car_price.set(car_price);
-    }
 
-    public String getDateOfSale() {
-        return dateOfSale.get();
-    }
 
-    public StringProperty dateOfSaleProperty() {
-        return dateOfSale;
-    }
-
-    public void setDateOfSale(String dateOfSale) {
-        this.dateOfSale.set(dateOfSale);
-    }
-
-    public String getDateOfPayStart() {
-        return dateOfPayStart.get();
-    }
-
-    public StringProperty dateOfPayStartProperty() {
+    public Date getDateOfPayStart() {
         return dateOfPayStart;
     }
 
-    public void setDateOfPayStart(String dateOfPayStart) {
-        this.dateOfPayStart.set(dateOfPayStart);
+    public void setDateOfPayStart(Date dateOfPayStart) {
+        this.dateOfPayStart = dateOfPayStart;
     }
 
-    public String getDateOfPayEnd() {
-        return dateOfPayEnd.get();
-    }
-
-    public StringProperty dateOfPayEndProperty() {
+    public Date getDateOfPayEnd() {
         return dateOfPayEnd;
     }
 
-    public void setDateOfPayEnd(String dateOfPayEnd) {
-        this.dateOfPayEnd.set(dateOfPayEnd);
+    public void setDateOfPayEnd(Date dateOfPayEnd) {
+        this.dateOfPayEnd = dateOfPayEnd;
     }
 
-    public String getApprovedBy() {
-        return approvedBy.get();
-    }
-
-    public StringProperty approvedByProperty() {
+    public int getApprovedBy() {
         return approvedBy;
     }
 
-    public void setApprovedBy(String approvedBy) {
-        this.approvedBy.set(approvedBy);
+    public void setApprovedBy(int approvedBy) {
+        this.approvedBy = approvedBy;
     }
 }

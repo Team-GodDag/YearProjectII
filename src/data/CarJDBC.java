@@ -92,7 +92,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
             while (resultSet.next()) {// iteration starter 'before first'
                 int id              = resultSet.getInt("car_model_id");
                 String modelName    = resultSet.getString("model_name");
-                String price        = resultSet.getString("price");
+                double price        = resultSet.getDouble("price");
                 String horsepower   = resultSet.getString("horsepower");
 
                 Car car = new Car(id, modelName, price, horsepower);

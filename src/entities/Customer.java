@@ -57,12 +57,15 @@ public class Customer {
         return phone;
     }
 
-    public int isGoodGuy() {
-        if(isGoodGuy == true) {
+    public int isGoodGuyBit() {
+        if(isGoodGuy == false) {
+            return 0;
+        } else
             return 1;
-        } else {
-            return 2;
-        }
+    }
+
+    public boolean isGoodGuy() {
+        return isGoodGuy;
     }
 
     //SETTERS
