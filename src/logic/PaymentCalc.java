@@ -50,7 +50,7 @@ public class PaymentCalc {
         return this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
     }
 
-    public double downPaymentCalc(Double price, Double downPayment){
+    public double downPaymentCalc(Double price, Double downPayment){    //bør måske hedde noget mere sigende
 
         double downPaymentInterestRate = 0.0;
         if(price>=downPayment) {
@@ -62,7 +62,7 @@ public class PaymentCalc {
             }
             this.downPaymentInterestRate = Double.valueOf(downPaymentInterestRate);
             return Double.valueOf(downPaymentInterestRate);
-        }else
+        } else
             return -1;
 
     }
@@ -91,13 +91,13 @@ public class PaymentCalc {
         return Double.valueOf(totalInterest);
 
     }
-    public double calculateTotalInterests(double rkiAndBankInterestRate,double paymentPeriodInterestRate,double downPaymentInterestRate){
+    public double calculateTotalInterests(double rkiAndBankInterestRate,double paymentPeriodInterestRate,double downPaymentInterestRate){   //snydemetode til unit testing
         //double totalInterest = rkiAndBankInterestRate + paymentPeriodInterestRate + downPaymentInterestRate;
         //System.out.println(totalInterest);
         this.totalInterest = Double.valueOf(rkiAndBankInterestRate+paymentPeriodInterestRate+downPaymentInterestRate);
         return Double.valueOf(totalInterest);
-
     }
+
     public double carPriceAfterDownPayment(double carPrice, double downPayment){
         if(downPayment>carPrice){
             return -1;

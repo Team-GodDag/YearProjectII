@@ -58,7 +58,7 @@ public class Customer {
     }
 
     public int isGoodGuyBit() {
-        if(isGoodGuy == false) {
+        if(!isGoodGuy) {
             return 0;
         } else
             return 1;

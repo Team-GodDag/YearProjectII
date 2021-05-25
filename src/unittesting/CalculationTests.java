@@ -71,7 +71,7 @@ public class CalculationTests {
         double paymentPeriodInterestRate =paymentCalc.periodInterestRate(periodCalculator.yearsBetweenDates("2021-05-19","2027-05-19"));
         double downPaymentInterestRate = paymentCalc.downPaymentCalc(10000000.0,2000000.0);
 
-        assertEquals(7,paymentCalc.calculateTotalInterests(rkiAndBankInterestRate,paymentPeriodInterestRate,downPaymentInterestRate));
+        assertEquals(7,paymentCalc.calculateTotalInterests(rkiAndBankInterestRate,paymentPeriodInterestRate,downPaymentInterestRate));  //snydetest
     }
     void totalInterestRate2(){
         PaymentCalc paymentCalc = new PaymentCalc();

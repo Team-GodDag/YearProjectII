@@ -39,14 +39,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
     SaveToCsv saveToCsv = new SaveToCsv();
-    NotifyWindow notifyWindow = new NotifyWindow();
+    NotifyWindow notifyWindow = new NotifyWindow(); //skal nok bare bare lokal variabel
 
-    PeriodCalculator periodCalculator = new PeriodCalculator();
-    PriceFormat priceFormat = new PriceFormat();
-    SalesLimit salesLimit = new SalesLimit();
-    MonthPayCalc monthPayCalc = new MonthPayCalc();
+    PeriodCalculator periodCalculator = new PeriodCalculator();     //Behøver måske ikke egen klasse
+    PriceFormat priceFormat = new PriceFormat();            //Hvorfor ligger den her?
+    SalesLimit salesLimit = new SalesLimit();               //flyt til metode i stedet?
+    MonthPayCalc monthPayCalc = new MonthPayCalc();         //behøver den egen klasse?
     PaymentCalc paymentCalc = new PaymentCalc();
-    WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();
+    WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();     //bruges kun i downpayment - keep local
 
     TextField cprTextField;
     Text creditRatingText, nameTextField, emailTextField, addressTextField, phoneTextField, priceTextField;
@@ -58,7 +58,7 @@ public class NewOfferView {
     Car car;
 
     public Node createView() {
-        Stage window = new Stage();
+        Stage window = new Stage();     //bruges til NotifyManager-popup; skal måske flyttes til relevante sted
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         saleDate = new Date();
 
@@ -190,8 +190,8 @@ public class NewOfferView {
         writeOnlyNumbers.input(downPaymentTextField);
         downPaymentTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {
             if (!newValue) { //when focus lost
-                if(Double.valueOf(downPaymentTextField.getText()) > Double.valueOf(priceTextField.getText())  ){
-                    downPaymentTextField.setText("");
+                if(Double.valueOf(downPaymentTextField.getText()) > Double.valueOf(priceTextField.getText())  ){        //price skal hentes på bilen
+                    downPaymentTextField.setText("");                       //Overvej brug af setter på downPayment i stedet, og så regne videre i logic
                 }
             }
         });
@@ -204,6 +204,7 @@ public class NewOfferView {
         startDatePicker.setPromptText("Pick Start Date");
         GridPane.setConstraints(startLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
+
         Label endLabel = new Label("End Date: ");
         DatePicker endDatePicker = new DatePicker();
         endDatePicker.setPromptText("Pick End Date");
@@ -218,8 +219,9 @@ public class NewOfferView {
             }
         });
 
-        payStartLocalDate = startDatePicker.getValue();
+        payStartLocalDate = startDatePicker.getValue();         //skal konverteres fra LocalDate t. Date, enten her eller i save-metoden
         payEndLocalDate = endDatePicker.getValue();
+
 
         GridPane.setConstraints(endLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
@@ -228,8 +230,8 @@ public class NewOfferView {
         ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonListFactory.createSalesPersonList()));
         salesPersonCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                salesPerson = (SalesPerson) t1;
+            public void changed(ObservableValue observableValue, Object personOne, Object chosenPerson) {
+                salesPerson = (SalesPerson) chosenPerson;
             }
         });
 
@@ -351,9 +353,9 @@ public class NewOfferView {
         GridPane.setConstraints(csvBtn,7,17);
         GridPane.setConstraints(acceptBtn,8,17);
 
+                //Udnytter ikke The Power of Objects.
 
-
-        salesGrid.getChildren().addAll(
+        salesGrid.getChildren().addAll(         //kig på, hvor mange af disse, der skal fjernes
 
                 leftDescriptionText,
                 cprLabel,
@@ -426,7 +428,7 @@ public class NewOfferView {
         getButton.disableProperty().bind(cprBooleanBind);
 
 
-        BooleanBinding calcBind = (
+        BooleanBinding calcBind = (     //mange skal slettes da info automatisk sættes ind
                 creditRatingText.textProperty().isEmpty()
                 .or(nameTextField.textProperty().isEmpty())
                 .or(phoneTextField.textProperty().isEmpty())
@@ -442,13 +444,13 @@ public class NewOfferView {
         );
         calcQuoteButton.disableProperty().bind(calcBind);
 
-        getButton.setOnAction(click -> {
+        getButton.setOnAction(click -> {        //flyt til lokal metode
                     this.customer = CustomerListFactory.getCustomerByCpr(cprTextField.getText());       //skal i privat metode
                     if (customer != null) {
                         if (customer.isGoodGuy() != false) {
                             setCustomerInfo(customer);
                             System.out.println(customer.isGoodGuy());
-                            CompletableFuture.runAsync(() -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));
+                            CompletableFuture.runAsync(() -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));   //bør kalde lokal klassevariabel creditRating i paymentCalc
                         } else {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.setTitle("Handel nægtet");
@@ -470,7 +472,7 @@ public class NewOfferView {
 
         clearButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));
 
-        calcQuoteButton.setOnAction(click -> {
+        calcQuoteButton.setOnAction(click -> {      //needs major overhaul
             creditRatingTxt.setText(creditRatingText.getText());
             bankInterestTxt.setText(String.valueOf(paymentCalc.rkiInterestCalc(creditRatingTxt.getText())));
             carPriceTxt.setText(priceFormat.formatter(priceTextField.getText()));
@@ -511,7 +513,7 @@ public class NewOfferView {
             }
         });
 
-        csvBtn.setOnAction(click -> {
+        csvBtn.setOnAction(click -> {       //lokal metode
             FileChooser fileChooser = new FileChooser();
 
             //Set extension filter for text files
@@ -522,7 +524,7 @@ public class NewOfferView {
             File file = fileChooser.showSaveDialog(window);
 
             if (file != null) {
-                saveToCsv.saveOffer(
+                saveToCsv.saveOfferToCSV(
                         file,createdTxt.getText(),buyerTxt.getText(),carModelTxt.getText(),carPriceTxt.getText(),downPayTxt.getText(),priceAfterDownPayTxt.getText(),
                         payPeriodTxt.getText(),creditRatingTxt.getText(),bankInterestTxt.getText(),
                         downPayInterestTxt.getText(),periodPayInterestTxt.getText(),totalInterestRateTxt.getText(),totalPriceTxt.getText(),
@@ -532,16 +534,24 @@ public class NewOfferView {
         });
 
         acceptBtn.setOnAction(click -> {
-            if(salesLimit.approval(salesLimit.approval(car.getPrice(), paymentCalc.getDownPayment(), salesPerson.getFirstname())).equals("Need Sales Manager") {
-
-            };
-            saveOffertoDB(customer, car, salesPerson, creditRatingTxt.getText(), paymentCalc, saleDate, payStartDate, payEndDate, approvedBy);
+            if(salesLimit.needsApproval(car, paymentCalc.getDownPayment())) {
+                this.approvedBy = salesPerson;
+            } else {
+                this.approvedBy = salesPerson;  //Nu er det den samme sælger begge steder, fordi jeg ikke kan få et id på en person, der ikke eksisterer
+            }
+            saveOffertoDB(customer, car, salesPerson, creditRatingTxt.getText()/*vil jeg hellere hente fra paymentCalc*/, paymentCalc, saleDate, payStartDate, payEndDate, approvedBy);
         });
 
         HBox root = new HBox(salesGrid);
         //root.setPrefWidth(700);
         return root;
     }
+
+
+
+
+//PRIVATE METHODS--------------------------------------------------------
+
     private void setCarInfo(Car car) {
         priceTextField.setText(String.valueOf(car.getPrice()));
     }
@@ -554,7 +564,7 @@ public class NewOfferView {
             emailTextField.setText(customer.getEmail());
             phoneTextField.setText(customer.getPhone());
         }
-        catch (NullPointerException e) {
+        catch (NullPointerException e) {        //kan ikke huske, om den virker
             e.printStackTrace();
         }
     }

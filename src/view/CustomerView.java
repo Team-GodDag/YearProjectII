@@ -227,10 +227,10 @@ public class CustomerView {
     }
 
     public String checkCustomerHistory(Customer customer) {
-        if(customer.isGoodGuyBit() == 1) {
-            return "Dårlig";
-        } else {
+        if(customer.isGoodGuy()) {
             return "God";
+        } else {
+            return "Dårlig";
         }
     }
 

@@ -1,15 +1,10 @@
 package data;
 
-import entities.Car;
-import entities.Customer;
 import entities.Offer;
-import entities.SalesPerson;
-import logic.AllCarModels;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,7 +24,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
                     offer.getSalesPersonId()        + "', '" +
                     offer.getCarId()                + "', '" +
                     offer.getCarPrice()             + "', '" +
-                    offer.getPayment()              + "', '" +
+                    offer.getDownpayment()              + "', '" +
                     offer.getApprovedBy()           + "', '" +
                     offer.getTodaysBankRate()       + "', '" +
                     offer.getDownpaymentIntRate()   + "', '" +         //+ "', " +
@@ -120,7 +115,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
                 int car_model_id        = resultSet.getInt("car_model_id");
                 double car_price        = resultSet.getDouble("car_price");
                 double payment          = resultSet.getDouble("payment");
-                int approvedBy       = resultSet.getInt("approvedby");
+                int approvedBy          = resultSet.getInt("approvedby");
                 double bankratingoftheday = resultSet.getDouble("bankratingoftheday");
                 double downpaymentinterest = resultSet.getDouble("downpaymentinterestrate");
                 double periodinterest = resultSet.getDouble("periodinterestrate");
@@ -129,7 +124,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
                 Date dateofpayend       = resultSet.getDate("dateofpayend");
 
 
-                Offer offer = new Offer(id, customer_id, credit_rating, seller_id, car_model_id, car_price, payment, dateofsale, dateofpaystart, dateofpayend, approvedBy, bankratingoftheday, downpaymentinterest, periodinterest);
+                Offer offer = new Offer(id, customer_id, credit_rating, seller_id, car_model_id, car_price, payment, approvedBy, bankratingoftheday, downpaymentinterest, periodinterest, dateofsale, dateofpaystart, dateofpayend);
                 offers.add(offer);
             }
         } catch (SQLException e) {

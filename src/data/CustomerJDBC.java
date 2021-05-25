@@ -70,7 +70,7 @@ public class CustomerJDBC implements CustomerDataAccess {
             assignments.append("email='"            + customer.getEmail()       + "', ");
             assignments.append("address='"          + customer.getAddress()     + "', ");
             assignments.append("phonenumber='"      + customer.getPhone()       + "', ");
-            assignments.append("customerhistory='"  + customer.isGoodGuyBit());
+            assignments.append("customerhistory='"  + customer.isGoodGuy());
 
 
             String condition = "id=" + customer.getId();

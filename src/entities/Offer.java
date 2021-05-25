@@ -1,34 +1,31 @@
 package entities;       //måske POJOs?
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import logic.PaymentCalc;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class Offer { // Henrik
 
     public int id, customerId, salesPersonId, carId, approvedBy;
-    public double payment, carPrice, downpaymentIntRate, todaysBankRate, paymentPeriodIntRate;
+    public double downpayment, carPrice, downpaymentIntRate, todaysBankRate, paymentPeriodIntRate;
     public String creditRating;
     public Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
-    public Offer(int id, int customerId, String creditRating, int salesPersonId, int carId, double carPrice, double payment, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd, int approvedBy, double todaysBankRate, double downpaymentIntRate, double paymentPeriodIntRate) {
+    public Offer(int id, int customerId, String creditRating, int salesPersonId, int carId, double carPrice, double downpayment, int approvedBy, double todaysBankRate, double downpaymentIntRate, double paymentPeriodIntRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
         this.id = id;
         this.customerId = customerId;
         this.creditRating = creditRating;
         this.salesPersonId = salesPersonId;
         this.carId = carId;
         this.carPrice = carPrice;
-        this.payment = payment;
+        this.downpayment = downpayment;
         this.dateOfSale = dateOfSale;
         this.dateOfPayStart = dateOfPayStart;
         this.dateOfPayEnd = dateOfPayEnd;
         this.approvedBy = approvedBy;
         this.todaysBankRate = todaysBankRate;
-        this.downpaymentIntRate = downpaymentIntRate;
-        this.paymentPeriodIntRate = paymentPeriodIntRate;
+//        this.downpaymentIntRate = downpaymentIntRate;             //SKAL BEREGNES VED LOADING og ikke gemmes direkte i DB
+//        this.paymentPeriodIntRate = paymentPeriodIntRate;
 
     }
 
@@ -39,13 +36,14 @@ public class Offer { // Henrik
         this.creditRating = creditRating;
         this.carId = car.getId();
         this.carPrice = car.getPrice();
-        this.payment = paymentCalc.getDownPayment();
+        this.downpayment = paymentCalc.getDownPayment();
+        this.approvedBy = approvedBy.getId();
         this.todaysBankRate = paymentCalc.getBankInterestRate();
+        this.downpaymentIntRate = paymentCalc.getDownPaymentInterestRate();
+        this.paymentPeriodIntRate = paymentCalc.getPaymentPeriodInterestRate();
         this.dateOfSale = dateOfSale;
         this.dateOfPayStart = startPayDate;
         this.dateOfPayEnd = endPayDate;
-        this.approvedBy = approvedBy.getId();
-        this.paymentPeriodIntRate = paymentCalc.getPaymentPeriodInterestRate();
     }
 
     public double getDownpaymentIntRate() {
@@ -125,12 +123,12 @@ public class Offer { // Henrik
         this.carId = carId;
     }
 
-    public double getPayment() {
-        return payment;
+    public double getDownpayment() {
+        return downpayment;
     }
 
-    public void setPayment(double payment) {
-        this.payment = payment;
+    public void setDownpayment(double downpayment) {
+        this.downpayment = downpayment;
     }
 
     public double getCarPrice() {
