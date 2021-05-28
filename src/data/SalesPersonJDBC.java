@@ -1,7 +1,7 @@
 package data;
 
 import entities.SalesPerson;
-import logic.AllSalesPersons;
+//import logic.AllSalesPersons;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAccess { // Henrik
 
-    @Override
+//    @Override
     public ArrayList<SalesPerson> getAllSalesPersons() {
         return getSalesPersonByCondition("0 = 0");
     }

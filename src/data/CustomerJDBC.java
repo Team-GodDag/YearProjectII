@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CustomerJDBC implements CustomerDataAccess {
 
-    @Override
+//    @Override
     public ArrayList<Customer> getAllCustomers() {
         return getCustomersByCondition("0 = 0");
     }
@@ -46,7 +46,7 @@ public class CustomerJDBC implements CustomerDataAccess {
     @Override
     public boolean deleteCustomer(Customer customer) {
         try {
-            String condition = "id=" + customer.getId();
+            String condition = "customer_id=" + customer.getId();
             String sql = "DELETE FROM customers WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -70,10 +70,10 @@ public class CustomerJDBC implements CustomerDataAccess {
             assignments.append("email='"            + customer.getEmail()       + "', ");
             assignments.append("address='"          + customer.getAddress()     + "', ");
             assignments.append("phonenumber='"      + customer.getPhone()       + "', ");
-            assignments.append("customerhistory='"  + customer.isGoodGuy());
+            assignments.append("customerhistory="   + customer.isGoodGuyBit());
 
 
-            String condition = "id=" + customer.getId();
+            String condition = "customer_id=" + customer.getId();
 
             String sql = "UPDATE customers SET " + assignments +
                     " WHERE " + condition;

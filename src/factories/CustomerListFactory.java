@@ -19,5 +19,8 @@ public class CustomerListFactory {              //skal den ligge i logic?
         new CustomerJDBC().addCustomer(customer);
     }
 
+    public static void updateCustomer(Customer customer) {
+        new CustomerJDBC().updateCustomer(customer);
+    }
 
 }

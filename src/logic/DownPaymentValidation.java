@@ -2,7 +2,7 @@ package logic;
 
 import javafx.scene.control.TextField;
 
-public class DownPaymentValidation {
+public class DownPaymentValidation {    //bliver ikke brugt
     TextField textField;
 
     public void validation(TextField carPrice, TextField downPayment){

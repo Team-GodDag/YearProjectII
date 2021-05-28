@@ -5,7 +5,7 @@ import entities.Offer;
 import java.util.ArrayList;
 
 public interface OfferDataAccess {
-    ArrayList<Offer> getAllOffers();
+//    ArrayList<Offer> getAllOffers();
 
     boolean addOffer(Offer offer);
 

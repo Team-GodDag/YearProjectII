@@ -1,57 +1,55 @@
 package entities;       //måske POJOs?
 
-import logic.PaymentCalc;
+import logic.PaymentCalculator;
 
 import java.util.Date;
 
 public class Offer { // Henrik
 
-    public int id, customerId, salesPersonId, carId, approvedBy;
-    public double downpayment, carPrice, downpaymentIntRate, todaysBankRate, paymentPeriodIntRate;
-    public String creditRating;
-    public Date dateOfSale, dateOfPayStart, dateOfPayEnd;
+    private int id, customerId, salesPersonId, carId;
+    private double downpayment, carPrice, todaysBankRate; //downpaymentIntRate, paymentPeriodIntRate
+    private String creditRating, status;
+    private Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
-    public Offer(int id, int customerId, String creditRating, int salesPersonId, int carId, double carPrice, double downpayment, int approvedBy, double todaysBankRate, double downpaymentIntRate, double paymentPeriodIntRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
-        this.id = id;
-        this.customerId = customerId;
-        this.creditRating = creditRating;
-        this.salesPersonId = salesPersonId;
-        this.carId = carId;
-        this.carPrice = carPrice;
-        this.downpayment = downpayment;
-        this.dateOfSale = dateOfSale;
-        this.dateOfPayStart = dateOfPayStart;
-        this.dateOfPayEnd = dateOfPayEnd;
-        this.approvedBy = approvedBy;
-        this.todaysBankRate = todaysBankRate;
-//        this.downpaymentIntRate = downpaymentIntRate;             //SKAL BEREGNES VED LOADING og ikke gemmes direkte i DB
-//        this.paymentPeriodIntRate = paymentPeriodIntRate;
-
-    }
-
-    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, PaymentCalc paymentCalc, Date dateOfSale, Date startPayDate, Date endPayDate, SalesPerson approvedBy) {
-        this.id = 0;
-        this.customerId = customer.getId();
-        this.salesPersonId = salesPerson.getId();
-        this.creditRating = creditRating;
-        this.carId = car.getId();
-        this.carPrice = car.getPrice();
-        this.downpayment = paymentCalc.getDownPayment();
-        this.approvedBy = approvedBy.getId();
-        this.todaysBankRate = paymentCalc.getBankInterestRate();
-        this.downpaymentIntRate = paymentCalc.getDownPaymentInterestRate();
-        this.paymentPeriodIntRate = paymentCalc.getPaymentPeriodInterestRate();
-        this.dateOfSale = dateOfSale;
+    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, String status, PaymentCalculator paymentCalculator, Date dateOfSale, Date startPayDate, Date endPayDate) { //boolean isApproved,
+        this.id             = 0;
+        this.customerId     = customer.getId();
+        this.salesPersonId  = salesPerson.getId();
+        this.creditRating   = creditRating;
+        this.carId          = car.getId();
+        this.carPrice       = car.getPrice();
+        this.downpayment    = paymentCalculator.getDownPayment();
+        this.todaysBankRate = paymentCalculator.getBaseBankInterestRate();
+        this.status         = status;
+        this.dateOfSale     = dateOfSale;
         this.dateOfPayStart = startPayDate;
-        this.dateOfPayEnd = endPayDate;
+        this.dateOfPayEnd   = endPayDate;
     }
 
-    public double getDownpaymentIntRate() {
-        return downpaymentIntRate;
+    public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  double carPrice, double downpayment, double todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
+        this.id             = id;
+        this.customerId     = customerId;
+        this.creditRating   = creditRating;
+        this.salesPersonId  = salesPersonId;
+        this.carId          = carId;
+        this.carPrice       = carPrice;
+        this.downpayment    = downpayment;
+        this.dateOfSale     = dateOfSale;
+        this.dateOfPayStart = dateOfPayStart;
+        this.dateOfPayEnd   = dateOfPayEnd;
+        this.status         = status;
+        this.todaysBankRate = todaysBankRate;
     }
 
-    public void setDownpaymentIntRate(double downpaymentIntRate) {
-        this.downpaymentIntRate = downpaymentIntRate;
+    public Offer() {
+
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public double getTodaysBankRate() {
@@ -62,13 +60,14 @@ public class Offer { // Henrik
         this.todaysBankRate = todaysBankRate;
     }
 
-    public double getPaymentPeriodIntRate() {
-        return paymentPeriodIntRate;
-    }
+//    public double getPaymentPeriodIntRate() {
+//        return paymentPeriodIntRate;
+//    }
+//
+//    public void setPaymentPeriodIntRate(double paymentPeriodIntRate) {
+//        this.paymentPeriodIntRate = paymentPeriodIntRate;
 
-    public void setPaymentPeriodIntRate(double paymentPeriodIntRate) {
-        this.paymentPeriodIntRate = paymentPeriodIntRate;
-    }
+//    }
 
     public String getCreditRating() {
         return creditRating;
@@ -76,9 +75,6 @@ public class Offer { // Henrik
 
     public void setCreditRating(String creditRating) {
         this.creditRating = creditRating;
-    }
-
-    public Offer() {
     }
 
     public Date getDateOfSale() {
@@ -139,8 +135,6 @@ public class Offer { // Henrik
         this.carPrice = carPrice;
     }
 
-
-
     public Date getDateOfPayStart() {
         return dateOfPayStart;
     }
@@ -157,11 +151,11 @@ public class Offer { // Henrik
         this.dateOfPayEnd = dateOfPayEnd;
     }
 
-    public int getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(int approvedBy) {
-        this.approvedBy = approvedBy;
-    }
+//    public int getApprovedBy() {
+//        return approvedBy;
+//    }
+//
+//    public void setApprovedBy(int approvedBy) {
+//        this.approvedBy = approvedBy;
+//    }
 }

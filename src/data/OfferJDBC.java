@@ -10,7 +10,6 @@ import java.util.Date;
 
 public class OfferJDBC implements OfferDataAccess { // Henrik
 
-    @Override
     public ArrayList<Offer> getAllOffers() {
         return getOffersByCondition("0 = 0");
     }
@@ -24,11 +23,9 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
                     offer.getSalesPersonId()        + "', '" +
                     offer.getCarId()                + "', '" +
                     offer.getCarPrice()             + "', '" +
-                    offer.getDownpayment()              + "', '" +
-                    offer.getApprovedBy()           + "', '" +
+                    offer.getDownpayment()          + "', '" +
+                    offer.getStatus()               + "', '" +
                     offer.getTodaysBankRate()       + "', '" +
-                    offer.getDownpaymentIntRate()   + "', '" +         //+ "', " +
-                    offer.getPaymentPeriodIntRate() + "', '" +          //+ ")";
                     offer.getDateOfSale()           + "', '" +
                     offer.getDateOfPayStart()       + "', " +
                     offer.getDateOfPayEnd()         + ")";
@@ -53,7 +50,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
     @Override
     public boolean deleteOffer(Offer offer) {
         try {
-            String condition = "id=" + offer.id;
+            String condition = "id=" + offer.getId();
             String sql = "DELETE FROM quotes WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -109,22 +106,20 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
 
             while (resultSet.next()) {// iteration starter 'before first'
                 int id                  = resultSet.getInt("quote_id");
-                int customer_id         = resultSet.getInt("customer_id");
-                String credit_rating    = resultSet.getString("credit_rating");
-                int seller_id           = resultSet.getInt("seller_id");
-                int car_model_id        = resultSet.getInt("car_model_id");
-                double car_price        = resultSet.getDouble("car_price");
+                int customerId         = resultSet.getInt("customer_id");
+                int sellerId           = resultSet.getInt("seller_id");
+                int carId        = resultSet.getInt("car_model_id");
+                String creditRating    = resultSet.getString("credit_rating");
+                String status           = resultSet.getString("status");
+                double carPrice        = resultSet.getDouble("car_price");
                 double payment          = resultSet.getDouble("payment");
-                int approvedBy          = resultSet.getInt("approvedby");
                 double bankratingoftheday = resultSet.getDouble("bankratingoftheday");
-                double downpaymentinterest = resultSet.getDouble("downpaymentinterestrate");
-                double periodinterest = resultSet.getDouble("periodinterestrate");
                 Date dateofsale         = resultSet.getDate("dateofsale");
                 Date dateofpaystart     = resultSet.getDate("dateofpaystart");
                 Date dateofpayend       = resultSet.getDate("dateofpayend");
 
 
-                Offer offer = new Offer(id, customer_id, credit_rating, seller_id, car_model_id, car_price, payment, approvedBy, bankratingoftheday, downpaymentinterest, periodinterest, dateofsale, dateofpaystart, dateofpayend);
+                Offer offer = new Offer(id, customerId, sellerId, carId, creditRating, status, carPrice, payment, bankratingoftheday, dateofsale, dateofpaystart, dateofpayend); //downpaymentinterest, periodinterest,
                 offers.add(offer);
             }
         } catch (SQLException e) {

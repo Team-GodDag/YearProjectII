@@ -5,7 +5,7 @@ import entities.Car;
 import java.util.ArrayList;
 
 public interface CarDataAccess {
-    ArrayList<Car> getAllCars();
+//    ArrayList<Car> getAllCars();
 
     boolean addCar(Car car);
 

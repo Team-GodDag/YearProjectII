@@ -21,7 +21,6 @@ public class Customer {
 
     public Customer(String cpr, String firstName, String lastName, String email, String address, String phone) {
         this(0, cpr, firstName, lastName, email, address, phone, true);
-
     }
 
 
@@ -57,7 +56,7 @@ public class Customer {
         return phone;
     }
 
-    public int isGoodGuyBit() {
+    public int isGoodGuyBit() {     //må den ligge her? det er vel en form for funktionalitet?
         if(!isGoodGuy) {
             return 0;
         } else

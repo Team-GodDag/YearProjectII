@@ -13,30 +13,28 @@ public class CatalogueView { // Henrik
 
     public VBox createView() {
         TableView table = new TableView();
-        ObservableList<Car> ModelList = FXCollections.observableArrayList(CarListFactory.createCarList());
+        ObservableList<Car> observableCarList = FXCollections.observableArrayList(CarListFactory.createCarList());
 
         table.setEditable(false);
         table.setMinWidth(700);
         table.setMaxWidth(798);
 
 
-        TableColumn modelName = new TableColumn<>("Model Name");
+        TableColumn modelName = new TableColumn<>("Model");
         modelName.setMinWidth(200);
-        modelName.setCellValueFactory(new PropertyValueFactory<Car, String>("model_name"));
+        modelName.setCellValueFactory(new PropertyValueFactory<Car, String>("name"));
 
-        TableColumn price = new TableColumn<>("Price");
+        TableColumn price = new TableColumn<>("Pris");
         price.setMinWidth(150);
         price.setCellValueFactory(new PropertyValueFactory<Car, String>("price"));
 
-        TableColumn horsepower = new TableColumn<>("Horsepower");
+        TableColumn horsepower = new TableColumn<>("HK");
         horsepower.setMinWidth(150);
         horsepower.setCellValueFactory(new PropertyValueFactory<Car, String>("horsepower"));
 
 
         table.getColumns().addAll(modelName, price, horsepower);
-
-
-        table.setItems(ModelList);
+        table.setItems(observableCarList);
 
         VBox root = new VBox(table);
         root.setId("modelTable");

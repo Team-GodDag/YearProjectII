@@ -1,4 +1,4 @@
-package logic;
+package data;
 /**
  * Enumeration of possible alpha-numerical credit ratings
  * with A being the highest (best) rating

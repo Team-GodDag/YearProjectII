@@ -7,15 +7,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import logic.LimitedTextField;
 
 
 public class NewCustomerView {
 
-    TextField firstNameTxtF, lastNameTxtF, phoneTxtF, emailTxtF, addressTxtF, zipTxtF, cprTxtF;
+    TextField firstNameTxtF, lastNameTxtF, phoneTxtF, emailTxtF, addressTxtF;
+    LimitedTextField limitedCprTextField;
 
     public GridPane createView() {
 
-        Label firstNameLbl = new Label("Name: ");
+        Label firstNameLbl = new Label("Fornavn: ");
         firstNameTxtF = new TextField();
         firstNameTxtF.setPromptText("Anders");
 
@@ -23,7 +25,7 @@ public class NewCustomerView {
         lastNameTxtF = new TextField();
         lastNameTxtF.setPromptText("Andersen");
 
-        Label phoneLbl = new Label("Phone: ");
+        Label phoneLbl = new Label("Telefon: ");
         phoneTxtF = new TextField();
         phoneTxtF.setPromptText("(+45)12345678");
 
@@ -31,22 +33,25 @@ public class NewCustomerView {
         emailTxtF = new TextField();
         emailTxtF.setPromptText("anders@andersenmail.dk");
 
-        Label addressLbl = new Label("Adress: ");
+        Label addressLbl = new Label("Adresse og postnummer: ");
         addressTxtF = new TextField();
         addressTxtF.setPromptText("Andersengade 1, 1010 Andersby");
 
-        Label zipLbl = new Label("Postnummer: ");
-        zipTxtF = new TextField();
-        zipTxtF.setPromptText("Postnummer");
+//        Label zipLbl = new Label("Postnummer: ");
+//        zipTxtF = new TextField();
+//        zipTxtF.setPromptText("Postnummer");
 
         Label cprLbl = new Label("CPR: ");
-        cprTxtF = new TextField();
-        cprTxtF.setPromptText("012345-6789");
+        limitedCprTextField = new LimitedTextField();
+        limitedCprTextField.addLimiter( 10);
+        limitedCprTextField.setPromptText("0123456789");
 
         Button saveBtn = new Button("Gem");
         saveBtn.setOnAction(click -> {
-            saveCustomer(cprTxtF, firstNameTxtF, lastNameTxtF, emailTxtF, addressTxtF, zipTxtF, phoneTxtF);
+            saveCustomer(limitedCprTextField, firstNameTxtF, lastNameTxtF, emailTxtF, addressTxtF, phoneTxtF);
         });
+
+
 
         GridPane root = new GridPane();
         root.addRow(0, firstNameLbl, firstNameTxtF);
@@ -54,9 +59,8 @@ public class NewCustomerView {
         root.addRow(1, phoneLbl, phoneTxtF);
         root.addRow(2, emailLbl, emailTxtF);
         root.addRow(3, addressLbl, addressTxtF);
-        root.addRow(4, zipLbl, zipTxtF);
         root.addColumn(2, cprLbl);
-        root.addColumn(3, cprTxtF);
+        root.addColumn(3, limitedCprTextField);
         root.addRow(5, saveBtn);
         root.setHgap(20);
         root.setVgap(20);
@@ -64,9 +68,9 @@ public class NewCustomerView {
         return root;
     }
 
-    private void saveCustomer(TextField cpr, TextField firstName, TextField lastName, TextField email, TextField address, TextField zipTxtF, TextField phone) {
-        CustomerListFactory.addCustomer(new Customer(cpr.getText(), firstName.getText(), lastName.getText(), email.getText(), address.getText() + " " + zipTxtF.getText(), phone.getText()));
-
+    private void saveCustomer(TextField cpr, TextField firstName, TextField lastName, TextField email, TextField address, TextField phone) {
+        CustomerListFactory.addCustomer(new Customer(cpr.getText(), firstName.getText(), lastName.getText(), email.getText(), address.getText(), phone.getText()));
     }
+
 
 }

@@ -6,6 +6,7 @@ import factories.CustomerListFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -19,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 
 public class CustomerView {
@@ -151,29 +152,40 @@ public class CustomerView {
 //        Text rkiText = new Text("A");
 //        GridPane.setConstraints(rkiText,6,0);
 
-        Label customerNumLabel = new Label("Kunde Nr.: ");
+        Label customerNumLabel = new Label("Kundenummer.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
         customerNumText = new Text();                  //skal det med? er det id?
         GridPane.setConstraints(customerNumText,6,1);
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
         GridPane.setConstraints(formerSalesLabel, 5,3);
-        Text formerSalesText = new Text("(3)");
+        //Text formerSalesText = new Text("(3)");
         Button seButton = new Button("   Se   ");
         seButton.setOnAction(Klik -> UIController.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
         GridPane.setConstraints(seButton,7,3);
-        GridPane.setConstraints(formerSalesText,6,3);
+        //GridPane.setConstraints(formerSalesText,6,3);
 
-        Button editButton = new Button("  Edit  ");
+        Button blacklistButton = new Button("Blacklist");
+        blacklistButton.setOnAction(click -> {
+            blacklistWarning();
+        });
+
+
+
+        Button editButton = new Button("  Rediger  ");
+        editButton.setOnAction(click -> {
+
+        });
+
         //GridPane.setConstraints(editButton,1,6);
-        Button saveButton = new Button("  Save  ");
+        Button saveButton = new Button("  Gem  ");
 
 
 
 
         //saveButton.setDisable(true);
         // GridPane.setConstraints(saveButton,2,6);
-        HBox crudBox = new HBox(editButton,saveButton);
+        HBox crudBox = new HBox(editButton, saveButton, blacklistButton);
         crudBox.setSpacing(5);
         GridPane.setConstraints(crudBox,0,8);
 
@@ -198,8 +210,9 @@ public class CustomerView {
                 customerNumLabel,
                 customerNumText,
                 formerSalesLabel,
-                formerSalesText,
+                //formerSalesText,
                 seButton,
+                blacklistButton,
                 crudBox
         );
 
@@ -232,6 +245,25 @@ public class CustomerView {
         } else {
             return "Dårlig";
         }
+    }
+
+    private void blacklistCustomer(Customer customer) {
+        customer.setGoodGuy(false);
+        CustomerListFactory.updateCustomer(customer);
+    }
+
+    private Alert blacklistWarning() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Advarsel");
+        alert.setHeaderText("Er du sikker?");
+        alert.setContentText("En blacklistet kunde vil få annulleret igangværende køb og kan ikke handle her igen. Er du indforstået med dette, tryk da OK.");
+        alert.setHeight(400);
+
+        Optional<ButtonType> result  = alert.showAndWait();
+        if(result.get() == ButtonType.OK) {
+            blacklistCustomer(customer);
+        }
+        return alert;
     }
 
 }
