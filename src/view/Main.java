@@ -16,8 +16,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-//        PeriodCalculator periodCalculator = new PeriodCalculator();
-//        periodCalculator.periodPayment();
         launch(args);
 
     }
