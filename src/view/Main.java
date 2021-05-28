@@ -12,8 +12,6 @@ public class Main extends Application {
         primaryStage.setTitle("BuyYoFerrari");
         primaryStage.setScene(UIController.instance().createScene());
         primaryStage.show();
-
-
     }
 
 

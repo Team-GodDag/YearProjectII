@@ -157,7 +157,7 @@ public class NewOfferView {
 
 
         Label carModelLabel = new Label("Bilmodel: ");
-        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.createCarList()));
+        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.getCarDataAccess().getAllCars()));
         carModelCombobox.setPromptText("Vælg model");
         GridPane.setConstraints(carModelLabel,0,9);
         GridPane.setConstraints(carModelCombobox,1,9);

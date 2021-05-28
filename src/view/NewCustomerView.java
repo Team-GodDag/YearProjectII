@@ -51,8 +51,6 @@ public class NewCustomerView {
             saveCustomer(limitedCprTextField, firstNameTxtF, lastNameTxtF, emailTxtF, addressTxtF, phoneTxtF);
         });
 
-
-
         GridPane root = new GridPane();
         root.addRow(0, firstNameLbl, firstNameTxtF);
         root.addRow(0, lastNameLbl, lastNameTxtF);

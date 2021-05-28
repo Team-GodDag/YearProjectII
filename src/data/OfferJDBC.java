@@ -107,6 +107,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
             while (resultSet.next()) {// iteration starter 'before first'
                 int id                  = resultSet.getInt("quote_id");
                 int customerId         = resultSet.getInt("customer_id");
+                
                 int sellerId           = resultSet.getInt("seller_id");
                 int carId        = resultSet.getInt("car_model_id");
                 String creditRating    = resultSet.getString("credit_rating");
