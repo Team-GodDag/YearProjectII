@@ -12,14 +12,10 @@ public class Main extends Application {
         primaryStage.setTitle("BuyYoFerrari");
         primaryStage.setScene(UIController.instance().createScene());
         primaryStage.show();
-
-
     }
 
 
     public static void main(String[] args) {
-//        PeriodCalculator periodCalculator = new PeriodCalculator();
-//        periodCalculator.periodPayment();
         launch(args);
 
     }

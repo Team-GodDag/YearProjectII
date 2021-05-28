@@ -16,12 +16,12 @@ import java.util.logging.Logger;
 public class SaveToCsv {
     private String phoneNumber;
 
+                                    //DET HER KAN GØRES SMARTERE
 
-
-    public  void saveOffer(File stageName, String created, String name, String carModel, String price,
-                           String downPayment, String priceAfterDp, String paymentPeriod, String creditRating, String bankInterest,
-                           String downPaymentInterest, String periodInterest, String totalInterest, String totalPrice,
-                           String monthlyPayment, String approvedBy) {
+    public  void saveOfferToCSV(File stageName, String created, String name, String carModel, String price,
+                                String downPayment, String priceAfterDp, String paymentPeriod, String creditRating, String bankInterest,
+                                String downPaymentInterest, String periodInterest, String totalInterest, String totalPrice,
+                                String monthlyPayment, String approvedBy) {
 
 
         String csvHeader =

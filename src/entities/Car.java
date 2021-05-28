@@ -1,43 +1,42 @@
 package entities;       //måske POJOs?
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Car {
 
     public int id;
-    public StringProperty model_name, price, horsepower;
+    public StringProperty name, horsepower;
+    double price;
 
-    public Car(int id, String model_name, String price, String horsepower) {
+    public Car(int id, String name, double price, String horsepower) {
         this.id = id;
-        this.model_name = new SimpleStringProperty(model_name);
-        this.price = new SimpleStringProperty(price);
+        this.name = new SimpleStringProperty(name);
+        this.price = price;
         this.horsepower = new SimpleStringProperty(horsepower);
     }
 
     public Car(){
     }
 
-    public void setModel_name(String model_name){
-        this.model_name.set(model_name);
+    public void setName(String name){
+        this.name.set(name);
     }
 
-    public StringProperty model_nameProperty() {
-        return model_name;
+    public StringProperty nameProperty() {
+        return name;
     }
 
-    public StringProperty getModel_name() {
-        return model_name;
+    public String getName() {
+        return name.get();
     }
 
-    public StringProperty priceProperty() {
+    public double getPrice() {
         return price;
     }
 
-    public String getPrice() {
-        return price.get();
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public StringProperty horsepowerProperty() {
@@ -59,7 +58,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return model_name.get();
+        return name.get();
     }
 
 

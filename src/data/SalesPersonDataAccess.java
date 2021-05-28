@@ -5,7 +5,7 @@ import entities.SalesPerson;
 import java.util.ArrayList;
 
 public interface SalesPersonDataAccess {
-    ArrayList<SalesPerson> getAllSalesPersons();
+//    ArrayList<SalesPerson> getAllSalesPersons();
 
     boolean addSalesPerson(SalesPersonJDBC salesPersonJDBC);
 

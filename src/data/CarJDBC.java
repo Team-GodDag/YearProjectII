@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CarJDBC implements CarDataAccess { // Henrik
 
-    @Override
+//    @Override
     public ArrayList<Car> getAllCars() {
         return getCarsByCondition("0 = 0");
     }
@@ -17,7 +17,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
     public boolean addCar(Car car) {
         try {
             String sql = "INSERT INTO carmodels VALUES ('" +
-                    car.getModel_name()     + "', '" +
+                    car.getName()     + "', '" +
                     car.getPrice()          + "', '" +
                     car.getHorsepower()     + ")";
 
@@ -59,7 +59,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
     public boolean updateCar(Car car) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("model_name='"   + car.getModel_name() + "', ");
+            assignments.append("model_name='"   + car.getName() + "', ");
             assignments.append("price='"        + car.getPrice() + "', ");
             assignments.append("horsepower='"   + car.getHorsepower());
 
@@ -92,7 +92,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
             while (resultSet.next()) {// iteration starter 'before first'
                 int id              = resultSet.getInt("car_model_id");
                 String modelName    = resultSet.getString("model_name");
-                String price        = resultSet.getString("price");
+                double price        = resultSet.getDouble("price");
                 String horsepower   = resultSet.getString("horsepower");
 
                 Car car = new Car(id, modelName, price, horsepower);

@@ -11,7 +11,7 @@ import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-public class PeriodCalculator {
+public class PeriodCalculator {         //BEHØVER DEN EGEN KLASSE?
     private  int timeDifferenceInYears;
 
 

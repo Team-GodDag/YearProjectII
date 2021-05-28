@@ -1,18 +1,15 @@
 package data;
 
-import entities.Car;
-import entities.Customer;
 import entities.Offer;
-import logic.AllCarModels;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OfferJDBC implements OfferDataAccess { // Henrik
 
-    @Override
     public ArrayList<Offer> getAllOffers() {
         return getOffersByCondition("0 = 0");
     }
@@ -21,15 +18,17 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
     public boolean addOffer(Offer offer) {
         try {
             String sql = "INSERT INTO quotes VALUES ('" +
-                    offer.getCustomerId()      + "', '" +  //mangler credtiRating (BOGSTAVET),
-                    offer.getRkiInterestRate() + "', '" +
-                    offer.getSalesPersonId()   + "', '" +
-                    offer.getCarId()           + "', '" +
-                    offer.getCar_price()       + "', '" +
-                    offer.getPayment()         + "', '" +
-                    offer.getDateOfSale()      + "', '" +
-                    offer.getDateOfPayStart()  + "', '" +
-                    offer.getDateOfPayEnd()    + ")";
+                    offer.getCustomerId()           + "', '" +
+                    offer.getCreditRating()         + "', '" +
+                    offer.getSalesPersonId()        + "', '" +
+                    offer.getCarId()                + "', '" +
+                    offer.getCarPrice()             + "', '" +
+                    offer.getDownpayment()          + "', '" +
+                    offer.getStatus()               + "', '" +
+                    offer.getTodaysBankRate()       + "', '" +
+                    offer.getDateOfSale()           + "', '" +
+                    offer.getDateOfPayStart()       + "', " +
+                    offer.getDateOfPayEnd()         + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -51,7 +50,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
     @Override
     public boolean deleteOffer(Offer offer) {
         try {
-            String condition = "id=" + offer.id;
+            String condition = "id=" + offer.getId();
             String sql = "DELETE FROM quotes WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -107,17 +106,21 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
 
             while (resultSet.next()) {// iteration starter 'before first'
                 int id                  = resultSet.getInt("quote_id");
-                int customer_id         = resultSet.getInt("customer_id");
-                double credit_rating    = resultSet.getDouble("credit_rating");
-                int seller_id           = resultSet.getInt("seller_id");
-                int car_model_id        = resultSet.getInt("car_model_id");
-                String car_price        = resultSet.getString("car_price");
+                int customerId         = resultSet.getInt("customer_id");
+                
+                int sellerId           = resultSet.getInt("seller_id");
+                int carId        = resultSet.getInt("car_model_id");
+                String creditRating    = resultSet.getString("credit_rating");
+                String status           = resultSet.getString("status");
+                double carPrice        = resultSet.getDouble("car_price");
                 double payment          = resultSet.getDouble("payment");
-                String dateofsale       = resultSet.getString("dateofsale");
-                String dateofpaystart   = resultSet.getString("dateofpaystart");
-                String dateofpayend     = resultSet.getString("dateofpayend");
+                double bankratingoftheday = resultSet.getDouble("bankratingoftheday");
+                Date dateofsale         = resultSet.getDate("dateofsale");
+                Date dateofpaystart     = resultSet.getDate("dateofpaystart");
+                Date dateofpayend       = resultSet.getDate("dateofpayend");
 
-                Offer offer = new Offer(id, customer_id, credit_rating, seller_id, car_model_id, car_price, payment, dateofsale, dateofpaystart, dateofpayend);
+
+                Offer offer = new Offer(id, customerId, sellerId, carId, creditRating, status, carPrice, payment, bankratingoftheday, dateofsale, dateofpaystart, dateofpayend); //downpaymentinterest, periodinterest,
                 offers.add(offer);
             }
         } catch (SQLException e) {

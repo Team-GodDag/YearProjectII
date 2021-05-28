@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CustomerJDBC implements CustomerDataAccess {
 
-    @Override
+//    @Override
     public ArrayList<Customer> getAllCustomers() {
         return getCustomersByCondition("0 = 0");
     }
@@ -18,20 +18,20 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean addCustomer(Customer customer) {
         try {
             String sql = "INSERT INTO customers VALUES ('" +
-                    customer.getId()            + "', '" +
                     customer.getCpr()           + "', '" +
                     customer.getFirstName()     + "', '" +
                     customer.getLastName()      + "', '" +
                     customer.getEmail()         + "', '" +
                     customer.getAddress()       + "', '" +
-                    customer.getPhone()         + ")";
+                    customer.getPhone()         + "', " +
+                    customer.isGoodGuyBit()     + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 int autoKey = resultSet.getInt(1);
                 customer.setId(autoKey);
             }
@@ -46,7 +46,7 @@ public class CustomerJDBC implements CustomerDataAccess {
     @Override
     public boolean deleteCustomer(Customer customer) {
         try {
-            String condition = "id=" + customer.getId();
+            String condition = "customer_id=" + customer.getId();
             String sql = "DELETE FROM customers WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -64,15 +64,16 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean updateCustomer(Customer customer) {
         try {
             StringBuffer assignments = new StringBuffer();
-            assignments.append("cpr='"          + customer.getCpr() + "', ");
-            assignments.append("firstname='"    + customer.getFirstName() + "', ");
-            assignments.append("lastname='"     + customer.getLastName() + "', ");
-            assignments.append("email='"        + customer.getEmail());
-            assignments.append("address='"      + customer.getAddress());
-            assignments.append("phonenumber='"  + customer.getPhone());
+            assignments.append("cpr='"              + customer.getCpr()         + "', ");
+            assignments.append("firstname='"        + customer.getFirstName()   + "', ");
+            assignments.append("lastname='"         + customer.getLastName()    + "', ");
+            assignments.append("email='"            + customer.getEmail()       + "', ");
+            assignments.append("address='"          + customer.getAddress()     + "', ");
+            assignments.append("phonenumber='"      + customer.getPhone()       + "', ");
+            assignments.append("customerhistory="   + customer.isGoodGuyBit());
 
 
-            String condition = "id=" + customer.getId();
+            String condition = "customer_id=" + customer.getId();
 
             String sql = "UPDATE customers SET " + assignments +
                     " WHERE " + condition;
@@ -89,7 +90,6 @@ public class CustomerJDBC implements CustomerDataAccess {
         }
     }
 
-//    @Override
     public ArrayList<Customer> getCustomersByCondition(String condition) {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         System.out.println("condition: " + condition);
@@ -106,8 +106,9 @@ public class CustomerJDBC implements CustomerDataAccess {
                 String email        = resultSet.getString("email");
                 String address      = resultSet.getString("address");
                 String phone        = resultSet.getString("phonenumber");
+                boolean isGoodGuy   = resultSet.getBoolean("customerhistory");
 
-                Customer customer = new Customer(id, cpr, firstName, lastName, email ,address , phone);
+                Customer customer = new Customer(id, cpr, firstName, lastName, email, address, phone, isGoodGuy);
                 customers.add(customer);
             }
         } catch (SQLException e) {

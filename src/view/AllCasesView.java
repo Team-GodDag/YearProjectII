@@ -1,52 +1,54 @@
 package view;
 
+import entities.Offer;
+import factories.OfferListFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 //, køber, sælger, status, bil,
 public class AllCasesView {
 
     public VBox createView() {
-        TableView table = new TableView();
-        //ObservableList<CarModels> ModelList = FXCollections.observableArrayList(DataLayer.instance.GetCarModels());
+        TableView tableView = new TableView();
+        ObservableList<Offer> observableOfferList = FXCollections.observableArrayList(OfferListFactory.createOfferList());
 
-        table.setEditable(false);
-        table.setMinHeight(700);
-
-
-
-        TableColumn salesDate = new TableColumn<>("Sales Date");
-        salesDate.setMinWidth(157);
-        //modelName.setCellValueFactory(new PropertyValueFactory<CarModels, String>("modelname"));
-
-        TableColumn caseNumber = new TableColumn<>("Case Number");
-        caseNumber.setMinWidth(157);
-        //price.setCellValueFactory(new PropertyValueFactory<CarModels, Integer>("price"));
-
-        TableColumn customer = new TableColumn<>("Customer");
-        customer.setMinWidth(157);
-        //horsepower.setCellValueFactory(new PropertyValueFactory<CarModels, Integer>("horsepower"));
-
-        TableColumn salesPerson = new TableColumn<>("Sales Person");
-        salesPerson.setMinWidth(157);
-        //horsepower.setCellValueFactory(new PropertyValueFactory<CarModels, Integer>("horsepower"));
-
-        TableColumn carType = new TableColumn<>("Car Sold");
-        carType.setMinWidth(161);
-        //horsepower.setCellValueFactory(new PropertyValueFactory<CarModels, Integer>("horsepower"));
-
-        TableColumn status = new TableColumn<>("Status");
-        status.setMinWidth(157);
-        //horsepower.setCellValueFactory(new PropertyValueFactory<CarModels, Integer>("horsepower"));
+        tableView.setEditable(false);
+        tableView.setMinHeight(700);
 
 
-        table.getColumns().addAll(salesDate, caseNumber, customer,carType, salesPerson,status);
+        TableColumn caseNumberColumn = new TableColumn<>("Sagsnummer");
+        caseNumberColumn.setMinWidth(157);
+        caseNumberColumn.setCellValueFactory(new PropertyValueFactory<Offer, Integer>("id"));
+
+        TableColumn saleDateColumn = new TableColumn<>("Oprettet");
+        saleDateColumn.setMinWidth(157);
+        saleDateColumn.setCellValueFactory(new PropertyValueFactory<Offer, String>("dateOfSale"));
+
+        TableColumn customerColumn = new TableColumn<>("Kunde");
+        customerColumn.setMinWidth(157);
+        customerColumn.setCellValueFactory(new PropertyValueFactory<Offer, String>("customerId"));
+
+        TableColumn salesPersonColumn = new TableColumn<>("Sælger");
+        salesPersonColumn.setMinWidth(157);
+        salesPersonColumn.setCellValueFactory(new PropertyValueFactory<Offer, Integer>("salesPersonId"));
+
+        TableColumn carColumn = new TableColumn<>("Bil");
+        carColumn.setMinWidth(161);
+        carColumn.setCellValueFactory(new PropertyValueFactory<Offer, Integer>("carId"));
+
+        TableColumn statusColumn = new TableColumn<>("Status");
+        statusColumn.setMinWidth(157);
+        statusColumn.setCellValueFactory(new PropertyValueFactory<Offer, String>("status"));
 
 
-        //table.setItems(ModelList);
+        tableView.getColumns().addAll(saleDateColumn, caseNumberColumn, customerColumn, carColumn, salesPersonColumn, statusColumn);
+        tableView.setItems(observableOfferList);
 
-        VBox root = new VBox(table);
+        VBox root = new VBox(tableView);
         root.setId("modelTable");
         return root;
     }

@@ -12,7 +12,7 @@ import java.util.Random;
  * @see #todaysRate()
  */
 public class InterestRate {
-    private static InterestRate instance=null;
+    private static InterestRate instance = null;
     private static Random rnd = new Random();
 
     //--------------------------------------------------

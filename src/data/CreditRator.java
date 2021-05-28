@@ -17,7 +17,7 @@ import java.util.Random;
  *
  * @see #rate(String)
  */
-public class CreditRator {
+public class CreditRator {      //skal CreditRator ligge data?????!!?
     private static CreditRator instance = null;
     private static Random rnd = new Random();
     private static Rating[] ratingValues = Rating.values();
