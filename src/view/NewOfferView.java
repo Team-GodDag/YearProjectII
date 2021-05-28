@@ -155,13 +155,6 @@ public class NewOfferView {
         GridPane.setConstraints(addressLabel,0,7);
         GridPane.setConstraints(addressText,1,7);
 
-//        Label zipCodeLabel = new Label("Zip Code: ");
-//        TextField zipCodeTextField = new TextField();
-//        zipCodeTextField.setPromptText("Zip Code");
-//        textFieldCheck.addTextLimiter(zipCodeTextField,4);
-//        writeOnlyNumbers.input(zipCodeTextField);
-//        GridPane.setConstraints(zipCodeLabel,0,8);
-//        GridPane.setConstraints(zipCodeTextField,1,8);
 
         Label carModelLabel = new Label("Bilmodel: ");
         ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.createCarList()));
@@ -169,7 +162,6 @@ public class NewOfferView {
         GridPane.setConstraints(carModelLabel,0,9);
         GridPane.setConstraints(carModelCombobox,1,9);
         carModelCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-//                @Override
                 public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
                     car = (Car) newValue;
                     setCarInfo(car);
@@ -196,6 +188,8 @@ public class NewOfferView {
             }
         });
 
+
+//DATES BEGIN-------------------------------------------------------------------------------------------------------------//
         GridPane.setConstraints(downPaymentLabel,0,11);
         GridPane.setConstraints(downPaymentTextField,1,11);
 
@@ -222,9 +216,12 @@ public class NewOfferView {
         payStartLocalDate = startDatePicker.getValue();         //skal konverteres fra LocalDate t. Date, enten her eller i save-metoden
         payEndLocalDate = endDatePicker.getValue();
 
-
         GridPane.setConstraints(endDateLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
+
+//DATES END -----------------------------------------------------------------------------------------------------------------------------------------//
+
+
 
         Label salesPersonLabel = new Label("Sælger");
         ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonListFactory.createSalesPersonList()));
@@ -240,13 +237,9 @@ public class NewOfferView {
         GridPane.setConstraints(salesPersonCombobox,1,14);
 
         Button calcQuoteButton = new Button("Beregn tilbud");
-
-
         GridPane.setConstraints(calcQuoteButton,0,17);
 
         Button clearButton = new Button("      Slet       ");
-//        clearButton.setTranslateX(150);
-//        clearButton.setTranslateY(598);
         GridPane.setConstraints(clearButton,1,17);
 
 //LEFT SIDE-----------------------------------------------------------------------------------//END
@@ -367,8 +360,6 @@ public class NewOfferView {
                 emailText,
                 addressLabel,
                 addressText,
-//                zipCodeLabel,
-//                zipCodeTextField,
                 carModelLabel,
                 carModelCombobox,
                 priceLabel,
@@ -430,7 +421,6 @@ public class NewOfferView {
                 .or(phoneText.textProperty().isEmpty())
                 .or(emailText.textProperty().isEmpty())
                 .or(addressText.textProperty().isEmpty())
-//                .or(zipCodeTextField.textProperty().isEmpty())
                 .or(carModelCombobox.valueProperty().isNull())
                 .or(priceText.textProperty().isEmpty())
                 .or(downPaymentTextField.textProperty().isEmpty())
@@ -441,12 +431,11 @@ public class NewOfferView {
 
         calcQuoteButton.disableProperty().bind(calcBind);
 
-        getButton.setOnAction(click -> {        //flyt til lokal metode
-            paymentCalculator.getCreditRating(cprTextField.getText(), NewOfferView.this::setCreditRating);  //virker ikke endnu'
+        getButton.setOnAction(click -> {
+            String cprInput = cprTextField.getText();
+            paymentCalculator.getCreditRating(cprInput, NewOfferView.this::setCreditRating);  //virker ikke endnu'
             checkCustomer();
-
             });
-
 
         clearButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
 
@@ -500,8 +489,8 @@ public class NewOfferView {
             File file = fileChooser.showSaveDialog(window);
 
             if (file != null) {
-                saveToCsv.saveOfferToCSV(
-                        file,createdTxt.getText(),buyerTxt.getText(),carModelTxt.getText(),carPriceTxt.getText(),downPayTxt.getText(),priceAfterDownPayTxt.getText(),
+                saveToCsv.saveOfferToCSV(   //bør vi lave den smartere?
+                        file,createdTxt.getText(), buyerTxt.getText(), carModelTxt.getText(), carPriceTxt.getText(), downPayTxt.getText(), priceAfterDownPayTxt.getText(),
                         payPeriodTxt.getText(),creditRatingTxt.getText(),bankInterestTxt.getText(),
                         downPayInterestTxt.getText(),periodPayInterestTxt.getText(),totalInterestRateTxt.getText(),totalPriceTxt.getText(),
                         monthPayTxt.getText(),statusText.getText()
