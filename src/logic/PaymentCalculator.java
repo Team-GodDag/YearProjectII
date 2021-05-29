@@ -122,7 +122,7 @@ public class PaymentCalculator {
         totalCarPrice();
     }
 
-    public void getCreditRating(String cprInput, Consumer<String> callback) {
+    public void getCreditRating(String cprInput, Consumer<Enum> callback) {
         CreditRator.i().rate(cprInput);
     }
 

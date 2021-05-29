@@ -1,21 +1,22 @@
 package view;
 // når der skal oprettes et tilbud/ordre
 
-import data.CarDataAccess;
 import data.CreditRator;
 import entities.Car;
 import entities.Customer;
 import entities.Offer;
 import entities.SalesPerson;
-import factories.CarListFactory;
-import factories.CustomerListFactory;
-import factories.OfferListFactory;
-import factories.SalesPersonListFactory;
+import factories.CarDataAccessor;
+import factories.CustomerDataAccessor;
+import factories.OfferDataAccessor;
+import factories.SalesPersonDataAccessor;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -55,16 +56,16 @@ public class NewOfferView {
     Text creditRatingText, nameText, emailText, addressText, phoneText, priceText;
     Customer customer;
     SalesPerson salesPerson;
-    LocalDate payStartLocalDate, payEndLocalDate;
-    Date saleDate, payStartDate, payEndDate;
+    LocalDate saleDate, payStartLocalDate, payEndLocalDate;
+//    Date , payStartDate, payEndDate;
     Car car;
     boolean needsApproval;
     String status;
 
     public Node createView() {
         Stage window = new Stage();     //bruges til NotifyManager-popup; skal måske flyttes til relevante sted
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        saleDate = new Date();
+//        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        saleDate = LocalDate.now();
 
 
         //GridPane Design//
@@ -157,7 +158,7 @@ public class NewOfferView {
 
 
         Label carModelLabel = new Label("Bilmodel: ");
-        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarListFactory.getCarDataAccess().getAllCars()));
+        ComboBox carModelCombobox = new ComboBox<>(FXCollections.observableArrayList(CarDataAccessor.getCarDataAccess().getAllCars()));
         carModelCombobox.setPromptText("Vælg model");
         GridPane.setConstraints(carModelLabel,0,9);
         GridPane.setConstraints(carModelCombobox,1,9);
@@ -196,6 +197,12 @@ public class NewOfferView {
         Label startDateLabel = new Label("Startdato");
         DatePicker startDatePicker = new DatePicker();
         startDatePicker.setPromptText("Vælg dato");
+        startDatePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                payStartLocalDate = startDatePicker.getValue();
+            }
+        });
         GridPane.setConstraints(startDateLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
 
@@ -213,8 +220,14 @@ public class NewOfferView {
             }
         });
 
-        payStartLocalDate = startDatePicker.getValue();         //skal konverteres fra LocalDate t. Date, enten her eller i save-metoden
-        payEndLocalDate = endDatePicker.getValue();
+        endDatePicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                payEndLocalDate = endDatePicker.getValue();
+            }
+        });
+
+
 
         GridPane.setConstraints(endDateLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
@@ -224,7 +237,7 @@ public class NewOfferView {
 
 
         Label salesPersonLabel = new Label("Sælger");
-        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonListFactory.createSalesPersonList()));
+        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonDataAccessor.createSalesPersonList()));
         salesPersonCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object personOne, Object chosenPerson) {
@@ -433,11 +446,11 @@ public class NewOfferView {
 
         getButton.setOnAction(click -> {
             String cprInput = cprTextField.getText();
-            paymentCalculator.getCreditRating(cprInput, NewOfferView.this::setCreditRating);  //virker ikke endnu'
+            //paymentCalculator.getCreditRating(cprInput::setCreditRating);  //virker ikke endnu'
             checkCustomer();
             });
 
-        clearButton.setOnAction(click -> UIController.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
+        clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
 
         calcQuoteButton.setOnAction(click -> {      //needs major overhaul
             setStatus(needsApproval);
@@ -449,7 +462,7 @@ public class NewOfferView {
             carPriceTxt.setText(priceFormat.formatter(car.getPrice()));
             downPayTxt.setText(priceFormat.formatter(paymentCalculator.getDownPayment()));
             downPayInterestTxt.setText(priceFormat.formatter(paymentCalculator.getDownPaymentInterestRate())); //String.valueOf(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()), Double.valueOf(downPaymentTextField.getText()))))
-            createdTxt.setText(dateFormat.format(saleDate));
+            createdTxt.setText(String.valueOf(saleDate)); //dateFormat.format(saleDate)
             buyerTxt.setText(customer.getFirstName() + " " + customer.getLastName());
     /**/        payPeriodTxt.setText(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(), endDatePicker.getValue().toString()) + " år");
             offerSalesPersTxt.setText(salesPerson.getFirstname() + " " + salesPerson.getLastname());
@@ -474,9 +487,6 @@ public class NewOfferView {
 
         });
 
-        acceptBtn.setOnAction(click -> {
-            //save method
-        });
 
         csvBtn.setOnAction(click -> {       //lokal metode
             FileChooser fileChooser = new FileChooser();
@@ -499,7 +509,7 @@ public class NewOfferView {
         });
 
         acceptBtn.setOnAction(click -> {
-            saveOffertoDB(customer, car, salesPerson, creditRatingTxt.getText(), status, paymentCalculator, saleDate, payStartDate, payEndDate);
+            saveOffertoDB(customer, car, salesPerson, creditRatingTxt.getText(), paymentCalculator, saleDate, payStartLocalDate, payEndLocalDate, status);
         });                                                                     //vil hellere hente fra paymentCalc
 
         HBox root = new HBox(salesGrid);
@@ -512,11 +522,11 @@ public class NewOfferView {
 
 //PRIVATE METHODS--------------------------------------------------------
 
-    private void setCreditRating(String rating) {       //INCOMLETE!!!!
+    private void setCreditRating(Enum rating) {       //INCOMLETE!!!!
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                creditRatingText.setText(rating);
+                creditRatingText.setText(rating.toString());
             }
         });
     }
@@ -526,12 +536,12 @@ public class NewOfferView {
     }
 
     private void checkCustomer() {
-        this.customer = CustomerListFactory.getCustomerByCpr(cprTextField.getText());       //skal i privat metode
+        this.customer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(cprTextField.getText());       //skal i privat metode
         if (customer != null) {
             if (customer.isGoodGuy() != false) {
                 setCustomerInfo(customer);
                 System.out.println(customer.isGoodGuy());
-                /* *****!!!!!!*/        CompletableFuture.runAsync(() -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));   //bør kalde lokal klassevariabel creditRating i paymentCalc
+/* *****!!!!!!*/        CompletableFuture.runAsync(() -> creditRatingText.setText(String.valueOf(CreditRator.i().rate(cprTextField.getText()))));   //bør kalde lokal klassevariabel creditRating i paymentCalc
             } else {
                 saleDeniedAlert();
             }
@@ -559,13 +569,13 @@ public class NewOfferView {
         }
     }
 
-    private boolean checkApprovalNeed(Car car) {
+    private void checkApprovalNeed(Car car) {
         if(car.getPrice() > 1000000) {
             needsApproval = true;
         } else {
             needsApproval = false;
         }
-        return needsApproval;
+//        return needsApproval;
     }
 
     private String setStatus(boolean needsApproval) {
@@ -577,17 +587,17 @@ public class NewOfferView {
         return status;
     }
 
-    private void saveOffertoDB(Customer customer, Car car, SalesPerson salesperson, String creditRating, String status, PaymentCalculator paymentCalculator, Date saleDate, Date startDate, Date endDate) {
-        OfferListFactory.addOffer(new Offer(customer, car, salesperson, creditRating, status, paymentCalculator, saleDate, startDate, endDate));
+    private void saveOffertoDB(Customer customer, Car car, SalesPerson salesperson, String creditRating, PaymentCalculator paymentCalculator, LocalDate saleDate, LocalDate startDate, LocalDate endDate, String status) {
+        OfferDataAccessor.addOffer(new Offer(customer, car, salesperson, creditRating, paymentCalculator, saleDate, startDate, endDate, status));
     }
 
-    private Alert saleDeniedAlert() {
+    private void saleDeniedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Handel nægtet");
         alert.setHeaderText("Vi handler ikke med svumpukler");
         alert.setContentText("Han må prøve at svindle en anden forhandler");
         alert.showAndWait();
-        return alert;
+//        return alert;
     }
 
 }

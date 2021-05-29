@@ -4,20 +4,20 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class UIController {
+public class UIManager {
 
-    private static UIController instance = null;
+    private static UIManager instance = null;
     public BorderPane root = new BorderPane();
 
-    public static UIController instance() {
+    public static UIManager instance() {
         if(instance == null) {
-            instance = new UIController();
+            instance = new UIManager();
         }
         return instance;
     }
 
     //private constructor
-    private UIController() { }
+    private UIManager() { }
 
     //creates scene
 

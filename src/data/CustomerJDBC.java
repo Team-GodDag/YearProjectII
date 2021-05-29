@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class CustomerJDBC implements CustomerDataAccess {
 
-//    @Override
     public ArrayList<Customer> getAllCustomers() {
         return getCustomersByCondition("0 = 0");
     }
@@ -18,13 +17,13 @@ public class CustomerJDBC implements CustomerDataAccess {
     public boolean addCustomer(Customer customer) {
         try {
             String sql = "INSERT INTO customers VALUES ('" +
-                    customer.getCpr()           + "', '" +
-                    customer.getFirstName()     + "', '" +
-                    customer.getLastName()      + "', '" +
-                    customer.getEmail()         + "', '" +
-                    customer.getAddress()       + "', '" +
-                    customer.getPhone()         + "', " +
-                    customer.isGoodGuyBit()     + ")";
+                    customer.getCpr()               + "', '" +
+                    customer.getFirstName()         + "', '" +
+                    customer.getLastName()          + "', '" +
+                    customer.getEmail()             + "', '" +
+                    customer.getAddress()           + "', '" +
+                    customer.getPhone()             + "', " +
+                    customer.isGoodGuyBit()         + ")";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();

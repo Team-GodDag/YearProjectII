@@ -17,18 +17,18 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
     @Override
     public boolean addOffer(Offer offer) {
         try {
-            String sql = "INSERT INTO quotes VALUES ('" +
+            String sql = "INSERT INTO offers VALUES ('" +
                     offer.getCustomerId()           + "', '" +
                     offer.getCreditRating()         + "', '" +
                     offer.getSalesPersonId()        + "', '" +
                     offer.getCarId()                + "', '" +
                     offer.getCarPrice()             + "', '" +
                     offer.getDownpayment()          + "', '" +
-                    offer.getStatus()               + "', '" +
                     offer.getTodaysBankRate()       + "', '" +
                     offer.getDateOfSale()           + "', '" +
-                    offer.getDateOfPayStart()       + "', " +
-                    offer.getDateOfPayEnd()         + ")";
+                    offer.getDateOfPayStart()       + "', '" +
+                    offer.getDateOfPayEnd()         + "', '" +
+                    offer.getStatus()               + "')";
 
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
@@ -51,7 +51,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
     public boolean deleteOffer(Offer offer) {
         try {
             String condition = "id=" + offer.getId();
-            String sql = "DELETE FROM quotes WHERE " + condition;
+            String sql = "DELETE FROM offers WHERE " + condition;
             System.out.println(sql);
             Statement statement = JDBC.instance.connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
@@ -100,25 +100,23 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
         ArrayList<Offer> offers = new ArrayList<Offer>();
         System.out.println("condition: " + condition);
         try {
-            String sql = "SELECT * FROM quotes WHERE " + condition;
+            String sql = "SELECT * FROM offers WHERE " + condition;
             Statement statement = JDBC.instance.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
-                int id                  = resultSet.getInt("quote_id");
-                int customerId         = resultSet.getInt("customer_id");
-                
-                int sellerId           = resultSet.getInt("seller_id");
-                int carId        = resultSet.getInt("car_model_id");
-                String creditRating    = resultSet.getString("credit_rating");
-                String status           = resultSet.getString("status");
-                double carPrice        = resultSet.getDouble("car_price");
-                double payment          = resultSet.getDouble("payment");
-                double bankratingoftheday = resultSet.getDouble("bankratingoftheday");
-                Date dateofsale         = resultSet.getDate("dateofsale");
-                Date dateofpaystart     = resultSet.getDate("dateofpaystart");
-                Date dateofpayend       = resultSet.getDate("dateofpayend");
-
+                int id                      = resultSet.getInt("offer_id");
+                int customerId              = resultSet.getInt("customer_id");
+                int sellerId                = resultSet.getInt("seller_id");
+                int carId                   = resultSet.getInt("car_id");
+                String creditRating         = resultSet.getString("credit_rating");
+                String status               = resultSet.getString("status");
+                double carPrice             = resultSet.getDouble("car_price");
+                double payment              = resultSet.getDouble("downpayment");
+                double bankratingoftheday   = resultSet.getDouble("bank_interest_rate");
+                Date dateofsale             = resultSet.getDate("sale_date");
+                Date dateofpaystart         = resultSet.getDate("payment_start_date");
+                Date dateofpayend           = resultSet.getDate("payment_end_date");
 
                 Offer offer = new Offer(id, customerId, sellerId, carId, creditRating, status, carPrice, payment, bankratingoftheday, dateofsale, dateofpaystart, dateofpayend); //downpaymentinterest, periodinterest,
                 offers.add(offer);

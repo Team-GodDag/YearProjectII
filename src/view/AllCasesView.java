@@ -1,7 +1,7 @@
 package view;
 
 import entities.Offer;
-import factories.OfferListFactory;
+import factories.OfferDataAccessor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -14,7 +14,7 @@ public class AllCasesView {
 
     public VBox createView() {
         TableView tableView = new TableView();
-        ObservableList<Offer> observableOfferList = FXCollections.observableArrayList(OfferListFactory.createOfferList());
+        ObservableList<Offer> observableOfferList = FXCollections.observableArrayList(OfferDataAccessor.createOfferList());
 
         tableView.setEditable(false);
         tableView.setMinHeight(700);

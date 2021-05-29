@@ -2,11 +2,10 @@ package view;
 // Start side
 // Viser nuværende kunder i databasen
 import entities.Customer;
-import factories.CustomerListFactory;
+import factories.CustomerDataAccessor;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -40,7 +39,7 @@ public class CustomerView {
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
         goButton.setOnAction(click -> {
-            Customer searchedCustomer = CustomerListFactory.getCustomerByCpr(searchTextField.getText());
+            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(searchTextField.getText());
             setCustomerInfo(searchedCustomer);
         });
 
@@ -48,8 +47,8 @@ public class CustomerView {
 //FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.getAllCustomers());        //skal den have sit eget interface?
-        ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(customerList);
+        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
+        ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(CustomerDataAccessor.getCustomerDataAccess().getAllCustomers());
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
@@ -98,7 +97,7 @@ public class CustomerView {
             }
         });
 
-//LISTVIEW ---------------------END
+//LISTVIEW ----------------------------------------------------------------------------------END
 
         Label emptyLabel = new Label(" ");              //????????
 
@@ -161,7 +160,7 @@ public class CustomerView {
         GridPane.setConstraints(formerSalesLabel, 5,3);
         //Text formerSalesText = new Text("(3)");
         Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIController.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
+        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
         GridPane.setConstraints(seButton,7,3);
         //GridPane.setConstraints(formerSalesText,6,3);
 
@@ -249,7 +248,7 @@ public class CustomerView {
 
     private void blacklistCustomer(Customer customer) {
         customer.setGoodGuy(false);
-        CustomerListFactory.updateCustomer(customer);
+        CustomerDataAccessor.getCustomerDataAccess().updateCustomer(customer);
     }
 
     private Alert blacklistWarning() {
