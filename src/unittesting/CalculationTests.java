@@ -39,14 +39,14 @@ public class CalculationTests {
 //        ArrayList<Car> cars = CarListFactory.createCarList();
 //        //find en specifik bil og hent prisen, så indtast XX downpayment, og assert om resultatet bliver 0/1
 //    }
-    @Test
-    void periodInterestRate(){
-        // Test om udbetalings perioder over 3 år, udløser 1% extra rente
-        NewOfferView newOfferView;
-        PeriodCalculator periodCalculator = new PeriodCalculator();
-        PaymentCalculator paymentCalculator = new PaymentCalculator();
-        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates("2021-05-19","2027-05-19")));
-    }
+//    @Test
+//    void periodInterestRate(){
+//        // Test om udbetalings perioder over 3 år, udløser 1% extra rente
+//        NewOfferView newOfferView;
+//        PeriodCalculator periodCalculator = new PeriodCalculator();
+//        PaymentCalculator paymentCalculator = new PaymentCalculator();
+//        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates("2021-05-19","2027-05-19")));
+//    }
 //    @Test
 //    void downPaymentInterest(){
 //        PaymentCalc paymentCalc = new PaymentCalc();
