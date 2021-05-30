@@ -463,9 +463,9 @@ public class NewOfferView {
             totalPriceTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalCarPrice())));    //priceFormat.formatter(paymentCalc.totalCarPrice(Double.parseDouble(priceTextField.getText()),Double.parseDouble(downPaymentTextField.getText())))
             totalPriceTxt.setUnderline(true);
             statusText.setText(status);
-            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(startDatePicker.getValue().toString(), endDatePicker.getValue().toString(), paymentCalculator.getPriceAfterDownPayment())));
+            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getPriceAfterDownPayment())));
             monthPayTxt.setUnderline(true);
-    /**/        priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalculator.getPriceAfterDownPayment()));
+            priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalculator.getPriceAfterDownPayment()));
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
