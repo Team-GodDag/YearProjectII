@@ -3,6 +3,8 @@ package logic;
 import data.CreditRator;
 import data.InterestRate;
 import entities.Car;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.text.DecimalFormat;
 import java.util.function.Consumer;
@@ -19,7 +21,7 @@ public class PaymentCalculator {
     private double priceAfterDownPayment;
     private double totalInterest;
     private double totalPrice;
-    private String creditRate;          //hent fra CreditRator
+    private StringProperty creditRating;          //hent fra CreditRator
     private Car car;
     private double downPayment = 0;
 
@@ -54,16 +56,16 @@ public class PaymentCalculator {
             //return rkiAndBankInterestRate;
 
         } else {
-            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+            this.rkiAndBankInterestRate = Double.parseDouble(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
            // return rkiAndBankInterestRate;
         }
-        return this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+        return this.rkiAndBankInterestRate = Double.parseDouble(df.format(rkiAndBankInterestRate));
     }
 
-    public void calculateCarPriceAfterDownPayment(){
-        if(downPayment > car.getPrice()){
-            System.out.println("Udbetaling overstiger bilens pris");
+    public void calculateCarPriceAfterDownPayment() {
+        if(downPayment > car.getPrice()) {
+            System.out.println("Udbetaling overstiger bilens pris");        //do pop-up
         } else {
             priceAfterDownPayment = car.getPrice() - downPayment;
         }
@@ -122,8 +124,12 @@ public class PaymentCalculator {
         totalCarPrice();
     }
 
-    public void getCreditRating(String cprInput, Consumer<Enum> callback) {
-        CreditRator.i().rate(cprInput);
+    public String fetchCreditRating(String cprInput) {
+        return String.valueOf(CreditRator.i().rate(cprInput));
+    }
+
+    public String getCreditRating() {
+        return String.valueOf(creditRating.get());
     }
 
     public int getPaymentPeriod() {
