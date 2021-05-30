@@ -1,7 +1,7 @@
 package view;
 //Viser tilgængelige bil modeller
 import entities.Car;
-import DataAccessors.CarDataAccessor;
+import dataaccessors.CarDataAccessor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;

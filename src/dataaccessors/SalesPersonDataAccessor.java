@@ -1,4 +1,4 @@
-package DataAccessors;
+package dataaccessors;
 
 import data.SalesPersonDataAccess;
 import data.SalesPersonJDBC;

@@ -1,4 +1,4 @@
-package DataAccessors;
+package dataaccessors;
 
 import data.CustomerDataAccess;
 import data.CustomerJDBC;

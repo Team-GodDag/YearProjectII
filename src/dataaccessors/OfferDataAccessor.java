@@ -1,4 +1,4 @@
-package DataAccessors;
+package dataaccessors;
 
 import data.OfferDataAccess;
 import data.OfferJDBC;

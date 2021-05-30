@@ -1,7 +1,7 @@
 package view;
 
 import entities.Offer;
-import DataAccessors.OfferDataAccessor;
+import dataaccessors.OfferDataAccessor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
