@@ -1,10 +1,7 @@
-package factories;
+package DataAccessors;
 
-import data.CarJDBC;
-import data.JDBC;
 import data.OfferDataAccess;
 import data.OfferJDBC;
-import entities.Car;
 import entities.Offer;
 
 import java.util.ArrayList;

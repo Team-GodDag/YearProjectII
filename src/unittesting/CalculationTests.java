@@ -5,8 +5,8 @@ import data.InterestRate;
 import logic.PaymentCalculator;
 import logic.PeriodCalculator;
 import org.junit.jupiter.api.Test;
-import view.NewOfferView;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,10 +16,9 @@ public class CalculationTests {
 
     @Test
     void getBankInterestRate(){
-
         assertNotNull(InterestRate.i().todaysRate());
-
     }
+
     @Test
     void assumeBankInterestRate(){
         assert(InterestRate.i().todaysRate()>= 3 && InterestRate.i().todaysRate()<=9);
@@ -39,24 +38,29 @@ public class CalculationTests {
 //        ArrayList<Car> cars = CarListFactory.createCarList();
 //        //find en specifik bil og hent prisen, så indtast XX downpayment, og assert om resultatet bliver 0/1
 //    }
+    @Test
+    void periodInterestRate(){
+        // Test om udbetalings perioder over 3 år, udløser 1% extra rente
+        PeriodCalculator periodCalculator = new PeriodCalculator();
+        PaymentCalculator paymentCalculator = new PaymentCalculator();
+        LocalDate dateOne = LocalDate.of(2021, 05, 05);
+        LocalDate dateTwo = LocalDate.of(2025, 05, 05);
+        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(dateOne, dateTwo)));
+    }
+
 //    @Test
-//    void periodInterestRate(){
-//        // Test om udbetalings perioder over 3 år, udløser 1% extra rente
-//        NewOfferView newOfferView;
-//        PeriodCalculator periodCalculator = new PeriodCalculator();
-//        PaymentCalculator paymentCalculator = new PaymentCalculator();
-//        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates("2021-05-19","2027-05-19")));
+//    void downPaymentInterest() {     //how to test???
+//        PaymentCalculator calculator = new PaymentCalculator();
+//        calculator.setCar();
+//        assertEquals(1,calculator.calculateDownPaymentInterest(calculator.,100.0);
 //    }
-//    @Test
-//    void downPaymentInterest(){
-//        PaymentCalc paymentCalc = new PaymentCalc();
-//        assertEquals(1,paymentCalc.downPaymentCalc(10000000.0,100.0));
-//    }
+
 //    @Test
 //    void downPaymentInterest2(){
 //        PaymentCalc paymentCalc = new PaymentCalc();
 //        assertEquals(0,paymentCalc.downPaymentCalc(10000000.0,9000000.0));
 //    }
+
 //    @Test
 //    void totalInterestRate(){
 //        PaymentCalc paymentCalc = new PaymentCalc();

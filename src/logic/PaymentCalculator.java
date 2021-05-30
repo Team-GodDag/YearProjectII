@@ -86,15 +86,13 @@ public class PaymentCalculator {
                 downPaymentInterestRate = 1.0;
                 System.out.println(downPaymentInterestRate);
             }
+        } else if(downPayment > car.getPrice()) {
+            throw new ArithmeticException("Udbetalingen overstiger bilens pris.");
         }
     }
 
     public void totalCarPrice() {  //behøver ikke downpayment som argument
         totalPrice = (car.getPrice() - downPayment) * (1 + (totalInterest /100));
-
-        if(downPayment > car.getPrice()){
-            throw new ArithmeticException("Udbetaling overstiger bilens pris");     //return -1;
-        }
     }
 
     public double calculatePaymentPeriodInterestRate(int paymentYears) { //bør måske tælle måneder i stedet?
@@ -140,7 +138,7 @@ public class PaymentCalculator {
         return creditRating;
     }
 
-    public double fetchInterestRate() {
+    public double fetchBankInterestRate() {
         baseBankInterestRate = InterestRate.i().todaysRate();
         return baseBankInterestRate;
     }
@@ -157,7 +155,7 @@ public class PaymentCalculator {
         this.paymentPeriod = paymentPeriod;
     }
 
-    public double getCombinedInterestRate() {
+    public double getCombinedInterestRate() {       //samme som getRkiAndBankInterestRate - tag beslutning
         return rkiAndBankInterestRate;
     }
 
@@ -169,7 +167,7 @@ public class PaymentCalculator {
         return rkiAndBankInterestRate;
     }
 
-    public double getBaseBankInterestRate() {   //denne skal kalde metode i InterestRate
+    public double getBaseBankInterestRate() {
         return baseBankInterestRate;
     }
 
@@ -177,7 +175,7 @@ public class PaymentCalculator {
         return downPaymentInterestRate;
     }
 
-    public double getPaymentPeriodInterestRate() {
+    public double getPaymentPeriodInterestRate() {  //bruger vi ikke, fordi vi kalder calculatePaymentPeriodInterestRate og får værdi retur
         return paymentPeriodInterestRate;
     }
 

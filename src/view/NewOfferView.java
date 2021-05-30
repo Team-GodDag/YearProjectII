@@ -5,10 +5,10 @@ import entities.Car;
 import entities.Customer;
 import entities.Offer;
 import entities.SalesPerson;
-import factories.CarDataAccessor;
-import factories.CustomerDataAccessor;
-import factories.OfferDataAccessor;
-import factories.SalesPersonDataAccessor;
+import DataAccessors.CarDataAccessor;
+import DataAccessors.CustomerDataAccessor;
+import DataAccessors.OfferDataAccessor;
+import DataAccessors.SalesPersonDataAccessor;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -292,7 +292,7 @@ public class NewOfferView {
         GridPane.setConstraints(creditRatingLbl,11,4);
         GridPane.setConstraints(creditRatingTxt,12,4);
 
-        Label bankInterestLbl = new Label("Bankrente:");         //"rentesats"?
+        Label bankInterestLbl = new Label("Rentesats:");                //bankrente + rente baseret på kreditværdighed
         Text bankInterestTxt = new Text();
         GridPane.setConstraints(bankInterestLbl,11,5);
         GridPane.setConstraints(bankInterestTxt,12,5);
@@ -302,7 +302,7 @@ public class NewOfferView {
         GridPane.setConstraints(downPayInterestLbl,11,6);
         GridPane.setConstraints(downPayInterestTxt,12,6);
 
-        Label periodPayInterestLbl = new Label("Løbetidsrente:");   //andet navn?
+        Label periodPayInterestLbl = new Label("Løbetidsrente:");         //andet navn?
         Text periodPayInterestTxt = new Text();
         GridPane.setConstraints(periodPayInterestLbl,11,7);
         GridPane.setConstraints(periodPayInterestTxt,12,7);
@@ -429,20 +429,15 @@ public class NewOfferView {
 
         calcQuoteButton.disableProperty().bind(calcBind);
 
-        getButton.setOnAction(click -> {
-            String cprInput = cprTextField.getText();
-//            setCreditRating(cprInput);
-            //paymentCalculator.getCreditRating(cprInput::setCreditRating);  //virker ikke endnu'
-            checkCustomer();
-            });
+        getButton.setOnAction(click -> checkCustomer());
 
         clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
 
-        calcQuoteButton.setOnAction(click -> {      //needs major overhaul
+        calcQuoteButton.setOnAction(click -> {
             setStatus(needsApproval);
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
-//            requestBankRate();
             paymentCalculator.calculateAll();
+
             if(!paymentCalculator.isRkiIsOK()) {
                 saleDeniedAlert();
             }
@@ -457,7 +452,7 @@ public class NewOfferView {
             payPeriodTxt.setText(periodCalculator.yearsBetweenDates(payStartLocalDate, payEndLocalDate) + " år");
             offerSalesPersTxt.setText(salesPerson.getFirstname() + " " + salesPerson.getLastname());
             carModelTxt.setText(car.getName());
-            periodPayInterestTxt.setText(String.valueOf(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.getTimeDifferenceInYears())));  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
+            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.getTimeDifferenceInYears()) + "%");  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
             totalInterestRateTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalInterest()))); //String.valueOf(paymentCalc.calculateTotalInterest())
             totalInterestRateTxt.setUnderline(true);
             totalPriceTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalCarPrice())));    //priceFormat.formatter(paymentCalc.totalCarPrice(Double.parseDouble(priceTextField.getText()),Double.parseDouble(downPaymentTextField.getText())))
@@ -498,7 +493,7 @@ public class NewOfferView {
         });
 
         acceptBtn.setOnAction(click -> {
-            saveOffertoDB(customer, car, salesPerson, creditRatingTxt.getText(), paymentCalculator, saleDate, payStartLocalDate, payEndLocalDate, status);
+            saveOffertoDB(customer, car, salesPerson, paymentCalculator.getCreditRating(), paymentCalculator, saleDate, payStartLocalDate, payEndLocalDate, status);
         });                                                                     //vil hellere hente fra paymentCalc
 
         HBox root = new HBox(salesGrid);
@@ -553,7 +548,7 @@ public class NewOfferView {
     }
 
     private void requestBankRate() {
-        CompletableFuture.runAsync(() -> paymentCalculator.fetchInterestRate());
+        CompletableFuture.runAsync(() -> paymentCalculator.fetchBankInterestRate());
     }
 
     private void setCustomerInfo(Customer customer) {

@@ -1,4 +1,4 @@
-package factories;
+package DataAccessors;
 
 import data.SalesPersonDataAccess;
 import data.SalesPersonJDBC;
