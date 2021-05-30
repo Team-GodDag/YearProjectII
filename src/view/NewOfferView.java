@@ -247,7 +247,7 @@ public class NewOfferView {
         Button calcQuoteButton = new Button("Beregn tilbud");
         GridPane.setConstraints(calcQuoteButton,0,17);
 
-        Button clearButton = new Button("      Annuller       ");
+        Button clearButton = new Button("Annuller");
         GridPane.setConstraints(clearButton,1,17);
 
 //LEFT SIDE-----------------------------------------------------------------------------------//END
