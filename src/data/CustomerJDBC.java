@@ -125,5 +125,14 @@ public class CustomerJDBC implements CustomerDataAccess {
             return null;
     }
 
+    public Customer getCustomerByPhone(String phone) {
+        ArrayList<Customer> result = getCustomersByCondition("phonenumber=" + phone);
+
+        if (result.size() > 0)
+            return result.get(0);
+        else
+            return null;
+    }
+
 
 }

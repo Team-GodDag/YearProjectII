@@ -37,23 +37,23 @@ import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
-    SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
-    NotifyWindow notifyWindow = new NotifyWindow(); //skal nok bare bare lokal variabel
+    private SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
+    private NotifyWindow notifyWindow = new NotifyWindow(); //skal nok bare bare lokal variabel
 
-    PeriodCalculator periodCalculator = new PeriodCalculator();     //Behøver måske ikke egen klasse
-    PriceFormat priceFormat = new PriceFormat();                    //Fordel v. BigDecimal er, at den indeholder formattering
-    MonthPayCalc monthPayCalc = new MonthPayCalc();                 //behøver den egen klasse?
-    PaymentCalculator paymentCalculator = new PaymentCalculator();
-    WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();     //bruges kun i downpayment - keep local
+    private PeriodCalculator periodCalculator = new PeriodCalculator();     //Behøver måske ikke egen klasse
+    private PriceFormat priceFormat = new PriceFormat();                    //Fordel v. BigDecimal er, at den indeholder formattering
+    private MonthPayCalc monthPayCalc = new MonthPayCalc();                 //behøver den egen klasse?
+    private PaymentCalculator paymentCalculator = new PaymentCalculator();
+    private WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();     //bruges kun i downpayment - keep local
 
-    TextField cprTextField;
-    Text creditRatingText, nameText, emailText, addressText, phoneText, priceText;
-    Customer customer;
-    SalesPerson salesPerson;
-    LocalDate saleDate, payStartLocalDate, payEndLocalDate;
-    Car car;
-    boolean needsApproval;
-    String status;
+    private TextField cprTextField;
+    private Text creditRatingText, nameText, emailText, addressText, phoneText, priceText;
+    private Customer customer;
+    private SalesPerson salesPerson;
+    private LocalDate saleDate, payStartLocalDate, payEndLocalDate;
+    private Car car;
+    private boolean needsApproval;
+    private String status;
 
     public Node createView() {
 
@@ -222,7 +222,7 @@ public class NewOfferView {
 
 
         Label salesPersonLabel = new Label("Sælger");
-        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonDataAccessor.createSalesPersonList()));
+        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonDataAccessor.getSalesPersonDataAccess().getAllSalesPersons()));
         salesPersonCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object personOne, Object chosenPerson) {
@@ -434,14 +434,11 @@ public class NewOfferView {
         clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
 
         calcQuoteButton.setOnAction(click -> {
+
             setStatus(needsApproval);
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
+            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + "%");  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
             paymentCalculator.calculateAll();
-
-            if(!paymentCalculator.isRkiIsOK()) {
-                saleDeniedAlert();
-            }
-
             creditRatingTxt.setText(creditRatingText.getText());    //skal hentes fra paymentcalc eller tilsvarende
             bankInterestTxt.setText(priceFormat.formatter(paymentCalculator.getRkiAndBankInterestRate()));
             carPriceTxt.setText(priceFormat.formatter(car.getPrice()));
@@ -452,20 +449,22 @@ public class NewOfferView {
             payPeriodTxt.setText(periodCalculator.yearsBetweenDates(payStartLocalDate, payEndLocalDate) + " år");
             offerSalesPersTxt.setText(salesPerson.getFirstname() + " " + salesPerson.getLastname());
             carModelTxt.setText(car.getName());
-            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.getTimeDifferenceInYears()) + "%");  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
-            totalInterestRateTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalInterest()))); //String.valueOf(paymentCalc.calculateTotalInterest())
+            totalInterestRateTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalInterestRate()))); //String.valueOf(paymentCalc.calculateTotalInterest())
             totalInterestRateTxt.setUnderline(true);
             totalPriceTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalCarPrice())));    //priceFormat.formatter(paymentCalc.totalCarPrice(Double.parseDouble(priceTextField.getText()),Double.parseDouble(downPaymentTextField.getText())))
             totalPriceTxt.setUnderline(true);
             statusText.setText(status);
-            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getPriceAfterDownPayment())));
+            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getTotalCarPrice())));
             monthPayTxt.setUnderline(true);
             priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalculator.getPriceAfterDownPayment()));
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
 
-            System.out.println("interest rate test " + paymentCalculator.getCombinedInterestRate());
+            if(!paymentCalculator.isRkiOK()) {
+                saleDeniedAlert();
+            }
+
 
         });
 
@@ -526,8 +525,7 @@ public class NewOfferView {
             if (customer.isGoodGuy()) {
                 setCustomerInfo(customer);
                 System.out.println(customer.isGoodGuy());
-//                setCreditRating(cprTextField.getText());          //virker ikke
-                requestRkiRating(cprInput);     //CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
+                requestRkiRating(cprInput);
                 requestBankRate();
             } else {
                 saleDeniedAlert();
@@ -581,7 +579,7 @@ public class NewOfferView {
     }
 
     private void saveOffertoDB(Customer customer, Car car, SalesPerson salesperson, String creditRating, PaymentCalculator paymentCalculator, LocalDate saleDate, LocalDate startDate, LocalDate endDate, String status) {
-        OfferDataAccessor.addOffer(new Offer(customer, car, salesperson, creditRating, paymentCalculator, saleDate, startDate, endDate, status));
+        OfferDataAccessor.getOfferDataAccess().addOffer(new Offer(customer, car, salesperson, creditRating, paymentCalculator, saleDate, startDate, endDate, status));
     }
 
     private void saveToCSV() {

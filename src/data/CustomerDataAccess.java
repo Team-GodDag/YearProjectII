@@ -5,7 +5,7 @@ import entities.Customer;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
-    ArrayList<Customer> getAllCustomers();  //skal den være her??? (for samtlige klasser)
+    ArrayList<Customer> getAllCustomers();
 
     boolean addCustomer(Customer customer);
 
@@ -15,5 +15,6 @@ public interface CustomerDataAccess {
 
     Customer getCustomerByCpr(String cpr);
 
-    //ArrayList<Customer> getCustomersByCondition(String condition);
+    Customer getCustomerByPhone(String phone);
+
 }

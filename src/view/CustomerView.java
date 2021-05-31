@@ -33,13 +33,13 @@ public class CustomerView {
 
         searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
-        searchTextField.setPromptText("Søg efter CPR Nummer");
+        searchTextField.setPromptText("Telefon el. navn");
 
 
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
         goButton.setOnAction(click -> {
-            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(searchTextField.getText());
+            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByPhone(searchTextField.getText());
             setCustomerInfo(searchedCustomer);
         });
 
@@ -52,12 +52,10 @@ public class CustomerView {
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
-            public void changed(ObservableValue<? extends Customer> observableValue, Customer prevCustomer, Customer nextCustomer) {
-                setCustomerInfo(nextCustomer);
+            public void changed(ObservableValue<? extends Customer> observableValue, Customer prevCustomer, Customer selected) {
+                setCustomerInfo(selected);
             }
         });
-
-
 
         FilteredList<Customer> filteredCustomerList = new FilteredList<>(observableCustomerlist, p -> true);
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -67,7 +65,7 @@ public class CustomerView {
                 }
 
                 String lowercaseFilter = newValue.toLowerCase();
-                if (customer.getCpr().toLowerCase().contains(lowercaseFilter)) {
+                if (customer.getPhone().toLowerCase().contains(lowercaseFilter)) {
                     return true;
                 } else if(customer.getFirstName().toLowerCase().contains(lowercaseFilter)) {
                     return true;
