@@ -5,100 +5,104 @@ import data.InterestRate;
 import entities.Car;
 
 import java.text.DecimalFormat;
-import java.util.function.Consumer;
 
 public class PaymentCalculator {
 
+
+    private double baseBankInterestRate;
     private double rkiAndBankInterestRate;
-    private double baseBankInterestRate/* = InterestRate.i().todaysRate()*/;
+    private boolean rkiIsOK;
 
     private double downPaymentInterestRate;
     private int paymentPeriod;
     private double paymentPeriodInterestRate;
 
     private double priceAfterDownPayment;
-    private double totalInterest;
     private double totalPrice;
-    private String creditRate;          //hent fra CreditRator
+    private double totalInterest;
+    private String creditRating;          //hent fra CreditRator
+
     private Car car;
     private double downPayment = 0;
+    PeriodCalculator periodCalculator;
 
 
 
-    public double rkiInterestCalc(String creditRating) {
-        rkiAndBankInterestRate = 0.0;
-        baseBankInterestRate = InterestRate.i().todaysRate();
-        DecimalFormat df = new DecimalFormat("#,##");       //formattering bør ske i View, ikke logik
+    public boolean rkiInterestCalc(String creditRating) {
+
+        rkiAndBankInterestRate = baseBankInterestRate;
+//        baseBankInterestRate = InterestRate.i().todaysRate();
+        DecimalFormat df = new DecimalFormat("#,##");       //formattering bør egentlig ske i View, ikke logik
 
         //double rkiAndBankInterestRate;
 
         if (creditRating.equals("A")) {
-            rkiAndBankInterestRate = InterestRate.i().todaysRate();
+            rkiIsOK = true;
             rkiAndBankInterestRate += 1;
-//            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
-            //return rkiAndBankInterestRate;
 
         } if(creditRating.equals("B")) {
-            rkiAndBankInterestRate = InterestRate.i().todaysRate(); //uhensigtsmæssigt at hente den flere gange
+            rkiIsOK = true;
             rkiAndBankInterestRate += 2;
 //            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
             //return rkiAndBankInterestRate;
 
         } if(creditRating.equals("C")) {
-            rkiAndBankInterestRate = InterestRate.i().todaysRate();
+            rkiIsOK = true;
             rkiAndBankInterestRate += 3;
 //            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
             System.out.println(rkiAndBankInterestRate);
             //return rkiAndBankInterestRate;
 
-        } else {
-            this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+        } else if(creditRating.equals("D")) {
+            rkiIsOK = false;
             System.out.println(rkiAndBankInterestRate);
-           // return rkiAndBankInterestRate;
         }
-        return this.rkiAndBankInterestRate = Double.valueOf(df.format(rkiAndBankInterestRate));
+        rkiAndBankInterestRate = Double.parseDouble(df.format(rkiAndBankInterestRate));
+        return rkiIsOK;
     }
 
-    public void calculateCarPriceAfterDownPayment(){
-        if(downPayment > car.getPrice()){
-            System.out.println("Udbetaling overstiger bilens pris");
-        } else {
+
+    public double calculateCarPriceAfterDownPayment() {
+        try {
             priceAfterDownPayment = car.getPrice() - downPayment;
+//            if(downPayment > car.getPrice()) {
+//                System.out.println("Udbetaling overstiger bilens pris");        //do pop-up
+//            } else {
+//                priceAfterDownPayment = car.getPrice() - downPayment;
+//            }
+        } catch(ArithmeticException e) {    //måske dobbeltkonfekt at have en exception både her og i downpaymentintrate
+            e.printStackTrace();
         }
+        return priceAfterDownPayment;
     }
 
-    public void calculateDownPaymentInterest() {
-//        downPaymentInterestRate = 0.0;
+    public double calculateDownPaymentInterestRate() {
         if(car.getPrice() >= downPayment) {
             if ((downPayment / car.getPrice()) < 0.5) {
                 downPaymentInterestRate = 1.0;
                 System.out.println(downPaymentInterestRate);
             }
+        } else if(downPayment > car.getPrice()) {
+            throw new ArithmeticException("Udbetalingen overstiger bilens pris.");
         }
+        return downPaymentInterestRate;
     }
 
     public void totalCarPrice() {  //behøver ikke downpayment som argument
-        if(downPayment > car.getPrice()){
-            throw new ArithmeticException("Udbetaling overstiger bilens pris");//return -1;
-        }
         totalPrice = (car.getPrice() - downPayment) * (1 + (totalInterest /100));
-//       return totalPrice;
     }
 
     public double calculatePaymentPeriodInterestRate(int paymentYears) { //bør måske tælle måneder i stedet?
-        paymentPeriodInterestRate = 0.0;
+//        paymentPeriodInterestRate = 0.0;
         if(paymentYears < 0) {
-            return -1;      //hvorfor ikke returnere en fejlbesked i stedet?
+            throw new ArithmeticException("Vælg en gyldig periode");              //????? godt nok?
         } else if (paymentYears > 3) {
-                paymentPeriodInterestRate = 1;
-//                this.paymentPeriodInterestRate = Double.valueOf(paymentPeriodInterestRate); //hvad sker der her??? unødvendig
-                System.out.println(paymentPeriodInterestRate);
-                return paymentPeriodInterestRate;
+            paymentPeriodInterestRate = 1;
+            System.out.println("payment period interest rat: " + paymentPeriodInterestRate);
         }
-//        this.paymentPeriodInterestRate = paymentPeriodInterestRate;
-        System.out.println(paymentPeriodInterestRate);
+        System.out.println("payment period interest rat: " + paymentPeriodInterestRate);
         return paymentPeriodInterestRate;
     }
 
@@ -117,13 +121,29 @@ public class PaymentCalculator {
 //-------------------------------------------------------
 
     public void calculateAll() {
+        rkiInterestCalc(creditRating);
         calculateCarPriceAfterDownPayment();
-        calculateDownPaymentInterest();
+        calculateDownPaymentInterestRate();
+        calculateTotalInterest();
         totalCarPrice();
     }
 
-    public void getCreditRating(String cprInput, Consumer<String> callback) {
-        CreditRator.i().rate(cprInput);
+    public String fetchCreditRating(String cprInput) {
+        creditRating = String.valueOf(CreditRator.i().rate(cprInput));
+        return creditRating;
+    }
+
+    public String getCreditRating() {
+        return creditRating;
+    }
+
+    public double fetchBankInterestRate() {
+        baseBankInterestRate = InterestRate.i().todaysRate();
+        return baseBankInterestRate;
+    }
+
+    public boolean isRkiIsOK() {
+        return rkiIsOK;
     }
 
     public int getPaymentPeriod() {
@@ -134,7 +154,7 @@ public class PaymentCalculator {
         this.paymentPeriod = paymentPeriod;
     }
 
-    public double getInterestRate() {
+    public double getCombinedInterestRate() {       //samme som getRkiAndBankInterestRate - tag beslutning
         return rkiAndBankInterestRate;
     }
 
@@ -146,7 +166,7 @@ public class PaymentCalculator {
         return rkiAndBankInterestRate;
     }
 
-    public double getBaseBankInterestRate() {   //denne skal kalde metode i InterestRate
+    public double getBaseBankInterestRate() {
         return baseBankInterestRate;
     }
 
@@ -154,7 +174,7 @@ public class PaymentCalculator {
         return downPaymentInterestRate;
     }
 
-    public double getPaymentPeriodInterestRate() {
+    public double getPaymentPeriodInterestRate() {  //bruger vi ikke, fordi vi kalder calculatePaymentPeriodInterestRate og får værdi retur
         return paymentPeriodInterestRate;
     }
 
@@ -164,6 +184,10 @@ public class PaymentCalculator {
 
     public double getTotalInterest() {
         return totalInterest;
+    }
+
+    public double getTotalCarPrice() {
+        return totalPrice;
     }
 
     public void setDownPayment(double downPayment) {

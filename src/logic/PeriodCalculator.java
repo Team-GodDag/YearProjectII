@@ -12,19 +12,22 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class PeriodCalculator {         //BEHØVER DEN EGEN KLASSE?
-    private  int timeDifferenceInYears;
 
+    private  int timeDifferenceInYears;         //skal vi kalde en setTimeDiffYears el. lign. i PaymentCalculator?
 
-    public int yearsBetweenDates(String startDate, String endDate){
+    public int yearsBetweenDates(LocalDate startDate, LocalDate endDate){
 
-
-        String dateString1FromJDatePicker = startDate;
-        String dateString2FromJDatePicker = endDate;
-        LocalDate from = LocalDate.parse(dateString1FromJDatePicker);
-        LocalDate to = LocalDate.parse(dateString2FromJDatePicker);
+        LocalDate dateString1FromJDatePicker = startDate;
+        LocalDate dateString2FromJDatePicker = endDate;
+        LocalDate from = dateString1FromJDatePicker;
+        LocalDate to = dateString2FromJDatePicker;
         int differenceInDays = (int) ChronoUnit.DAYS.between(from, to);
-        this.timeDifferenceInYears = (differenceInDays / 365);
+        timeDifferenceInYears = (differenceInDays / 365);
 
+        return timeDifferenceInYears;
+    }
+
+    public int getTimeDifferenceInYears() {
         return timeDifferenceInYears;
     }
 }

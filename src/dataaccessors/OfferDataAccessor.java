@@ -1,14 +1,12 @@
-package factories;
+package dataaccessors;
 
-import data.CarJDBC;
-import data.JDBC;
+import data.OfferDataAccess;
 import data.OfferJDBC;
-import entities.Car;
 import entities.Offer;
 
 import java.util.ArrayList;
 
-public class OfferListFactory {
+public class OfferDataAccessor {
 
     public static ArrayList<Offer> createOfferList() {
         return new OfferJDBC().getAllOffers();
@@ -16,5 +14,9 @@ public class OfferListFactory {
 
     public static void addOffer(Offer offer) {
         new OfferJDBC().addOffer(offer);
+    }
+
+    public static OfferDataAccess getOfferDataAccess() {
+        return new OfferJDBC();
     }
 }

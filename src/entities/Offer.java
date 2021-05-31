@@ -2,6 +2,7 @@ package entities;       //måske POJOs?
 
 import logic.PaymentCalculator;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Offer { // Henrik
@@ -11,7 +12,8 @@ public class Offer { // Henrik
     private String creditRating, status;
     private Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
-    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, String status, PaymentCalculator paymentCalculator, Date dateOfSale, Date startPayDate, Date endPayDate) { //boolean isApproved,
+
+    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, PaymentCalculator paymentCalculator, LocalDate dateOfSale, LocalDate startPayDate, LocalDate endPayDate, String status) { //boolean isApproved,
         this.id             = 0;
         this.customerId     = customer.getId();
         this.salesPersonId  = salesPerson.getId();
@@ -21,9 +23,9 @@ public class Offer { // Henrik
         this.downpayment    = paymentCalculator.getDownPayment();
         this.todaysBankRate = paymentCalculator.getBaseBankInterestRate();
         this.status         = status;
-        this.dateOfSale     = dateOfSale;
-        this.dateOfPayStart = startPayDate;
-        this.dateOfPayEnd   = endPayDate;
+        this.dateOfSale     = java.sql.Date.valueOf(dateOfSale);
+        this.dateOfPayStart = java.sql.Date.valueOf(startPayDate);
+        this.dateOfPayEnd   = java.sql.Date.valueOf(endPayDate);
     }
 
     public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  double carPrice, double downpayment, double todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {

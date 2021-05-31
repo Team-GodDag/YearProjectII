@@ -2,11 +2,10 @@ package view;
 // Start side
 // Viser nuværende kunder i databasen
 import entities.Customer;
-import factories.CustomerListFactory;
+import dataaccessors.CustomerDataAccessor;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -40,7 +39,7 @@ public class CustomerView {
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
         goButton.setOnAction(click -> {
-            Customer searchedCustomer = CustomerListFactory.getCustomerByCpr(searchTextField.getText());
+            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(searchTextField.getText());
             setCustomerInfo(searchedCustomer);
         });
 
@@ -48,8 +47,8 @@ public class CustomerView {
 //FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>(CustomerListFactory.getAllCustomers());        //skal den have sit eget interface?
-        ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(customerList);
+        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
+        ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(CustomerDataAccessor.getCustomerDataAccess().getAllCustomers());
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
@@ -98,7 +97,7 @@ public class CustomerView {
             }
         });
 
-//LISTVIEW ---------------------END
+//LISTVIEW ----------------------------------------------------------------------------------END
 
         Label emptyLabel = new Label(" ");              //????????
 
@@ -136,21 +135,17 @@ public class CustomerView {
         adressText = new Text();
         GridPane.setConstraints(adressLabel,0,3);
         GridPane.setConstraints(adressText,1,3);
-
-        Label cprLabel = new Label("CPR Nr.: ");
+//------------------------------------------------------------------------
+        Label cprLabel = new Label("CPR Nr.: ");    //MÅ IKKE VISES!!!!
         cprText = new Text();
         GridPane.setConstraints(cprLabel,0,4);
         GridPane.setConstraints(cprText,1,4);
+//------------------------------------------------------------------------
 
         Label historyLabel = new Label("Historik: ");
         GridPane.setConstraints(historyLabel,0,5);
         historyText = new Text();
         GridPane.setConstraints(historyText,1,5);
-
-//        Label rkiLabel = new Label("RKI Kategori: ");             //SKAL VEL IKKE VÆRE HERINDE
-//        GridPane.setConstraints(rkiLabel,5,0);
-//        Text rkiText = new Text("A");
-//        GridPane.setConstraints(rkiText,6,0);
 
         Label customerNumLabel = new Label("Kundenummer.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
@@ -161,33 +156,56 @@ public class CustomerView {
         GridPane.setConstraints(formerSalesLabel, 5,3);
         //Text formerSalesText = new Text("(3)");
         Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIController.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
+        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
         GridPane.setConstraints(seButton,7,3);
         //GridPane.setConstraints(formerSalesText,6,3);
 
-        Button blacklistButton = new Button("Blacklist");
+        Button blacklistButton = new Button("Blacklist");   //skal sidde et bedre sted
+        blacklistButton.setVisible(false);
         blacklistButton.setOnAction(click -> {
             blacklistWarning();
+            blacklistButton.setVisible(false);
         });
-
-
 
         Button editButton = new Button("  Rediger  ");
-        editButton.setOnAction(click -> {
+        Button saveButton = new Button("  Gem  ");
+        Button cancelEditButton = new Button("Annuller");
 
+        editButton.setOnAction(click -> {
+            editButton.setDisable(true);
+            cancelEditButton.setVisible(true);
+            saveButton.setVisible(true);
+            blacklistButton.setVisible(true);
         });
 
-        //GridPane.setConstraints(editButton,1,6);
-        Button saveButton = new Button("  Gem  ");
+        saveButton.setVisible(false);
+        saveButton.setOnAction(click -> {
+            CustomerDataAccessor.getCustomerDataAccess().updateCustomer(customer);
+            saveButton.setVisible(false);
+            cancelEditButton.setVisible(false);
+            blacklistButton.setVisible(false);
+        });
+
+        cancelEditButton.setVisible(false);
+        cancelEditButton.setOnAction(click -> {
+            editButton.setDisable(false);
+            saveButton.setVisible(false);
+            cancelEditButton.setVisible(false);
+            blacklistButton.setVisible(false);
+            setCustomerInfo(customer);
+        });
+
+
 
 
 
 
         //saveButton.setDisable(true);
         // GridPane.setConstraints(saveButton,2,6);
-        HBox crudBox = new HBox(editButton, saveButton, blacklistButton);
-        crudBox.setSpacing(5);
-        GridPane.setConstraints(crudBox,0,8);
+//        HBox crudBox = new HBox(editButton, saveButton, blacklistButton, cancelEditButton);
+//        crudBox.setSpacing(5);
+        userInfoPane.addRow(10, editButton, saveButton, blacklistButton, cancelEditButton);
+//        GridPane.setConstraints(crudBox,0,8);
 
 //        Label customerNumLabel = new Label("Kunde nummer: 00001");
 //        GridPane.setConstraints(rkiLabel,11,0);
@@ -205,15 +223,14 @@ public class CustomerView {
                 cprText,
                 historyLabel,
                 historyText,
-//                rkiLabel,
-//                rkiText,
                 customerNumLabel,
                 customerNumText,
                 formerSalesLabel,
                 //formerSalesText,
-                seButton,
-                blacklistButton,
-                crudBox
+                seButton
+//                blacklistButton,
+//                cancelEditButton,
+//                crudBox
         );
 
 
@@ -249,10 +266,10 @@ public class CustomerView {
 
     private void blacklistCustomer(Customer customer) {
         customer.setGoodGuy(false);
-        CustomerListFactory.updateCustomer(customer);
+        CustomerDataAccessor.getCustomerDataAccess().updateCustomer(customer);
     }
 
-    private Alert blacklistWarning() {
+    private void blacklistWarning() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Advarsel");
         alert.setHeaderText("Er du sikker?");
@@ -263,7 +280,6 @@ public class CustomerView {
         if(result.get() == ButtonType.OK) {
             blacklistCustomer(customer);
         }
-        return alert;
     }
 
 }

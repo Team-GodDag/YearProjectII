@@ -1,7 +1,7 @@
 package view;
 // Når der skal oprettes en ny kunde
 import entities.Customer;
-import factories.CustomerListFactory;
+import dataaccessors.CustomerDataAccessor;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -67,7 +67,7 @@ public class NewCustomerView {
     }
 
     private void saveCustomer(TextField cpr, TextField firstName, TextField lastName, TextField email, TextField address, TextField phone) {
-        CustomerListFactory.addCustomer(new Customer(cpr.getText(), firstName.getText(), lastName.getText(), email.getText(), address.getText(), phone.getText()));
+        CustomerDataAccessor.getCustomerDataAccess().addCustomer(new Customer(cpr.getText(), firstName.getText(), lastName.getText(), email.getText(), address.getText(), phone.getText()));
     }
 
 

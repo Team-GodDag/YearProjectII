@@ -1,6 +1,8 @@
 package data;
 
 import entities.Car;
+import entities.Customer;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -80,7 +82,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
         }
     }
 
-    @Override
+//    @Override
     public ArrayList<Car> getCarsByCondition(String condition) {
         ArrayList<Car> cars = new ArrayList<>();
         System.out.println("condition: " + condition);
@@ -104,5 +106,15 @@ public class CarJDBC implements CarDataAccess { // Henrik
 
         return cars;
     }
+
+    public Car getCarByName(String modelName) {
+        ArrayList<Car> result = getCarsByCondition("model_name=" + modelName);
+
+        if (result.size() > 0)
+            return result.get(0);
+        else
+            return null;
+    }
+
 
 }

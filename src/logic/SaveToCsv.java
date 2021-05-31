@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class SaveToCsv {
     private String phoneNumber;
 
-                                    //DET HER KAN GØRES SMARTERE
+                                    //det er vel bl.a. her, et objekt med nødvendige data
 
     public  void saveOfferToCSV(File stageName, String created, String name, String carModel, String price,
                                 String downPayment, String priceAfterDp, String paymentPeriod, String creditRating, String bankInterest,

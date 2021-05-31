@@ -13,7 +13,9 @@ public interface CarDataAccess {
 
     boolean updateCar(Car car);
 
-    ArrayList<Car> getCarsByCondition(String condition);
+//    ArrayList<Car> getCarsByCondition(String condition);
 
     ArrayList<Car> getAllCars();
+
+    Car getCarByName(String modelName);
 }
