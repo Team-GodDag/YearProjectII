@@ -1,6 +1,7 @@
 package data;
 
 
+import entities.Customer;
 import entities.Offer;
 import java.util.ArrayList;
 
@@ -13,5 +14,6 @@ public interface OfferDataAccess {
 
 //    boolean updateOffer(Offer offer);
 
-    ArrayList<Offer> getOffersByCondition(String condition);
+//    ArrayList<Offer> getOffersByCondition(String condition);
+    ArrayList<Offer> getOffersByCustomer(Customer customer);
 }

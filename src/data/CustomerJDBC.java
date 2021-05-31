@@ -116,7 +116,6 @@ public class CustomerJDBC implements CustomerDataAccess {
         return customers;
     }
 
-
     public Customer getCustomerByCpr(String cpr) {
         ArrayList<Customer> result = getCustomersByCondition("cpr=" + cpr);
 

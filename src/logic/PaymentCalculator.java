@@ -3,11 +3,8 @@ package logic;
 import data.CreditRator;
 import data.InterestRate;
 import entities.Car;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import java.text.DecimalFormat;
-import java.util.function.Consumer;
 
 public class PaymentCalculator {
 
@@ -67,7 +64,7 @@ public class PaymentCalculator {
     }
 
 
-    public void calculateCarPriceAfterDownPayment() {
+    public double calculateCarPriceAfterDownPayment() {
         try {
             priceAfterDownPayment = car.getPrice() - downPayment;
 //            if(downPayment > car.getPrice()) {
@@ -75,12 +72,13 @@ public class PaymentCalculator {
 //            } else {
 //                priceAfterDownPayment = car.getPrice() - downPayment;
 //            }
-        } catch(ArithmeticException e) {
+        } catch(ArithmeticException e) {    //måske dobbeltkonfekt at have en exception både her og i downpaymentintrate
             e.printStackTrace();
         }
+        return priceAfterDownPayment;
     }
 
-    public void calculateDownPaymentInterest() {
+    public double calculateDownPaymentInterestRate() {
         if(car.getPrice() >= downPayment) {
             if ((downPayment / car.getPrice()) < 0.5) {
                 downPaymentInterestRate = 1.0;
@@ -89,6 +87,7 @@ public class PaymentCalculator {
         } else if(downPayment > car.getPrice()) {
             throw new ArithmeticException("Udbetalingen overstiger bilens pris.");
         }
+        return downPaymentInterestRate;
     }
 
     public void totalCarPrice() {  //behøver ikke downpayment som argument
@@ -124,7 +123,7 @@ public class PaymentCalculator {
     public void calculateAll() {
         rkiInterestCalc(creditRating);
         calculateCarPriceAfterDownPayment();
-        calculateDownPaymentInterest();
+        calculateDownPaymentInterestRate();
         calculateTotalInterest();
         totalCarPrice();
     }

@@ -156,7 +156,7 @@ public class CustomerView {
         GridPane.setConstraints(formerSalesLabel, 5,3);
         //Text formerSalesText = new Text("(3)");
         Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView()));       //ku måske bruge et interface
+        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
         GridPane.setConstraints(seButton,7,3);
         //GridPane.setConstraints(formerSalesText,6,3);
 

@@ -1,5 +1,6 @@
 package data;
 
+import entities.Customer;
 import entities.Offer;
 
 import java.sql.ResultSet;
@@ -95,7 +96,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
 //        }
 //    }
 
-    @Override
+//    @Override
     public ArrayList<Offer> getOffersByCondition(String condition) {
         ArrayList<Offer> offers = new ArrayList<Offer>();
         System.out.println("condition: " + condition);
@@ -125,6 +126,12 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
             e.printStackTrace();
         }
         return offers;
+    }
+
+    public ArrayList<Offer> getOffersByCustomer(Customer customer) {
+        return getOffersByCondition("customer_id=" + customer.getId());
+
+
     }
 
 }
