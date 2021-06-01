@@ -56,21 +56,22 @@ public class PaymentCalculator {
             rkiOK = false;
             System.out.println("rki + bank:" + rkiAndBankInterestRate);
         }
+
         rkiAndBankInterestRate = Double.parseDouble(df.format(rkiAndBankInterestRate));
         return rkiOK;
     }
 
 
     public double calculateCarPriceAfterDownPayment() {
-        try {
+//        try {
             priceAfterDownPayment = car.getPrice() - downPayment;
-//            if(downPayment > car.getPrice()) {
-//                System.out.println("Udbetaling overstiger bilens pris");        //do pop-up
-//            } else {
-//                priceAfterDownPayment = car.getPrice() - downPayment;
+            if(downPayment > car.getPrice()) {
+                throw new ArithmeticException("Udbetaling overstiger bilens pris");        //do pop-up
+            } else {
+                priceAfterDownPayment = car.getPrice() - downPayment;
 //            }
-        } catch(ArithmeticException e) {    //måske dobbeltkonfekt at have en exception både her og i downpaymentintrate
-            e.printStackTrace();
+//        } catch(ArithmeticException e) {    //måske dobbeltkonfekt at have en exception både her og i downpaymentintrate
+//            e.printStackTrace();
         }
         return priceAfterDownPayment;
     }
@@ -81,8 +82,8 @@ public class PaymentCalculator {
                 downPaymentInterestRate = 1.0;
                 System.out.println(downPaymentInterestRate);
             }
-        } else if(downPayment > car.getPrice()) {
-            throw new ArithmeticException("Udbetalingen overstiger bilens pris.");
+//        } else if(downPayment > car.getPrice()) {
+//            throw new ArithmeticException("Udbetalingen overstiger bilens pris.");
         }
         return downPaymentInterestRate;
     }

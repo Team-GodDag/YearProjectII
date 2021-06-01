@@ -38,7 +38,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
     private SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
-    private NotifyWindow notifyWindow = new NotifyWindow(); //skal nok bare bare lokal variabel
 
     private PeriodCalculator periodCalculator = new PeriodCalculator();     //Behøver måske ikke egen klasse
     private PriceFormat priceFormat = new PriceFormat();                    //Fordel v. BigDecimal er, at den indeholder formattering
@@ -106,6 +105,19 @@ public class NewOfferView {
         creditRatingText = new Text();
         creditRatingText.setFont(Font.font("Verdana", FontWeight.LIGHT, FontPosture.REGULAR, 18));
         creditRatingText.setFill(Color.GREEN);
+        creditRatingText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+//                checkRkiRating();
+//                requestBankRate();
+                if(!paymentCalculator.isRkiOK())
+                        saleDeniedAlert();
+                else
+                    requestBankRate();
+//                System.out.println(paymentCalculator.getCreditRating());
+                System.out.println("requesting bankrate");
+            }
+        });
 
         Label creditLabel = new Label("Kreditværdighed:");
         GridPane.setConstraints(creditLabel,3,0);
@@ -154,6 +166,7 @@ public class NewOfferView {
                     setCarInfo(car);
                     paymentCalculator.setCar(car);
                     checkApprovalNeed(car);
+                    setStatus(needsApproval);
                 }
             }
         );
@@ -289,6 +302,7 @@ public class NewOfferView {
 
         Label creditRatingLbl = new Label("Kreditværdighed:");
         Text creditRatingTxt = new Text();
+
         GridPane.setConstraints(creditRatingLbl,11,4);
         GridPane.setConstraints(creditRatingTxt,12,4);
 
@@ -435,7 +449,7 @@ public class NewOfferView {
 
         calcQuoteButton.setOnAction(click -> {
 
-            setStatus(needsApproval);
+//            checkRkiRating();
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
             periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + "%");  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
             paymentCalculator.calculateAll();
@@ -463,6 +477,8 @@ public class NewOfferView {
 
             if(!paymentCalculator.isRkiOK()) {
                 saleDeniedAlert();
+                acceptBtn.setDisable(true);
+                csvBtn.setDisable(true);
             }
 
 
@@ -526,7 +542,10 @@ public class NewOfferView {
                 setCustomerInfo(customer);
                 System.out.println(customer.isGoodGuy());
                 requestRkiRating(cprInput);
-                requestBankRate();
+//                if(!paymentCalculator.isRkiOK()) {
+//                    saleDeniedAlert();
+//                } else
+//                    requestBankRate();
             } else {
                 saleDeniedAlert();
             }
@@ -541,8 +560,15 @@ public class NewOfferView {
         }
     }
 
+    private void checkRkiRating() {
+        if(!paymentCalculator.isRkiOK()) {
+            saleDeniedAlert();
+        } else
+            requestBankRate();
+    }
+
     private void requestRkiRating(String cprInput) {
-        CompletableFuture.runAsync(() -> CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput))));
+        CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
     }
 
     private void requestBankRate() {
@@ -563,7 +589,7 @@ public class NewOfferView {
     }
 
     private void checkApprovalNeed(Car car) {
-        if(car.getPrice() > 1000000) {
+        if(car.getPrice() > 5000000) {
             needsApproval = true;
         } else {
             needsApproval = false;

@@ -1,6 +1,7 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
+import dataaccessors.OfferDataAccessor;
 import entities.Customer;
 import dataaccessors.CustomerDataAccessor;
 import javafx.beans.value.ChangeListener;
@@ -47,7 +48,7 @@ public class CustomerView {
 //FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
+//        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
         ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(CustomerDataAccessor.getCustomerDataAccess().getAllCustomers());
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
@@ -152,10 +153,10 @@ public class CustomerView {
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
         GridPane.setConstraints(formerSalesLabel, 5,3);
-        //Text formerSalesText = new Text("(3)");
-        Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
-        GridPane.setConstraints(seButton,7,3);
+
+        Button seePrevSalesButton = new Button("   Se   ");
+        seePrevSalesButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
+        GridPane.setConstraints(seePrevSalesButton,7,3);
         //GridPane.setConstraints(formerSalesText,6,3);
 
         Button blacklistButton = new Button("Blacklist");   //skal sidde et bedre sted
@@ -194,19 +195,7 @@ public class CustomerView {
         });
 
 
-
-
-
-
-        //saveButton.setDisable(true);
-        // GridPane.setConstraints(saveButton,2,6);
-//        HBox crudBox = new HBox(editButton, saveButton, blacklistButton, cancelEditButton);
-//        crudBox.setSpacing(5);
         userInfoPane.addRow(10, editButton, saveButton, blacklistButton, cancelEditButton);
-//        GridPane.setConstraints(crudBox,0,8);
-
-//        Label customerNumLabel = new Label("Kunde nummer: 00001");
-//        GridPane.setConstraints(rkiLabel,11,0);
 
         userInfoPane.getChildren().addAll(
                 nameLabel,
@@ -224,11 +213,7 @@ public class CustomerView {
                 customerNumLabel,
                 customerNumText,
                 formerSalesLabel,
-                //formerSalesText,
-                seButton
-//                blacklistButton,
-//                cancelEditButton,
-//                crudBox
+                seePrevSalesButton
         );
 
 
@@ -271,7 +256,7 @@ public class CustomerView {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Advarsel");
         alert.setHeaderText("Er du sikker?");
-        alert.setContentText("En blacklistet kunde vil få annulleret igangværende køb og kan ikke handle her igen. Er du indforstået med dette, tryk da OK.");
+        alert.setContentText("En blacklistet kunde vil få annulleret igangværende køb og kan ikke handle her igen. Er du indforstået med dette, tryk OK.");
         alert.setHeight(400);
 
         Optional<ButtonType> result  = alert.showAndWait();
