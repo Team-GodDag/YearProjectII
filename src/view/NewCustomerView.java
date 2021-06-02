@@ -51,7 +51,6 @@ public class NewCustomerView {
         Button saveBtn = new Button("Gem");
         saveBtn.setOnAction(click -> {
             saveCustomer(limitedCprTextField, firstNameTxtF, lastNameTxtF, emailTxtF, addressTxtF, phoneTxtF);
-            saveBtn.getScene().getWindow().hide();
         });
 
         BooleanBinding saveBind = (

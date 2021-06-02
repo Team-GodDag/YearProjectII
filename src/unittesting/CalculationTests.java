@@ -2,10 +2,9 @@ package unittesting;
 
 import data.CreditRator;
 import data.InterestRate;
-import dataaccessors.CarDataAccessor;
 import entities.Car;
 import logic.PaymentCalculator;
-import logic.PeriodCalculator;
+import logic.Tools;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -72,11 +71,11 @@ public class CalculationTests {
 
     @Test
     void payment_period_over_three_years_should_return_1() {
-        PeriodCalculator periodCalculator = new PeriodCalculator();
+        Tools tool = new Tools();
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         LocalDate dateOne = LocalDate.of(2021, 05, 05);
         LocalDate dateTwo = LocalDate.of(2025, 05, 05);
-        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(dateOne, dateTwo)));
+        assertEquals(1, paymentCalculator.calculatePaymentPeriodInterestRate(tool.yearsBetweenDates(dateOne, dateTwo)));
     }
 
     @Test

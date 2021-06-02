@@ -63,12 +63,12 @@ public class SaveToCsv {
             pw.write(approvedBy + ";");
 
 
-
+            pw.flush();
             pw.close();
-            JOptionPane.showMessageDialog(null, "Offer Has Been Saved as Csv File");
+
             System.out.println("Finished writing the file");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error, Offer Has Not Been Saved");
+
             Logger.getLogger(NewOfferView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

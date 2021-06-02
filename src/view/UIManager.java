@@ -1,8 +1,16 @@
 package view;
 
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
+
+import java.util.Optional;
 
 public class UIManager {
 
@@ -25,7 +33,7 @@ public class UIManager {
         Scene scene = new Scene(root, 1100, 700);
         root.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
         switchTop(new TopMenuView().createTopMenu());
-        switchCenter(new CustomerView().createView());
+        switchCenter(new LoginView().createView());
         return scene;
     }
 
@@ -36,4 +44,6 @@ public class UIManager {
     public void switchTop(Node node) {
         root.setTop(node);
     }
+
+
 }
