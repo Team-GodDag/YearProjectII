@@ -9,6 +9,7 @@ import dataaccessors.CarDataAccessor;
 import dataaccessors.CustomerDataAccessor;
 import dataaccessors.OfferDataAccessor;
 import dataaccessors.SalesPersonDataAccessor;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -105,19 +106,26 @@ public class NewOfferView {
         creditRatingText = new Text();
         creditRatingText.setFont(Font.font("Verdana", FontWeight.LIGHT, FontPosture.REGULAR, 18));
         creditRatingText.setFill(Color.GREEN);
+
+
+
         creditRatingText.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-//                checkRkiRating();
-//                requestBankRate();
-                if(!paymentCalculator.isRkiOK())
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if (newValue.equals("D")){
+                    Platform.runLater(() -> {
                         saleDeniedAlert();
-                else
+                        UIManager.instance().switchCenter(new NewOfferView().createView());
+                    });
+
+                }else{
                     requestBankRate();
-//                System.out.println(paymentCalculator.getCreditRating());
-                System.out.println("requesting bankrate");
+                }
             }
         });
+
 
         Label creditLabel = new Label("Kreditværdighed:");
         GridPane.setConstraints(creditLabel,3,0);
@@ -485,6 +493,7 @@ public class NewOfferView {
         });
 
 
+
         csvBtn.setOnAction(click -> {       //lokal metode - lokale variable -_-
             FileChooser fileChooser = new FileChooser();
             Stage window = new Stage();
@@ -509,6 +518,16 @@ public class NewOfferView {
 
         acceptBtn.setOnAction(click -> {
             saveOffertoDB(customer, car, salesPerson, paymentCalculator.getCreditRating(), paymentCalculator, saleDate, payStartLocalDate, payEndLocalDate, status);
+            if(needsApproval){
+                try {
+                    Notify notify = new Notify();
+                    alertSalesManager();
+                    notify.sendEmail();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+           // UIManager.instance().switchCenter(new NewOfferView().createView());
         });                                                                     //vil hellere hente fra paymentCalc
 
         HBox root = new HBox(salesGrid);
@@ -532,6 +551,14 @@ public class NewOfferView {
 
     private void setCarInfo(Car car) {
         priceText.setText(String.valueOf(car.getPrice()));
+    }
+    private void alertSalesManager(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Handel nægtet");
+        alert.setHeaderText("Email er blevet sendt til salgschefen");
+        alert.setContentText("Årsagen er at prisen overstiger beløbsgrænsen");
+        alert.setHeight(400);
+        alert.showAndWait();
     }
 
     private void checkCustomer() {
