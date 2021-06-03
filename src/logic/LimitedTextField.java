@@ -5,6 +5,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
 public class LimitedTextField extends TextField {
+    // Lavet af Lars
+
     public void addTextLimiter(final TextField tf, final int maxLength) {
         tf.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -29,5 +31,4 @@ public class LimitedTextField extends TextField {
             }
         });
     }
-
 }

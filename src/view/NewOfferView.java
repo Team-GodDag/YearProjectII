@@ -38,7 +38,8 @@ import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
-    private SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
+    //Lavet af Rikke og Lars
+    private SaveToCsv saveToCsv;
 
     private PaymentCalculator paymentCalculator = new PaymentCalculator();
     private Tools tools = new Tools();
@@ -62,10 +63,10 @@ public class NewOfferView {
         GridPane salesGrid = new GridPane();
         salesGrid.setPadding(new Insets(15,10,10,20));
         salesGrid.setMinSize(10, 10);
-        //salesGrid.setGridLinesVisible(true);
         salesGrid.setVgap(16);
         salesGrid.setHgap(16);
         //------------------------------------//
+
 
 //TOP PART START------------------------------------------------------------------------------------//
         Line topLine = new Line(100,150,1095,150);
@@ -86,7 +87,7 @@ public class NewOfferView {
 
 
 
-        LimitedTextField limitedTextField = new LimitedTextField();   //Lars' hjemmelavede klasse m. tilhørende metode, der begrænser længde af input
+        LimitedTextField limitedTextField = new LimitedTextField();
         Label cprLabel = new Label("CPR: ");
         GridPane.setConstraints(cprLabel,0,0);
         cprTextField = new TextField("");
@@ -133,10 +134,6 @@ public class NewOfferView {
         Text leftDescriptionText = new Text("Kundeoplysninger");
         leftDescriptionText.setUnderline(true);
         GridPane.setConstraints(leftDescriptionText,0,2);
-
-
-
-
 
         Label nameLabel = new Label("Kunde:");
         nameText = new Text();
@@ -211,10 +208,8 @@ public class NewOfferView {
             }
         });
 
-
         GridPane.setConstraints(startDateLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
-
 
         Label endDateLabel = new Label("Slutdato");
         DatePicker endDatePicker = new DatePicker();
@@ -236,8 +231,6 @@ public class NewOfferView {
         });
         BooleanBinding endDateBind = (startDatePicker.valueProperty().isNull());
         endDatePicker.disableProperty().bind(endDateBind);
-
-
 
         GridPane.setConstraints(endDateLabel,0,13);
         GridPane.setConstraints(endDatePicker,1,13);
@@ -460,8 +453,6 @@ public class NewOfferView {
         clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));
 
         calcQuoteButton.setOnAction(click -> {
-
-
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
             periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + "%");
             paymentCalculator.calculateAll();

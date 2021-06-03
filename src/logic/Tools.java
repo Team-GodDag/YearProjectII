@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 public class Tools {
+    // Lavet af Rikke og Lars
 
 
 

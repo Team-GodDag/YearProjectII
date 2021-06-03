@@ -1,13 +1,13 @@
 package data;
 
 import entities.Customer;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CustomerJDBC implements CustomerDataAccess {
+    //Laver af Henrik
 
     public ArrayList<Customer> getAllCustomers() {
         return getCustomersByCondition("0 = 0");

@@ -5,6 +5,7 @@ import data.CarJDBC;
 
 
 public class CarDataAccessor {
+    // Lavet af Rikke
 
     public static CarDataAccess getCarDataAccess(){
     //get the wanted dataaccessobject

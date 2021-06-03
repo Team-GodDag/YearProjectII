@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.util.Date;
 
 public class CustomerSalesView {
+    // Lavet af Henrik
 
     public VBox createView(Customer customer) {
         TableView table = new TableView();
@@ -22,8 +23,6 @@ public class CustomerSalesView {
         table.setEditable(false);
         table.setMinWidth(750);
         table.setMinHeight(700);
-        //table.setMaxWidth(798);
-
 
         TableColumn created = new TableColumn<>("Oprettet");
         created.setMinWidth(250);
@@ -41,14 +40,11 @@ public class CustomerSalesView {
         status.setMinWidth(230);
         status.setCellValueFactory(new PropertyValueFactory<Offer, String>("status"));
 
-
         table.getColumns().addAll(modelName, created, salesPerson,status);
-
 
         table.setItems(offers);
 
         VBox root = new VBox(table);
-        root.setId("modelTable");
         return root;
     }
 }

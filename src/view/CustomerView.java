@@ -1,7 +1,6 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
-import dataaccessors.OfferDataAccessor;
 import entities.Customer;
 import dataaccessors.CustomerDataAccessor;
 import javafx.beans.value.ChangeListener;
@@ -18,12 +17,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
 public class CustomerView {
+    //Lavet af Rikke og Lars
 
     private Customer customer;
     private Text nameText, phoneText, emailText, adressText, historyText, customerNumText;
@@ -48,7 +46,6 @@ public class CustomerView {
 //FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
-//        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
         ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(CustomerDataAccessor.getCustomerDataAccess().getAllCustomers());
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
@@ -143,7 +140,7 @@ public class CustomerView {
 
         Label customerNumLabel = new Label("Kundenummer.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
-        customerNumText = new Text();                  //skal det med? er det id?
+        customerNumText = new Text();
         GridPane.setConstraints(customerNumText,6,1);
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
@@ -152,9 +149,8 @@ public class CustomerView {
         Button seePrevSalesButton = new Button("   Se   ");
         seePrevSalesButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
         GridPane.setConstraints(seePrevSalesButton,7,3);
-        //GridPane.setConstraints(formerSalesText,6,3);
 
-        Button blacklistButton = new Button("Blacklist");   //skal sidde et bedre sted
+        Button blacklistButton = new Button("Blacklist");
         blacklistButton.setVisible(false);
         blacklistButton.setOnAction(click -> {
             blacklistWarning();
@@ -189,7 +185,6 @@ public class CustomerView {
             setCustomerInfo(customer);
         });
 
-
         userInfoPane.addRow(10, editButton, saveButton, blacklistButton, cancelEditButton);
 
         userInfoPane.getChildren().addAll(
@@ -209,7 +204,6 @@ public class CustomerView {
                 seePrevSalesButton
         );
 
-
         HBox gridBox = new HBox(userInfoPane);
         HBox root = new HBox(listViewBox,gridBox);
 
@@ -228,7 +222,6 @@ public class CustomerView {
         adressText.setText(customer.getAddress());
         historyText.setText(checkCustomerHistory(customer));
         customerNumText.setText(String.valueOf(customer.getId()));
-
     }
 
     public String checkCustomerHistory(Customer customer) {
@@ -256,5 +249,4 @@ public class CustomerView {
             blacklistCustomer(customer);
         }
     }
-
 }

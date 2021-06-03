@@ -1,28 +1,19 @@
 package logic;
 
 
-import javafx.scene.text.Text;
 
 import view.NewOfferView;
-
-import  javafx.scene.control.TextInputControl;
-
-import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SaveToCsv {
-    private String phoneNumber;
-
-                                    //det er vel bl.a. her, et objekt med nødvendige data
+    // Lavet af Lars
 
     public  void saveOfferToCSV(File stageName, String created, String name, String carModel, String price,
                                 String downPayment, String priceAfterDp, String paymentPeriod, String creditRating, String bankInterest,
                                 String downPaymentInterest, String periodInterest, String totalInterest, String totalPrice,
                                 String monthlyPayment, String approvedBy) {
-
 
         String csvHeader =
                         "Created;" +
@@ -62,13 +53,11 @@ public class SaveToCsv {
             pw.write(monthlyPayment + ";");
             pw.write(approvedBy + ";");
 
-
             pw.flush();
             pw.close();
 
             System.out.println("Finished writing the file");
         } catch (IOException ex) {
-
             Logger.getLogger(NewOfferView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

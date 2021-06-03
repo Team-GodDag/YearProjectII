@@ -6,6 +6,7 @@ import entities.Offer;
 import java.util.ArrayList;
 
 public interface OfferDataAccess {
+    //Laver af Rikke
     ArrayList<Offer> getAllOffers();
 
     boolean addOffer(Offer offer);

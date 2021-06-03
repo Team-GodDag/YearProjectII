@@ -1,14 +1,15 @@
-package entities;       //måske POJOs?
+package entities;
 
 import logic.PaymentCalculator;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Offer { // Henrik
+public class Offer {
+    // Lavet af Rikke
 
     private int id, customerId, salesPersonId, carId;
-    private double downpayment, carPrice, todaysBankRate; //downpaymentIntRate, paymentPeriodIntRate
+    private double downpayment, carPrice, todaysBankRate;
     private String creditRating, status;
     private Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
