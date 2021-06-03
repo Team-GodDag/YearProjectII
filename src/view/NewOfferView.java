@@ -9,6 +9,7 @@ import dataaccessors.CarDataAccessor;
 import dataaccessors.CustomerDataAccessor;
 import dataaccessors.OfferDataAccessor;
 import dataaccessors.SalesPersonDataAccessor;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,28 +38,23 @@ import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 
 public class NewOfferView {
-    SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
-    NotifyWindow notifyWindow = new NotifyWindow(); //skal nok bare bare lokal variabel
+    private SaveToCsv saveToCsv; //har flyttet initialisering til det sted, hvor den bruges
 
-    PeriodCalculator periodCalculator = new PeriodCalculator();     //Behøver måske ikke egen klasse
-    PriceFormat priceFormat = new PriceFormat();                    //Fordel v. BigDecimal er, at den indeholder formattering
-    MonthPayCalc monthPayCalc = new MonthPayCalc();                 //behøver den egen klasse?
-    PaymentCalculator paymentCalculator = new PaymentCalculator();
-    WriteOnlyNumbers writeOnlyNumbers = new WriteOnlyNumbers();     //bruges kun i downpayment - keep local
-
-    TextField cprTextField;
-    Text creditRatingText, nameText, emailText, addressText, phoneText, priceText;
-    Customer customer;
-    SalesPerson salesPerson;
-    LocalDate saleDate, payStartLocalDate, payEndLocalDate;
-    Car car;
-    boolean needsApproval;
-    String status;
+    private PaymentCalculator paymentCalculator = new PaymentCalculator();
+    private Tools tools = new Tools();
+    private TextField cprTextField;
+    private Text creditRatingText, nameText, emailText, addressText, phoneText, priceText;
+    private Customer customer;
+    private SalesPerson salesPerson;
+    private LocalDate saleDate, payStartLocalDate, payEndLocalDate;
+    private Car car;
+    private boolean needsApproval;
+    private String status;
 
     public Node createView() {
 
-//        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        saleDate = LocalDate.now();
+
+
 
 
         //GridPane Design//
@@ -94,7 +90,7 @@ public class NewOfferView {
         Label cprLabel = new Label("CPR: ");
         GridPane.setConstraints(cprLabel,0,0);
         cprTextField = new TextField("");
-        writeOnlyNumbers.input(cprTextField);
+        tools.makeInputNumbersOnly(cprTextField);
         limitedTextField.addTextLimiter(cprTextField,10);
 
         cprTextField.setPromptText("1234567890");
@@ -106,6 +102,26 @@ public class NewOfferView {
         creditRatingText = new Text();
         creditRatingText.setFont(Font.font("Verdana", FontWeight.LIGHT, FontPosture.REGULAR, 18));
         creditRatingText.setFill(Color.GREEN);
+
+
+
+        creditRatingText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+
+                if (newValue.equals("D")){
+                    Platform.runLater(() -> {
+                        saleDeniedAlert();
+                        UIManager.instance().switchCenter(new NewOfferView().createView());
+                    });
+
+                }else{
+                    requestBankRate();
+                }
+            }
+        });
+
 
         Label creditLabel = new Label("Kreditværdighed:");
         GridPane.setConstraints(creditLabel,3,0);
@@ -166,20 +182,16 @@ public class NewOfferView {
         Label downPaymentLabel = new Label("Kontant udbetaling:");
         TextField downPaymentTextField = new TextField();
         downPaymentTextField.setPromptText("Indtast beløb");
-        writeOnlyNumbers.input(downPaymentTextField);
-        downPaymentTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {     //sikrer, at der ikke kan indtastes andet end tal i udbetalingsfelt
-            if (!newValue) { //when focus lost
-                if(paymentCalculator.getDownPayment() > car.getPrice()) {       //virker lidt shoddy but idk
-                    downPaymentTextField.setText("");
-                }
-            }
-        });
+        tools.makeInputNumbersOnly(downPaymentTextField);
+        tools.numberNotTooBigValidator(downPaymentTextField,priceText,downPaymentTextField);
+
 
         GridPane.setConstraints(downPaymentLabel,0,11);
         GridPane.setConstraints(downPaymentTextField,1,11);
 
 //DATES BEGIN-------------------------------------------------------------------------------------------------------------//
 
+        saleDate = LocalDate.now();
         Label startDateLabel = new Label("Startdato");
         DatePicker startDatePicker = new DatePicker();
         startDatePicker.setPromptText("Vælg dato");
@@ -222,7 +234,7 @@ public class NewOfferView {
 
 
         Label salesPersonLabel = new Label("Sælger");
-        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonDataAccessor.createSalesPersonList()));
+        ComboBox salesPersonCombobox = new ComboBox<>(FXCollections.observableArrayList(SalesPersonDataAccessor.getSalesPersonDataAccess().getAllSalesPersons()));
         salesPersonCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object personOne, Object chosenPerson) {
@@ -289,10 +301,11 @@ public class NewOfferView {
 
         Label creditRatingLbl = new Label("Kreditværdighed:");
         Text creditRatingTxt = new Text();
+
         GridPane.setConstraints(creditRatingLbl,11,4);
         GridPane.setConstraints(creditRatingTxt,12,4);
 
-        Label bankInterestLbl = new Label("Rentesats:");                //bankrente + rente baseret på kreditværdighed
+        Label bankInterestLbl = new Label("Rentesats:");
         Text bankInterestTxt = new Text();
         GridPane.setConstraints(bankInterestLbl,11,5);
         GridPane.setConstraints(bankInterestTxt,12,5);
@@ -302,7 +315,7 @@ public class NewOfferView {
         GridPane.setConstraints(downPayInterestLbl,11,6);
         GridPane.setConstraints(downPayInterestTxt,12,6);
 
-        Label periodPayInterestLbl = new Label("Løbetidsrente:");         //andet navn?
+        Label periodPayInterestLbl = new Label("Løbetidsrente:");
         Text periodPayInterestTxt = new Text();
         GridPane.setConstraints(periodPayInterestLbl,11,7);
         GridPane.setConstraints(periodPayInterestTxt,12,7);
@@ -313,7 +326,7 @@ public class NewOfferView {
         GridPane.setConstraints(totalInterestRateLbl,11,8);
         GridPane.setConstraints(totalInterestRateTxt,12,8);
 
-        Text amountTxt = new Text("Beløb: ");   //fungerer blot som underoverskrift til et "her er de beløb, du skal bekymre dig om"-afsnit
+        Text amountTxt = new Text("Beløb: ");
         amountTxt.setUnderline(true);
         GridPane.setConstraints(amountTxt,11,10);
 
@@ -343,7 +356,7 @@ public class NewOfferView {
         GridPane.setConstraints(acceptBtn,8,17);
 
 
-        salesGrid.getChildren().addAll(         //kig på, hvor mange af disse, der skal fjernes
+        salesGrid.getChildren().addAll(
                 leftDescriptionText,
                 cprLabel,
                 cprTextField,
@@ -431,46 +444,48 @@ public class NewOfferView {
 
         getButton.setOnAction(click -> checkCustomer());
 
-        clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));        //shoddy?
+        clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));
 
         calcQuoteButton.setOnAction(click -> {
-            setStatus(needsApproval);
+
+
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
+            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + "%");
             paymentCalculator.calculateAll();
-
-            if(!paymentCalculator.isRkiIsOK()) {
-                saleDeniedAlert();
-            }
-
-            creditRatingTxt.setText(creditRatingText.getText());    //skal hentes fra paymentcalc eller tilsvarende
-            bankInterestTxt.setText(priceFormat.formatter(paymentCalculator.getRkiAndBankInterestRate()));
-            carPriceTxt.setText(priceFormat.formatter(car.getPrice()));
-            downPayTxt.setText(priceFormat.formatter(paymentCalculator.getDownPayment()));
-            downPayInterestTxt.setText(priceFormat.formatter(paymentCalculator.getDownPaymentInterestRate())); //String.valueOf(paymentCalc.downPaymentCalc(Double.valueOf(priceTextField.getText()), Double.valueOf(downPaymentTextField.getText()))))
-            createdTxt.setText(String.valueOf(saleDate)); //dateFormat.format(saleDate)
+            creditRatingTxt.setText(creditRatingText.getText());
+            bankInterestTxt.setText(tools.formatter(paymentCalculator.getRkiAndBankInterestRate()));
+            carPriceTxt.setText(tools.formatter(car.getPrice()));
+            downPayTxt.setText(tools.formatter(paymentCalculator.getDownPayment()));
+            downPayInterestTxt.setText(tools.formatter(paymentCalculator.getDownPaymentInterestRate()));
+            createdTxt.setText(String.valueOf(saleDate));
             buyerTxt.setText(customer.getFirstName() + " " + customer.getLastName());
-            payPeriodTxt.setText(periodCalculator.yearsBetweenDates(payStartLocalDate, payEndLocalDate) + " år");
+            payPeriodTxt.setText(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate) + " år");
             offerSalesPersTxt.setText(salesPerson.getFirstname() + " " + salesPerson.getLastname());
             carModelTxt.setText(car.getName());
-            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.getTimeDifferenceInYears()) + "%");  //paymentCalculator.calculatePaymentPeriodInterestRate(periodCalculator.yearsBetweenDates(startDatePicker.getValue().toString(),endDatePicker.getValue().toString())))
-            totalInterestRateTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalInterest()))); //String.valueOf(paymentCalc.calculateTotalInterest())
+            totalInterestRateTxt.setText(String.valueOf(tools.formatter(paymentCalculator.getTotalInterestRate())));
             totalInterestRateTxt.setUnderline(true);
-            totalPriceTxt.setText(String.valueOf(priceFormat.formatter(paymentCalculator.getTotalCarPrice())));    //priceFormat.formatter(paymentCalc.totalCarPrice(Double.parseDouble(priceTextField.getText()),Double.parseDouble(downPaymentTextField.getText())))
+            totalPriceTxt.setText(String.valueOf(tools.formatter(paymentCalculator.getTotalCarPrice())));
             totalPriceTxt.setUnderline(true);
             statusText.setText(status);
-            monthPayTxt.setText(priceFormat.formatter(monthPayCalc.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getPriceAfterDownPayment())));
+            monthPayTxt.setText(tools.formatter(tools.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getTotalCarPrice())));
             monthPayTxt.setUnderline(true);
-            priceAfterDownPayTxt.setText(priceFormat.formatter(paymentCalculator.getPriceAfterDownPayment()));
+            priceAfterDownPayTxt.setText(tools.formatter(paymentCalculator.getPriceAfterDownPayment()));
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
 
-            System.out.println("interest rate test " + paymentCalculator.getCombinedInterestRate());
+            if(!paymentCalculator.isRkiOK()) {
+                saleDeniedAlert();
+                acceptBtn.setDisable(true);
+                csvBtn.setDisable(true);
+            }
+
 
         });
 
 
-        csvBtn.setOnAction(click -> {       //lokal metode - lokale variable -_-
+
+        csvBtn.setOnAction(click -> {
             FileChooser fileChooser = new FileChooser();
             Stage window = new Stage();
 
@@ -483,7 +498,7 @@ public class NewOfferView {
 
             if (file != null) {
                 saveToCsv = new SaveToCsv();
-                saveToCsv.saveOfferToCSV(   //bør vi lave den smartere?
+                saveToCsv.saveOfferToCSV(
                         file, createdTxt.getText(), buyerTxt.getText(), carModelTxt.getText(), carPriceTxt.getText(), downPayTxt.getText(), priceAfterDownPayTxt.getText(),
                         payPeriodTxt.getText(),creditRatingTxt.getText(),bankInterestTxt.getText(),
                         downPayInterestTxt.getText(),periodPayInterestTxt.getText(),totalInterestRateTxt.getText(),totalPriceTxt.getText(),
@@ -494,10 +509,24 @@ public class NewOfferView {
 
         acceptBtn.setOnAction(click -> {
             saveOffertoDB(customer, car, salesPerson, paymentCalculator.getCreditRating(), paymentCalculator, saleDate, payStartLocalDate, payEndLocalDate, status);
-        });                                                                     //vil hellere hente fra paymentCalc
+            if(needsApproval){
+                try {
+                    alertSalesManager();
+                    CompletableFuture.runAsync(()-> {
+                        try {
+                            Notify.sendEmail();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            UIManager.instance().switchCenter(new NewOfferView().createView());
+        });
 
         HBox root = new HBox(salesGrid);
-        //root.setPrefWidth(700);
         return root;
     }
 
@@ -506,29 +535,28 @@ public class NewOfferView {
 
 //PRIVATE METHODS--------------------------------------------------------
 
-//    private void setCreditRating(String cprInput) {       //virker ikke som den står her
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput));   //setText(paymentCalculator.fetchCreditRating(cprTextField.getText()));
-//            }
-//        });
-//    }
 
     private void setCarInfo(Car car) {
         priceText.setText(String.valueOf(car.getPrice()));
     }
+    private void alertSalesManager(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Handel nægtet");
+        alert.setHeaderText("Email er blevet sendt til salgschefen");
+        alert.setContentText("Årsagen er at prisen overstiger beløbsgrænsen");
+        alert.setHeight(400);
+        alert.showAndWait();
+    }
+
 
     private void checkCustomer() {
         String cprInput = cprTextField.getText();
-        this.customer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(cprInput);       //skal i privat metode
+        this.customer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(cprInput);
         if (customer != null) {
             if (customer.isGoodGuy()) {
                 setCustomerInfo(customer);
                 System.out.println(customer.isGoodGuy());
-//                setCreditRating(cprTextField.getText());          //virker ikke
-                requestRkiRating(cprInput);     //CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
-                requestBankRate();
+                requestRkiRating(cprInput);
             } else {
                 saleDeniedAlert();
             }
@@ -539,12 +567,12 @@ public class NewOfferView {
             newCustomerPopUp.initModality(Modality.WINDOW_MODAL);
             newCustomerPopUp.setTitle("Opret ny kunde");
             newCustomerPopUp.showAndWait();
-            setCustomerInfo(customer);  //virker ikke efter hensigten
         }
     }
 
+
     private void requestRkiRating(String cprInput) {
-        CompletableFuture.runAsync(() -> CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput))));
+        CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
     }
 
     private void requestBankRate() {
@@ -559,17 +587,18 @@ public class NewOfferView {
             emailText.setText(customer.getEmail());
             phoneText.setText(customer.getPhone());
         }
-        catch (NullPointerException e) {        //kan ikke huske, om den virker
+        catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
     private void checkApprovalNeed(Car car) {
-        if(car.getPrice() > 1000000) {
+        if(car.getPrice() > 5000000) {
             needsApproval = true;
         } else {
             needsApproval = false;
         }
+        setStatus(needsApproval);
     }
 
     private void setStatus(boolean needsApproval) {
@@ -581,12 +610,9 @@ public class NewOfferView {
     }
 
     private void saveOffertoDB(Customer customer, Car car, SalesPerson salesperson, String creditRating, PaymentCalculator paymentCalculator, LocalDate saleDate, LocalDate startDate, LocalDate endDate, String status) {
-        OfferDataAccessor.addOffer(new Offer(customer, car, salesperson, creditRating, paymentCalculator, saleDate, startDate, endDate, status));
+        OfferDataAccessor.getOfferDataAccess().addOffer(new Offer(customer, car, salesperson, creditRating, paymentCalculator, saleDate, startDate, endDate, status));
     }
 
-    private void saveToCSV() {
-
-    }
 
     private void saleDeniedAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -596,9 +622,4 @@ public class NewOfferView {
         alert.setHeight(400);
         alert.showAndWait();
     }
-
-    private void setRightText() {
-
-    }
-
 }

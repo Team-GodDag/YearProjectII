@@ -1,6 +1,7 @@
 package view;
 // Start side
 // Viser nuværende kunder i databasen
+import dataaccessors.OfferDataAccessor;
 import entities.Customer;
 import dataaccessors.CustomerDataAccessor;
 import javafx.beans.value.ChangeListener;
@@ -25,7 +26,7 @@ import java.util.Optional;
 public class CustomerView {
 
     private Customer customer;
-    private Text nameText, phoneText, emailText, adressText, cprText, historyText, customerNumText;
+    private Text nameText, phoneText, emailText, adressText, historyText, customerNumText;
     private TextField searchTextField;
     private ListView listView;
 
@@ -33,13 +34,13 @@ public class CustomerView {
 
         searchTextField = new TextField();
         searchTextField.setPrefWidth(200);
-        searchTextField.setPromptText("Søg efter CPR Nummer");
+        searchTextField.setPromptText("Telefon el. navn");
 
 
         Button goButton = new Button("Søg");
         goButton.setPrefWidth(50);
         goButton.setOnAction(click -> {
-            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByCpr(searchTextField.getText());
+            Customer searchedCustomer = CustomerDataAccessor.getCustomerDataAccess().getCustomerByPhone(searchTextField.getText());
             setCustomerInfo(searchedCustomer);
         });
 
@@ -47,17 +48,15 @@ public class CustomerView {
 //FILTERED LISTVIEW ---------------------START
         listView = new ListView();
         listView.setPrefHeight(600);
-        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
+//        List<Customer> customerList = new ArrayList<Customer>();        //skal den have sit eget interface?
         ObservableList<Customer> observableCustomerlist = FXCollections.observableArrayList(CustomerDataAccessor.getCustomerDataAccess().getAllCustomers());
 
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
             @Override
-            public void changed(ObservableValue<? extends Customer> observableValue, Customer prevCustomer, Customer nextCustomer) {
-                setCustomerInfo(nextCustomer);
+            public void changed(ObservableValue<? extends Customer> observableValue, Customer prevCustomer, Customer selected) {
+                setCustomerInfo(selected);
             }
         });
-
-
 
         FilteredList<Customer> filteredCustomerList = new FilteredList<>(observableCustomerlist, p -> true);
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -67,7 +66,7 @@ public class CustomerView {
                 }
 
                 String lowercaseFilter = newValue.toLowerCase();
-                if (customer.getCpr().toLowerCase().contains(lowercaseFilter)) {
+                if (customer.getPhone().toLowerCase().contains(lowercaseFilter)) {
                     return true;
                 } else if(customer.getFirstName().toLowerCase().contains(lowercaseFilter)) {
                     return true;
@@ -135,17 +134,12 @@ public class CustomerView {
         adressText = new Text();
         GridPane.setConstraints(adressLabel,0,3);
         GridPane.setConstraints(adressText,1,3);
-//------------------------------------------------------------------------
-        Label cprLabel = new Label("CPR Nr.: ");    //MÅ IKKE VISES!!!!
-        cprText = new Text();
-        GridPane.setConstraints(cprLabel,0,4);
-        GridPane.setConstraints(cprText,1,4);
-//------------------------------------------------------------------------
+
 
         Label historyLabel = new Label("Historik: ");
-        GridPane.setConstraints(historyLabel,0,5);
+        GridPane.setConstraints(historyLabel,0,4);
         historyText = new Text();
-        GridPane.setConstraints(historyText,1,5);
+        GridPane.setConstraints(historyText,1,4);
 
         Label customerNumLabel = new Label("Kundenummer.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
@@ -154,10 +148,10 @@ public class CustomerView {
 
         Label formerSalesLabel = new Label("Tidligere Salg: ");
         GridPane.setConstraints(formerSalesLabel, 5,3);
-        //Text formerSalesText = new Text("(3)");
-        Button seButton = new Button("   Se   ");
-        seButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
-        GridPane.setConstraints(seButton,7,3);
+
+        Button seePrevSalesButton = new Button("   Se   ");
+        seePrevSalesButton.setOnAction(Klik -> UIManager.instance().switchCenter(new CustomerSalesView().createView(customer)));       //ku måske bruge et interface
+        GridPane.setConstraints(seePrevSalesButton,7,3);
         //GridPane.setConstraints(formerSalesText,6,3);
 
         Button blacklistButton = new Button("Blacklist");   //skal sidde et bedre sted
@@ -196,19 +190,7 @@ public class CustomerView {
         });
 
 
-
-
-
-
-        //saveButton.setDisable(true);
-        // GridPane.setConstraints(saveButton,2,6);
-//        HBox crudBox = new HBox(editButton, saveButton, blacklistButton, cancelEditButton);
-//        crudBox.setSpacing(5);
         userInfoPane.addRow(10, editButton, saveButton, blacklistButton, cancelEditButton);
-//        GridPane.setConstraints(crudBox,0,8);
-
-//        Label customerNumLabel = new Label("Kunde nummer: 00001");
-//        GridPane.setConstraints(rkiLabel,11,0);
 
         userInfoPane.getChildren().addAll(
                 nameLabel,
@@ -219,18 +201,12 @@ public class CustomerView {
                 emailText,
                 adressLabel,
                 adressText,
-                cprLabel,
-                cprText,
                 historyLabel,
                 historyText,
                 customerNumLabel,
                 customerNumText,
                 formerSalesLabel,
-                //formerSalesText,
-                seButton
-//                blacklistButton,
-//                cancelEditButton,
-//                crudBox
+                seePrevSalesButton
         );
 
 
@@ -246,7 +222,6 @@ public class CustomerView {
         if(customer == null) {
             return;
         }
-        cprText.setText(customer.getCpr());
         emailText.setText(customer.getEmail());
         nameText.setText(customer.getFirstName() + " " + customer.getLastName());
         phoneText.setText(customer.getPhone());
@@ -273,7 +248,7 @@ public class CustomerView {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Advarsel");
         alert.setHeaderText("Er du sikker?");
-        alert.setContentText("En blacklistet kunde vil få annulleret igangværende køb og kan ikke handle her igen. Er du indforstået med dette, tryk da OK.");
+        alert.setContentText("En blacklistet kunde vil få annulleret igangværende køb og kan ikke handle her igen. Er du indforstået med dette, tryk OK.");
         alert.setHeight(400);
 
         Optional<ButtonType> result  = alert.showAndWait();

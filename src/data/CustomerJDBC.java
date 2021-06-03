@@ -26,7 +26,7 @@ public class CustomerJDBC implements CustomerDataAccess {
                     customer.isGoodGuyBit()         + ")";
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -48,7 +48,7 @@ public class CustomerJDBC implements CustomerDataAccess {
             String condition = "customer_id=" + customer.getId();
             String sql = "DELETE FROM customers WHERE " + condition;
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -78,7 +78,7 @@ public class CustomerJDBC implements CustomerDataAccess {
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -94,7 +94,7 @@ public class CustomerJDBC implements CustomerDataAccess {
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM customers WHERE " + condition;
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
@@ -118,6 +118,15 @@ public class CustomerJDBC implements CustomerDataAccess {
 
     public Customer getCustomerByCpr(String cpr) {
         ArrayList<Customer> result = getCustomersByCondition("cpr=" + cpr);
+
+        if (result.size() > 0)
+            return result.get(0);
+        else
+            return null;
+    }
+
+    public Customer getCustomerByPhone(String phone) {
+        ArrayList<Customer> result = getCustomersByCondition("phonenumber=" + phone);
 
         if (result.size() > 0)
             return result.get(0);

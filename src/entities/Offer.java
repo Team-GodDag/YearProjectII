@@ -28,28 +28,29 @@ public class Offer { // Henrik
         this.dateOfPayEnd   = java.sql.Date.valueOf(endPayDate);
     }
 
+//Constructor til DB-entry
     public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  double carPrice, double downpayment, double todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
         this.id             = id;
         this.customerId     = customerId;
-        this.creditRating   = creditRating;
         this.salesPersonId  = salesPersonId;
         this.carId          = carId;
+        this.creditRating   = creditRating;
+        this.status         = status;
         this.carPrice       = carPrice;
         this.downpayment    = downpayment;
+        this.todaysBankRate = todaysBankRate;
         this.dateOfSale     = dateOfSale;
         this.dateOfPayStart = dateOfPayStart;
         this.dateOfPayEnd   = dateOfPayEnd;
-        this.status         = status;
-        this.todaysBankRate = todaysBankRate;
     }
 
     public Offer() {
-
     }
 
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
@@ -61,15 +62,6 @@ public class Offer { // Henrik
     public void setTodaysBankRate(double todaysBankRate) {
         this.todaysBankRate = todaysBankRate;
     }
-
-//    public double getPaymentPeriodIntRate() {
-//        return paymentPeriodIntRate;
-//    }
-//
-//    public void setPaymentPeriodIntRate(double paymentPeriodIntRate) {
-//        this.paymentPeriodIntRate = paymentPeriodIntRate;
-
-//    }
 
     public String getCreditRating() {
         return creditRating;
@@ -86,8 +78,6 @@ public class Offer { // Henrik
     public void setDateOfSale(Date dateOfSale) {
         this.dateOfSale = dateOfSale;
     }
-
-
 
     public int getId() {
         return id;
@@ -153,11 +143,4 @@ public class Offer { // Henrik
         this.dateOfPayEnd = dateOfPayEnd;
     }
 
-//    public int getApprovedBy() {
-//        return approvedBy;
-//    }
-//
-//    public void setApprovedBy(int approvedBy) {
-//        this.approvedBy = approvedBy;
-//    }
 }

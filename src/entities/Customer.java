@@ -72,6 +72,7 @@ public class Customer {
     public void setCpr(String cpr) {
         this.cpr = cpr;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

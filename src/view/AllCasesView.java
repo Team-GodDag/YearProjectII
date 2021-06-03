@@ -14,7 +14,7 @@ public class AllCasesView {
 
     public VBox createView() {
         TableView tableView = new TableView();
-        ObservableList<Offer> observableOfferList = FXCollections.observableArrayList(OfferDataAccessor.createOfferList());
+        ObservableList<Offer> observableOfferList = FXCollections.observableArrayList(OfferDataAccessor.getOfferDataAccess().getAllOffers());
 
         tableView.setEditable(false);
         tableView.setMinHeight(700);

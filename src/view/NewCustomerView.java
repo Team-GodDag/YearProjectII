@@ -2,6 +2,8 @@ package view;
 // Når der skal oprettes en ny kunde
 import entities.Customer;
 import dataaccessors.CustomerDataAccessor;
+import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -49,7 +51,19 @@ public class NewCustomerView {
         Button saveBtn = new Button("Gem");
         saveBtn.setOnAction(click -> {
             saveCustomer(limitedCprTextField, firstNameTxtF, lastNameTxtF, emailTxtF, addressTxtF, phoneTxtF);
+            UIManager.instance().switchCenter(new CustomerView().createView());
         });
+
+        BooleanBinding saveBind = (
+                        limitedCprTextField.textProperty().length().isNotEqualTo(10)
+                        .or(firstNameTxtF.textProperty().isEmpty())
+                        .or(lastNameTxtF.textProperty().isEmpty())
+                        .or(phoneTxtF.textProperty().isEmpty())
+                        .or(emailTxtF.textProperty().isEmpty())
+                        .or(addressTxtF.textProperty().isEmpty())
+                        );
+
+        saveBtn.disableProperty().bind(saveBind);
 
         GridPane root = new GridPane();
         root.addRow(0, firstNameLbl, firstNameTxtF);

@@ -17,7 +17,7 @@ public class LimitedTextField extends TextField {
         });
     }
 
-    //alternativ måde at gøre det på
+    //alternativ metode
     public void addLimiter(final int maxLength) {
         this.textProperty().addListener(new ChangeListener<String>() {
             @Override
