@@ -3,3 +3,11 @@
     -fx-border-width: 0 0 1 0, 0 0 1 0, 0 0 1 0;
     -fx-border-insets: 0 0 1 0, 0 0 2 0, 0 0 3 0;
 }/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.login{
+    -fx-background-image: url(../images/laferrari2.jpeg);
+}
+.loginmsg{
+    -fx-fill: WHITE;
+    -fx-stroke: BLACK;
+    -fx-stroke-width: 1px;
+}
