@@ -20,7 +20,11 @@ public class TopMenuView {
 
         Button casesButton = new Button("Sager");
         casesButton.setOnAction(click -> UIManager.instance().switchCenter(new AllCasesView().createView()));
-        ToolBar root = new ToolBar(customerButton, newSalesButton, newCustomerButton, catalogButton, casesButton);
+
+        Button loginOutButton = new Button("Log Ud");
+        loginOutButton.setOnAction(click -> UIManager.instance().switchCenter(new LoginView().createView()));
+
+        ToolBar root = new ToolBar(customerButton, newSalesButton, newCustomerButton, catalogButton, casesButton, loginOutButton);
         root.setPrefWidth(700);
         return root;
     }

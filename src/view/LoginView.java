@@ -16,13 +16,15 @@ import javafx.util.Pair;
 import java.util.Optional;
 
 public class LoginView {
+    TopMenuView topMenu;
 
- String user = "Admin";
-    String pw = "123";
+    String user = "Admin";
+    String pw = "password";
     String checkUser;
     String checkPw;
 
     public GridPane createView(){
+        UIManager.instance().switchTop(null);
 
         GridPane root = new GridPane();
 
@@ -72,9 +74,10 @@ public class LoginView {
 
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                checkUser = nameInput.getText().toString();
-                checkPw = passwordInput.getText().toString();
+                checkUser = nameInput.getText();
+                checkPw = passwordInput.getText();
                 if(checkUser.equals(user) && checkPw.equals(pw)){
+                    UIManager.instance().switchTop(new TopMenuView().createTopMenu());
                     UIManager.instance().switchCenter(new CustomerView().createView());
                     loginMessage.setText("Congratulations!");
                     loginMessage.setTextFill(Color.GREEN);
@@ -87,10 +90,6 @@ public class LoginView {
                 passwordInput.setText("");
             }
         });
-
-
-
         return root;
     }
-
 }

@@ -57,7 +57,6 @@ public class PaymentCalculator {
             System.out.println("rki + bank:" + rkiAndBankInterestRate);
         }
 
-        rkiAndBankInterestRate = Double.parseDouble(df.format(rkiAndBankInterestRate));
         return rkiOK;
     }
 
