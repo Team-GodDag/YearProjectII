@@ -42,6 +42,7 @@ public class LoginView {
 
         //Name label
         Label nameLabel = new Label("Brugernavn: ");
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: BOLD");
         GridPane.setConstraints(nameLabel,1,4);
         nameLabel.setId("loginLabel");
 
@@ -52,6 +53,7 @@ public class LoginView {
 
         //Password Label
         Label passwordLabel = new Label("Password: ");
+        passwordLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: BOLD");
         GridPane.setConstraints(passwordLabel,1,6);
         passwordLabel.setId("loginLabel");
 
@@ -61,7 +63,7 @@ public class LoginView {
         GridPane.setConstraints(passwordInput,1,7);
 
         //Login message
-        final Label loginMessage = new Label();
+        final Text loginMessage = new Text();
         GridPane.setConstraints(loginMessage,1,8);
 
         //Login Button
@@ -92,16 +94,16 @@ public class LoginView {
                     UIManager.instance().switchTop(new TopMenuView().createTopMenu());
                     UIManager.instance().switchCenter(new CustomerView().createView());
                     loginMessage.setText("Congratulations!");
-                    loginMessage.setTextFill(Color.GREEN);
                 }
                 else{
                     loginMessage.setText("Forkert Brugernavn eller Password.");
-                    loginMessage.setTextFill(Color.RED);
+                    loginMessage.getStyleClass().add("loginmsg");
                 }
                 nameInput.setText("");
                 passwordInput.setText("");
             }
         });
+        root.getStyleClass().add("login");
         return root;
     }
 }
