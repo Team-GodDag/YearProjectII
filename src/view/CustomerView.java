@@ -26,7 +26,7 @@ import java.util.Optional;
 public class CustomerView {
 
     private Customer customer;
-    private Text nameText, phoneText, emailText, adressText, cprText, historyText, customerNumText;
+    private Text nameText, phoneText, emailText, adressText, historyText, customerNumText;
     private TextField searchTextField;
     private ListView listView;
 
@@ -134,17 +134,12 @@ public class CustomerView {
         adressText = new Text();
         GridPane.setConstraints(adressLabel,0,3);
         GridPane.setConstraints(adressText,1,3);
-//------------------------------------------------------------------------
-        Label cprLabel = new Label("CPR Nr.: ");    //MÅ IKKE VISES!!!!
-        cprText = new Text();
-        GridPane.setConstraints(cprLabel,0,4);
-        GridPane.setConstraints(cprText,1,4);
-//------------------------------------------------------------------------
+
 
         Label historyLabel = new Label("Historik: ");
-        GridPane.setConstraints(historyLabel,0,5);
+        GridPane.setConstraints(historyLabel,0,4);
         historyText = new Text();
-        GridPane.setConstraints(historyText,1,5);
+        GridPane.setConstraints(historyText,1,4);
 
         Label customerNumLabel = new Label("Kundenummer.: ");
         GridPane.setConstraints(customerNumLabel, 5,1);
@@ -206,8 +201,6 @@ public class CustomerView {
                 emailText,
                 adressLabel,
                 adressText,
-                cprLabel,
-                cprText,
                 historyLabel,
                 historyText,
                 customerNumLabel,
@@ -229,7 +222,6 @@ public class CustomerView {
         if(customer == null) {
             return;
         }
-        cprText.setText(customer.getCpr());
         emailText.setText(customer.getEmail());
         nameText.setText(customer.getFirstName() + " " + customer.getLastName());
         phoneText.setText(customer.getPhone());
