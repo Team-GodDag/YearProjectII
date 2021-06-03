@@ -42,6 +42,7 @@ public class LoginView {
 
         //Name label
         Label nameLabel = new Label("Brugernavn: ");
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: BOLD");
         GridPane.setConstraints(nameLabel,1,4);
         nameLabel.setId("loginLabel");
 
@@ -52,6 +53,7 @@ public class LoginView {
 
         //Password Label
         Label passwordLabel = new Label("Password: ");
+        passwordLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: BOLD");
         GridPane.setConstraints(passwordLabel,1,6);
         passwordLabel.setId("loginLabel");
 
