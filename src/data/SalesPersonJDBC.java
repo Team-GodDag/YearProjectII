@@ -27,7 +27,7 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
                     salesPersonJDBC.getLimit()        + ")";
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -49,7 +49,7 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
             String condition = "id=" + salesPersonJDBC.getId();
             String sql = "DELETE FROM carsellers WHERE " + condition;
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -77,7 +77,7 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -94,7 +94,7 @@ public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAcces
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carsellers WHERE " + condition;
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'

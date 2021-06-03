@@ -32,7 +32,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
                     offer.getStatus()               + "')";
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -54,7 +54,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
             String condition = "id=" + offer.getId();
             String sql = "DELETE FROM offers WHERE " + condition;
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -102,7 +102,7 @@ public class OfferJDBC implements OfferDataAccess { // Henrik
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM offers WHERE " + condition;
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'

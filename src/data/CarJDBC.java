@@ -24,7 +24,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
                     car.getHorsepower()     + ")";
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             ResultSet resultSet = statement.executeQuery("SELECT SCOPE_IDENTITY()");
@@ -46,7 +46,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
             String condition = "id=" + car.getId();
             String sql = "DELETE FROM carmodels WHERE " + condition;
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
 
             return (affectedRows == 1);
@@ -71,7 +71,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
                     " WHERE " + condition;
 
             System.out.println(sql);
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             int affectedRows = statement.executeUpdate(sql);
             return (affectedRows == 1);
 
@@ -88,7 +88,7 @@ public class CarJDBC implements CarDataAccess { // Henrik
         System.out.println("condition: " + condition);
         try {
             String sql = "SELECT * FROM carmodels WHERE " + condition;
-            Statement statement = JDBC.instance.connection.createStatement();
+            Statement statement = JDBC.instance().connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {// iteration starter 'before first'
