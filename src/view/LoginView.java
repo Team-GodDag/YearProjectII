@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 
 import java.util.Optional;
@@ -32,36 +33,47 @@ public class LoginView {
         root.setVgap(8);
         root.setHgap(10);
 
+        //Welcome text
+        Text welcomeTxt = new Text("Login");
+        welcomeTxt.setStyle("-fx-font: normal bold 20px 'serif' ");
+        GridPane.setConstraints(welcomeTxt,1,0);
+
+
 
         //Name label
         Label nameLabel = new Label("Brugernavn: ");
-        GridPane.setConstraints(nameLabel,1,0);
+        GridPane.setConstraints(nameLabel,1,4);
         nameLabel.setId("loginLabel");
 
         //Name input
         TextField nameInput = new TextField();
         nameInput.setPromptText("Indtast Brugernavn");
-        GridPane.setConstraints(nameInput,1,1);
+        GridPane.setConstraints(nameInput,1,5);
 
         //Password Label
         Label passwordLabel = new Label("Password: ");
-        GridPane.setConstraints(passwordLabel,1,2);
+        GridPane.setConstraints(passwordLabel,1,6);
         passwordLabel.setId("loginLabel");
 
         //Password Input
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("Indtast Password");
-        GridPane.setConstraints(passwordInput,1,3);
-
-        Button loginButton = new Button("Login");
-        loginButton.setMaxWidth(100);
-        GridPane.setConstraints(loginButton,1,5);
+        GridPane.setConstraints(passwordInput,1,7);
 
         //Login message
         final Label loginMessage = new Label();
-        GridPane.setConstraints(loginMessage,1,4);
+        GridPane.setConstraints(loginMessage,1,8);
+
+        //Login Button
+
+        Button loginButton = new Button("Login");
+        loginButton.setMaxWidth(100);
+        GridPane.setConstraints(loginButton,1,9);
+
+
 
         root.getChildren().addAll(
+                welcomeTxt,
                 nameLabel,
                 nameInput,
                 passwordLabel,

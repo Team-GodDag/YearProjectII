@@ -21,7 +21,7 @@ public class TopMenuView {
         Button casesButton = new Button("Sager");
         casesButton.setOnAction(click -> UIManager.instance().switchCenter(new AllCasesView().createView()));
 
-        Button loginOutButton = new Button("Log Ud");
+        Button loginOutButton = new Button("Log ud");
         loginOutButton.setOnAction(click -> UIManager.instance().switchCenter(new LoginView().createView()));
 
         ToolBar root = new ToolBar(customerButton, newSalesButton, newCustomerButton, catalogButton, casesButton, loginOutButton);
