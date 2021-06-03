@@ -201,6 +201,17 @@ public class NewOfferView {
                 payStartLocalDate = startDatePicker.getValue();
             }
         });
+        startDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate startDate, boolean empty) {
+                if (startDate.isBefore(LocalDate.now())) {
+                    setStyle("-fx-background-color: #ffc0cb; -fx-text-fill: darkgray;");
+                    setDisable(true);
+                }
+            }
+        });
+
+
         GridPane.setConstraints(startDateLabel,0,12);
         GridPane.setConstraints(startDatePicker,1,12);
 
@@ -223,6 +234,8 @@ public class NewOfferView {
                 payEndLocalDate = endDatePicker.getValue();
             }
         });
+        BooleanBinding endDateBind = (startDatePicker.valueProperty().isNull());
+        endDatePicker.disableProperty().bind(endDateBind);
 
 
 
