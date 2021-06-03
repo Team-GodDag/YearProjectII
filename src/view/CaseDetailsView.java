@@ -1,6 +1,7 @@
 package view;
 //når man på tilbud som er oprettet allerede
 //pop up når når NewOfferView tilbud udregnes
+//Blev desværre ikke implementeret
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 public class CaseDetailsView {
+    // Lavet af Lars
 
     public GridPane createScene() {
 

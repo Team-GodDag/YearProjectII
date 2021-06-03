@@ -1,10 +1,10 @@
 package data;
 
 import entities.Car;
-
 import java.util.ArrayList;
 
 public interface CarDataAccess {
+    //Laver af Rikke
 //    ArrayList<Car> getAllCars();
 
     boolean addCar(Car car);

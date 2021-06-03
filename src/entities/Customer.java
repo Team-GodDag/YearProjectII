@@ -2,10 +2,10 @@ package entities;
 
 
 public class Customer {
-    //lavet af Rikke    Skal den bare hedde Customer?
+    //Lavet af Rikke
 
     private int id;
-    private String cpr, firstName, lastName, email, address, phone; //skal vel bare være en String, og så kan den blive en Property i logik?
+    private String cpr, firstName, lastName, email, address, phone;
     private boolean isGoodGuy;
 
     public Customer(int id, String cpr, String firstname, String lastname, String email, String address, String phone, boolean isGoodGuy) {

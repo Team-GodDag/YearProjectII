@@ -1,14 +1,13 @@
 package data;
 
 import entities.SalesPerson;
-//import logic.AllSalesPersons;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAccess { // Henrik
+public class SalesPersonJDBC extends SalesPerson implements SalesPersonDataAccess {
+    // Lavet af Henrik
 
 //    @Override
     public ArrayList<SalesPerson> getAllSalesPersons() {

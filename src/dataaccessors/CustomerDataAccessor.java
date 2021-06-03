@@ -4,7 +4,8 @@ import data.CustomerDataAccess;
 import data.CustomerJDBC;
 
 
-public class CustomerDataAccessor {              //skal den ligge i logic?
+public class CustomerDataAccessor {
+    // Lavet af Rikke
 
     public static CustomerDataAccess getCustomerDataAccess() {
         return new CustomerJDBC();

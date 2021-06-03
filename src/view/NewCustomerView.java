@@ -13,6 +13,7 @@ import logic.LimitedTextField;
 
 
 public class NewCustomerView {
+    // Lavet af Rikke
 
     TextField firstNameTxtF, lastNameTxtF, phoneTxtF, emailTxtF, addressTxtF;
     LimitedTextField limitedCprTextField;
@@ -38,10 +39,6 @@ public class NewCustomerView {
         Label addressLbl = new Label("Adresse og postnummer: ");
         addressTxtF = new TextField();
         addressTxtF.setPromptText("Andersengade 1, 1010 Andersby");
-
-//        Label zipLbl = new Label("Postnummer: ");
-//        zipTxtF = new TextField();
-//        zipTxtF.setPromptText("Postnummer");
 
         Label cprLbl = new Label("CPR: ");
         limitedCprTextField = new LimitedTextField();
@@ -83,6 +80,4 @@ public class NewCustomerView {
     private void saveCustomer(TextField cpr, TextField firstName, TextField lastName, TextField email, TextField address, TextField phone) {
         CustomerDataAccessor.getCustomerDataAccess().addCustomer(new Customer(cpr.getText(), firstName.getText(), lastName.getText(), email.getText(), address.getText(), phone.getText()));
     }
-
-
 }

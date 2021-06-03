@@ -1,11 +1,10 @@
 package data;
 
-import entities.Car;
 
 import java.sql.*;
-import java.util.ArrayList;
 
-public class JDBC { // Henrik
+public class JDBC {
+    //Laver af Henrik
 
     private static JDBC instance = null;
 

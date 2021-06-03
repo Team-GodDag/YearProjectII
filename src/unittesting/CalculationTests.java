@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculationTests {
+    // Lavet af Rikke, Henrik og Lars
 
     @Test
     void getBankInterestRate(){
@@ -112,32 +113,5 @@ public class CalculationTests {
         paymentCalc.setCar(car);
         assertEquals(0, paymentCalc.calculateDownPaymentInterestRate());
     }
-
-//    @Test
-//    void totalInterestRate(){
-//        PaymentCalculator paymentCalc = new PaymentCalculator();
-//        PeriodCalculator periodCalculator = new PeriodCalculator();
-//
-//        double rkiAndBankInterestRate = 5;
-//        double paymentPeriodInterestRate = paymentCalc.periodInterestRate(periodCalculator.yearsBetweenDates("2021-05-19","2027-05-19"));
-//        double downPaymentInterestRate = paymentCalc.downPaymentCalc(10000000.0,2000000.0);
-//
-//        assertEquals(7,paymentCalc.calculateTotalInterests(rkiAndBankInterestRate,paymentPeriodInterestRate,downPaymentInterestRate));  //snydetest
-//    }
-//    @Test
-//    void totalInterestRate2() {
-//        PaymentCalculator paymentCalc = new PaymentCalculator();
-//        PeriodCalculator periodCalculator = new PeriodCalculator();
-//        LocalDate dateOne = LocalDate.of(2021, 05, 05);
-//        LocalDate dateTwo = LocalDate.of(2025, 05 ,05);
-//
-//        double rkiAndBankInterestRate = 5;
-//        double paymentPeriodInterestRate = paymentCalc.calculatePaymentPeriodInterestRate((periodCalculator.yearsBetweenDates(dateOne, dateTwo)));
-////        double downPaymentInterestRate = paymentCalc.calculateDownPaymentInterestRate((10000000.0,9000000.0));
-//
-//        assertEquals(6,paymentCalc.calculateTotalInterests(rkiAndBankInterestRate,paymentPeriodInterestRate,downPaymentInterestRate));
-//    }
-
-
 }
 

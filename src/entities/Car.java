@@ -1,9 +1,10 @@
-package entities;       //måske POJOs?
+package entities;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Car {
+    // Lavet af Rikke
 
     public int id;
     public StringProperty name, horsepower;

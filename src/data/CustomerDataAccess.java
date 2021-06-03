@@ -1,10 +1,10 @@
 package data;
 
 import entities.Customer;
-
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
+    //Laver af Rikke
     ArrayList<Customer> getAllCustomers();
 
     boolean addCustomer(Customer customer);

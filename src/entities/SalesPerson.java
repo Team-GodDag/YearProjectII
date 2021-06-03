@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class SalesPerson {
+    // Lavet af Rikke
     public int id;
     public StringProperty firstname, lastname, email, address, phonenumber, limit;
 

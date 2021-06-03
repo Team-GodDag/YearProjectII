@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 public class TopMenuView {
+    // Lavet af Henrik
     public Node createTopMenu(){
         Button customerButton = new Button("Kunder");
         customerButton.setOnAction(click -> UIManager.instance().switchCenter(new CustomerView().createView()));

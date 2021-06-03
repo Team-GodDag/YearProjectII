@@ -12,11 +12,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
-
-import java.util.Optional;
 
 public class LoginView {
+    //Lavet af Lars
     TopMenuView topMenu;
 
     String user = "Admin";
@@ -37,8 +35,6 @@ public class LoginView {
         Text welcomeTxt = new Text("Login");
         welcomeTxt.setStyle("-fx-font: normal bold 20px 'serif' ");
         GridPane.setConstraints(welcomeTxt,1,0);
-
-
 
         //Name label
         Label nameLabel = new Label("Brugernavn: ");
@@ -72,8 +68,6 @@ public class LoginView {
         loginButton.setMaxWidth(100);
         GridPane.setConstraints(loginButton,1,9);
 
-
-
         root.getChildren().addAll(
                 welcomeTxt,
                 nameLabel,
@@ -82,7 +76,6 @@ public class LoginView {
                 passwordInput,
                 loginMessage,
                 loginButton);
-
 
         root.setAlignment(Pos.CENTER);
 
