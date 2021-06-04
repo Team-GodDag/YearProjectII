@@ -449,26 +449,26 @@ public class NewOfferView {
 
         calcQuoteButton.setOnAction(click -> {
             paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
-            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + "%");
+            periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + " %");
             paymentCalculator.calculateAll();
             creditRatingTxt.setText(creditRatingText.getText());
-            bankInterestTxt.setText(tools.formatter(paymentCalculator.getRkiAndBankInterestRate()));
+            bankInterestTxt.setText(tools.formatter(paymentCalculator.getRkiAndBankInterestRate()) + " %");
             carPriceTxt.setText(tools.formatter(car.getPrice()));
-            downPayTxt.setText(tools.formatter(paymentCalculator.getDownPayment()));
-            downPayInterestTxt.setText(tools.formatter(paymentCalculator.getDownPaymentInterestRate()));
+            downPayTxt.setText(tools.formatter(paymentCalculator.getDownPayment()) + " DKK");
+            downPayInterestTxt.setText(paymentCalculator.getDownPaymentInterestRate() + " %");
             createdTxt.setText(String.valueOf(saleDate));
             buyerTxt.setText(customer.getFirstName() + " " + customer.getLastName());
             payPeriodTxt.setText(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate) + " år");
             offerSalesPersTxt.setText(salesPerson.getFirstname() + " " + salesPerson.getLastname());
             carModelTxt.setText(car.getName());
-            totalInterestRateTxt.setText(String.valueOf(tools.formatter(paymentCalculator.getTotalInterestRate())));
+            totalInterestRateTxt.setText(tools.formatter(paymentCalculator.getTotalInterestRate()) + " %");
             totalInterestRateTxt.setUnderline(true);
-            totalPriceTxt.setText(String.valueOf(tools.formatter(paymentCalculator.getTotalCarPrice())));
+            totalPriceTxt.setText(tools.formatter(paymentCalculator.getTotalCarPrice()) + " DKK");
             totalPriceTxt.setUnderline(true);
             statusText.setText(status);
-            monthPayTxt.setText(tools.formatter(tools.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getTotalCarPrice())));
+            monthPayTxt.setText(tools.formatter(tools.monthlyPay(payStartLocalDate, payEndLocalDate, paymentCalculator.getTotalCarPrice())) + " DDK");
             monthPayTxt.setUnderline(true);
-            priceAfterDownPayTxt.setText(tools.formatter(paymentCalculator.getPriceAfterDownPayment()));
+            priceAfterDownPayTxt.setText(tools.formatter(paymentCalculator.getPriceAfterDownPayment()) + " DDK");
             priceAfterDownPayTxt.setUnderline(true);
             csvBtn.setDisable(false);
             acceptBtn.setDisable(false);
