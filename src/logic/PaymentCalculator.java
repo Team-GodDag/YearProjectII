@@ -62,6 +62,8 @@ public class PaymentCalculator {
                 downPaymentInterestRate = 1.0;
                 System.out.println(downPaymentInterestRate);
             }
+        }else if(downPayment > car.getPrice()){
+            downPaymentInterestRate = -1;
         }
         return downPaymentInterestRate;
     }

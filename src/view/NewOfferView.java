@@ -478,8 +478,6 @@ public class NewOfferView {
                 acceptBtn.setDisable(true);
                 csvBtn.setDisable(true);
             }
-
-
         });
 
 

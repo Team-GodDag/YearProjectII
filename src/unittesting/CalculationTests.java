@@ -48,6 +48,15 @@ public class CalculationTests {
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedExceptionMsg));
     }
+    @Test
+    void downpayment_over_car_price() {
+        Car car = new Car();
+        car.setPrice(1000);
+        PaymentCalculator paymentCalculator = new PaymentCalculator();
+        paymentCalculator.setCar(car);
+        paymentCalculator.setDownPayment(5000000);
+        assertEquals(-1, paymentCalculator.calculateDownPaymentInterestRate());
+    }
 
 
     @Test
@@ -61,7 +70,7 @@ public class CalculationTests {
     }
 
     @Test
-    void downpayment_over_50percent_car_price() {     //how to test???
+    void downpayment_over_50percent_car_price() {
         Car car = new Car();
         car.setPrice(5000000);
         PaymentCalculator paymentCalculator = new PaymentCalculator();
