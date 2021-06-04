@@ -6,16 +6,16 @@ import javafx.beans.property.StringProperty;
 public class SalesPerson {
     // Lavet af Rikke
     public int id;
-    public StringProperty firstname, lastname, email, address, phonenumber, limit;
+    public String firstname, lastname, email, address, phonenumber, limit;
 
     public SalesPerson(int id, String firstname, String lastname, String email,String address, String phonenumber, String limit) {
         this.id = id;
-        this.firstname = new SimpleStringProperty(firstname);
-        this.lastname = new SimpleStringProperty(lastname);
-        this.email = new SimpleStringProperty(email);
-        this.address = new SimpleStringProperty(address);
-        this.phonenumber = new SimpleStringProperty(phonenumber);
-        this.limit = new SimpleStringProperty(limit);
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.address = address;
+        this.phonenumber = phonenumber;
+        this.limit = limit;
     }
 
     public SalesPerson(){
@@ -25,84 +25,60 @@ public class SalesPerson {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getFirstname() {
-        return firstname.get();
-    }
-
-    public StringProperty firstnameProperty() {
         return firstname;
     }
 
     public void setFirstname(String firstname) {
-        this.firstname.set(firstname);
+        this.firstname = firstname;
     }
 
     public String getLastname() {
-        return lastname.get();
-    }
-
-    public StringProperty lastnameProperty() {
         return lastname;
     }
 
     public void setLastname(String lastname) {
-        this.lastname.set(lastname);
+        this.lastname = lastname;
     }
 
     public String getEmail() {
-        return email.get();
-    }
-
-    public StringProperty emailProperty() {
         return email;
     }
 
     public void setEmail(String email) {
-        this.email.set(email);
+        this.email = email;
     }
 
     public String getAddress() {
-        return address.get();
-    }
-
-    public StringProperty addressProperty() {
         return address;
     }
 
     public void setAddress(String address) {
-        this.address.set(address);
+        this.address = address;
     }
 
     public String getPhonenumber() {
-        return phonenumber.get();
-    }
-
-    public StringProperty phonenumberProperty() {
         return phonenumber;
     }
 
     public void setPhonenumber(String phonenumber) {
-        this.phonenumber.set(phonenumber);
+        this.phonenumber = phonenumber;
     }
 
     public String getLimit() {
-        return limit.get();
-    }
-
-    public StringProperty limitProperty() {
         return limit;
     }
 
     public void setLimit(String limit) {
-        this.limit.set(limit);
+        this.limit = limit;
     }
 
-    @Override
-    public String toString() {
-        return firstname.get() + " " + lastname.get();
+    public void setId(int id) {
+        this.id = id;
     }
+
+    public String toString(){
+        return getFirstname() + " " + getLastname();
+    }
+
 }

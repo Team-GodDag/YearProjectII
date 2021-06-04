@@ -99,7 +99,7 @@ public class CalculationTests {
             paymentCalculator.setDownPayment(6000);
             paymentCalculator.calculateCarPriceAfterDownPayment();
         });
-        String expectedMsg = "Udbetaling overstiger bilens pris.";
+        String expectedMsg = "Udbetaling overstiger bilens pris";
         String actualMsg = exception.getMessage();
         assertTrue(actualMsg.contains(expectedMsg));
     }

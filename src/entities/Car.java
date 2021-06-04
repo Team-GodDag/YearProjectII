@@ -7,45 +7,17 @@ public class Car {
     // Lavet af Rikke
 
     public int id;
-    public StringProperty name, horsepower;
+    public String name, horsepower;
     double price;
 
     public Car(int id, String name, double price, String horsepower) {
         this.id = id;
-        this.name = new SimpleStringProperty(name);
+        this.name = name;
         this.price = price;
-        this.horsepower = new SimpleStringProperty(horsepower);
+        this.horsepower = horsepower;
     }
 
     public Car(){
-    }
-
-    public void setName(String name){
-        this.name.set(name);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-    public String getName() {
-        return name.get();
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public StringProperty horsepowerProperty() {
-        return horsepower;
-    }
-
-    public String getHorsepower() {
-        return horsepower.get();
     }
 
     public int getId() {
@@ -56,11 +28,32 @@ public class Car {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHorsepower() {
+        return horsepower;
+    }
+
+    public void setHorsepower(String horsepower) {
+        this.horsepower = horsepower;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     @Override
     public String toString() {
-        return name.get();
+        return name;
     }
-
-
 }
