@@ -80,11 +80,12 @@ public class PaymentCalculator {
     }
 
     public BigDecimal calculatePaymentPeriodInterestRate(int paymentYears) {
+        paymentPeriodInterestRate = BigDecimal.valueOf(0);
         if(paymentYears < 0) {
             throw new ArithmeticException("Vælg en gyldig afbetalingsperiode");
-        } else if (paymentYears > 3) {
+        } else if (paymentYears >= 3) {
             System.out.println("payment period interest rate >3y: " + paymentPeriodInterestRate);
-            paymentPeriodInterestRate = BigDecimal.valueOf(1);       //problemet er måske, at BigDecimal er immutable....
+            paymentPeriodInterestRate = BigDecimal.valueOf(1);
         }
         System.out.println("payment period interest rate end: " + paymentPeriodInterestRate);
         return paymentPeriodInterestRate;
