@@ -4,26 +4,28 @@ import data.CreditRator;
 import data.InterestRate;
 import entities.Car;
 
+import java.math.BigDecimal;
+
 
 public class PaymentCalculator {
 
     // Lavet af Rikke, Rune, Lars
 
-    private double baseBankInterestRate;
-    private double rkiAndBankInterestRate;
+    private BigDecimal baseBankInterestRate;
+    private BigDecimal rkiAndBankInterestRate;
     private boolean rkiOK;
 
-    private double downPaymentInterestRate;
+    private BigDecimal downPaymentInterestRate;
     private int paymentPeriod;
-    private double paymentPeriodInterestRate;
+    private BigDecimal paymentPeriodInterestRate;
 
-    private double priceAfterDownPayment;
-    private double totalPrice;
-    private double totalInterestRate;
+    private BigDecimal priceAfterDownPayment;
+    private BigDecimal totalPrice;
+    private BigDecimal totalInterestRate;
     private String creditRating;
 
     private Car car;
-    private double downPayment;
+    private BigDecimal downPayment;
 
 
     public boolean rkiInterestCalc(String creditRating) {
@@ -32,13 +34,13 @@ public class PaymentCalculator {
 
         if (creditRating.equals("A")) {
             rkiOK = true;
-            rkiAndBankInterestRate += 1;
+            rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(1));
         } if(creditRating.equals("B")) {
             rkiOK = true;
-            rkiAndBankInterestRate += 2;
+            rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(2));
         } if(creditRating.equals("C")) {
             rkiOK = true;
-            rkiAndBankInterestRate += 3;
+            rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(3));
         } else if(creditRating.equals("D")) {
             rkiOK = false;
         }
@@ -46,44 +48,50 @@ public class PaymentCalculator {
     }
 
 
-    public double calculateCarPriceAfterDownPayment() {
-            priceAfterDownPayment = car.getPrice() - downPayment;
-            if(downPayment > car.getPrice()) {
+    public BigDecimal calculateCarPriceAfterDownPayment() {
+            priceAfterDownPayment = car.getPrice().subtract(downPayment);
+
+            if(downPayment.compareTo(car.getPrice()) > 0) {
                 throw new ArithmeticException("Udbetaling overstiger bilens pris");
-            } else {
-            priceAfterDownPayment = car.getPrice() - downPayment;
+//            } else {
+//            priceAfterDownPayment = car.getPrice() - downPayment;
         }
             return priceAfterDownPayment;
     }
 
-    public double calculateDownPaymentInterestRate() {
-        if(car.getPrice() >= downPayment) {
-            if ((downPayment / car.getPrice()) < 0.5) {
-                downPaymentInterestRate = 1.0;
+    public BigDecimal calculateDownPaymentInterestRate() {
+        //if carPrice is more than or equal to downpayment
+        if(car.getPrice().compareTo(downPayment) >= 0) {
+            //and if downpayment is less than half carPrice
+            if ((downPayment.compareTo(car.getPrice())) < 0.5) {
+                //additional interest rate of 1%p
+                downPaymentInterestRate = BigDecimal.valueOf(1);
                 System.out.println(downPaymentInterestRate);
             }
-        }else if(downPayment > car.getPrice()){
-            downPaymentInterestRate = -1;
-        }
+        //else if downpayment is larger than carPrice
+        } //else if(car.getPrice().compareTo(downPayment) < 0) {
+//            downPaymentInterestRate = downPaymentInterestRate.add(BigDecimal.valueOf(-1)); //det lyder ikke helt sikkert...
+//        }
         return downPaymentInterestRate;
     }
 
-    public void totalCarPrice() {  //behøver ikke downpayment som argument
-        totalPrice = (car.getPrice() - downPayment) * (1 + (totalInterestRate /100));
+    public void totalCarPrice() {  //virkelig lang........
+        totalPrice = ((car.getPrice().subtract(downPayment)).multiply(BigDecimal.valueOf(1).add(totalInterestRate.divide(BigDecimal.valueOf(100)))));//(car.getPrice() - downPayment) * (1 + (totalInterestRate /100));
     }
 
-    public double calculatePaymentPeriodInterestRate(int paymentYears) {
+    public BigDecimal calculatePaymentPeriodInterestRate(int paymentYears) {
         if(paymentYears < 0) {
             throw new ArithmeticException("Vælg en gyldig afbetalingsperiode");
         } else if (paymentYears > 3) {
             System.out.println("payment period interest rate >3y: " + paymentPeriodInterestRate);
-            paymentPeriodInterestRate = 1;
+            paymentPeriodInterestRate = BigDecimal.valueOf(1);       //problemet er måske, at BigDecimal er immutable....
         }
         System.out.println("payment period interest rate end: " + paymentPeriodInterestRate);
         return paymentPeriodInterestRate;
     }
+
     public void calculateTotalInterestRate() {
-        totalInterestRate = rkiAndBankInterestRate + paymentPeriodInterestRate + downPaymentInterestRate;
+        totalInterestRate = rkiAndBankInterestRate.add(paymentPeriodInterestRate).add(downPaymentInterestRate);
     }
 
     public void calculateAll() {
@@ -100,8 +108,8 @@ public class PaymentCalculator {
         return creditRating;
     }
 
-    public double fetchBankInterestRate() {
-        baseBankInterestRate = InterestRate.i().todaysRate();
+    public BigDecimal fetchBankInterestRate() {
+        baseBankInterestRate = BigDecimal.valueOf(InterestRate.i().todaysRate());
         return baseBankInterestRate;
     }
 
@@ -121,39 +129,39 @@ public class PaymentCalculator {
         this.paymentPeriod = paymentPeriod;
     }
 
-    public double getDownPayment() {
+    public BigDecimal getDownPayment() {
         return downPayment;
     }
 
-    public double getRkiAndBankInterestRate() {
+    public BigDecimal getRkiAndBankInterestRate() {
         return rkiAndBankInterestRate;
     }
 
-    public double getBaseBankInterestRate() {
+    public BigDecimal getBaseBankInterestRate() {
         return baseBankInterestRate;
     }
 
-    public double getDownPaymentInterestRate() {
+    public BigDecimal getDownPaymentInterestRate() {
         return downPaymentInterestRate;
     }
 
-    public double getPaymentPeriodInterestRate() {  //bruger vi ikke, fordi vi kalder calculatePaymentPeriodInterestRate og får værdi retur
+    public BigDecimal getPaymentPeriodInterestRate() {  //bruger vi ikke, fordi vi kalder calculatePaymentPeriodInterestRate og får værdi retur
         return paymentPeriodInterestRate;
     }
 
-    public double getPriceAfterDownPayment() {
+    public BigDecimal getPriceAfterDownPayment() {
         return priceAfterDownPayment;
     }
 
-    public double getTotalInterestRate() {
+    public BigDecimal getTotalInterestRate() {
         return totalInterestRate;
     }
 
-    public double getTotalCarPrice() {
+    public BigDecimal getTotalCarPrice() {
         return totalPrice;
     }
 
-    public void setDownPayment(double downPayment) {
+    public void setDownPayment(BigDecimal downPayment) {
         this.downPayment = downPayment;
     }
 

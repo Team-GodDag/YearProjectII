@@ -2,6 +2,8 @@ package data;
 
 import entities.Customer;
 import entities.Offer;
+
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -80,9 +82,9 @@ public class OfferJDBC implements OfferDataAccess {
                 int carId                   = resultSet.getInt("car_id");
                 String creditRating         = resultSet.getString("credit_rating");
                 String status               = resultSet.getString("status");
-                double carPrice             = resultSet.getDouble("car_price");
-                double payment              = resultSet.getDouble("downpayment");
-                double bankratingoftheday   = resultSet.getDouble("bank_interest_rate");
+                BigDecimal carPrice             = resultSet.getBigDecimal("car_price");
+                BigDecimal payment              = resultSet.getBigDecimal("downpayment");
+                BigDecimal bankratingoftheday   = resultSet.getBigDecimal("bank_interest_rate");
                 Date dateofsale             = resultSet.getDate("sale_date");
                 Date dateofpaystart         = resultSet.getDate("payment_start_date");
                 Date dateofpayend           = resultSet.getDate("payment_end_date");

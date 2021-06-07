@@ -2,6 +2,7 @@ package entities;
 
 import logic.PaymentCalculator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ public class Offer {
     // Lavet af Rikke
 
     private int id, customerId, salesPersonId, carId;
-    private double downpayment, carPrice, todaysBankRate;
+    private BigDecimal downpayment, carPrice, todaysBankRate;
     private String creditRating, status;
     private Date dateOfSale, dateOfPayStart, dateOfPayEnd;
 
@@ -30,7 +31,7 @@ public class Offer {
     }
 
 //Constructor til DB-entry
-    public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  double carPrice, double downpayment, double todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
+    public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  BigDecimal carPrice, BigDecimal downpayment, BigDecimal todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
         this.id             = id;
         this.customerId     = customerId;
         this.salesPersonId  = salesPersonId;
@@ -56,11 +57,11 @@ public class Offer {
         this.status = status;
     }
 
-    public double getTodaysBankRate() {
+    public BigDecimal getTodaysBankRate() {
         return todaysBankRate;
     }
 
-    public void setTodaysBankRate(double todaysBankRate) {
+    public void setTodaysBankRate(BigDecimal todaysBankRate) {
         this.todaysBankRate = todaysBankRate;
     }
 
@@ -112,19 +113,19 @@ public class Offer {
         this.carId = carId;
     }
 
-    public double getDownpayment() {
+    public BigDecimal getDownpayment() {
         return downpayment;
     }
 
-    public void setDownpayment(double downpayment) {
+    public void setDownpayment(BigDecimal downpayment) {
         this.downpayment = downpayment;
     }
 
-    public double getCarPrice() {
+    public BigDecimal getCarPrice() {
         return carPrice;
     }
 
-    public void setCarPrice(double carPrice) {
+    public void setCarPrice(BigDecimal carPrice) {
         this.carPrice = carPrice;
     }
 

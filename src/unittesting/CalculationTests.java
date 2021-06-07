@@ -7,6 +7,7 @@ import logic.PaymentCalculator;
 import logic.Tools;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -51,10 +52,10 @@ public class CalculationTests {
     @Test
     void downpayment_over_car_price() {
         Car car = new Car();
-        car.setPrice(1000);
+        car.setPrice(BigDecimal.valueOf(1000));
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         paymentCalculator.setCar(car);
-        paymentCalculator.setDownPayment(5000000);
+        paymentCalculator.setDownPayment(BigDecimal.valueOf(5000000));
         assertEquals(-1, paymentCalculator.calculateDownPaymentInterestRate());
     }
 
@@ -62,20 +63,20 @@ public class CalculationTests {
     @Test
     void downpayment_under_50percent_car_price() {
         Car car = new Car();
-        car.setPrice(5000000);
+        car.setPrice(BigDecimal.valueOf(5000000));
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         paymentCalculator.setCar(car);
-        paymentCalculator.setDownPayment(1000);
+        paymentCalculator.setDownPayment(BigDecimal.valueOf(1000));
         assertEquals(1, paymentCalculator.calculateDownPaymentInterestRate());
     }
 
     @Test
     void downpayment_over_50percent_car_price() {
         Car car = new Car();
-        car.setPrice(5000000);
+        car.setPrice(BigDecimal.valueOf(5000000));
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         paymentCalculator.setCar(car);
-        paymentCalculator.setDownPayment(4000000);
+        paymentCalculator.setDownPayment(BigDecimal.valueOf(4000000));
         assertEquals(0, paymentCalculator.getDownPaymentInterestRate());
     }
 
@@ -91,10 +92,10 @@ public class CalculationTests {
     @Test
     void car_price_after_downpayment_should_return_4999000() {
         Car car = new Car();
-        car.setPrice(5000000);
+        car.setPrice(BigDecimal.valueOf(5000000));
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         paymentCalculator.setCar(car);
-        paymentCalculator.setDownPayment(1000);
+        paymentCalculator.setDownPayment(BigDecimal.valueOf(1000));
         assertEquals(4999000, paymentCalculator.calculateCarPriceAfterDownPayment());
     }
 
@@ -104,8 +105,8 @@ public class CalculationTests {
             Car car = new Car();
             PaymentCalculator paymentCalculator = new PaymentCalculator();
             paymentCalculator.setCar(car);
-            car.setPrice(5000);
-            paymentCalculator.setDownPayment(6000);
+            car.setPrice(BigDecimal.valueOf(5000));
+            paymentCalculator.setDownPayment(BigDecimal.valueOf(6000));
             paymentCalculator.calculateCarPriceAfterDownPayment();
         });
         String expectedMsg = "Udbetaling overstiger bilens pris";
@@ -117,10 +118,10 @@ public class CalculationTests {
     void downPaymentInterest2(){
         PaymentCalculator paymentCalc = new PaymentCalculator();
         Car car = new Car();
-        car.setPrice(5000);
-        paymentCalc.setDownPayment(4000);
+        car.setPrice(BigDecimal.valueOf(5000));
+        paymentCalc.setDownPayment(BigDecimal.valueOf(4000));
         paymentCalc.setCar(car);
-        assertEquals(0, paymentCalc.calculateDownPaymentInterestRate());
+        assertEquals(BigDecimal.valueOf(0), paymentCalc.calculateDownPaymentInterestRate());
     }
 }
 

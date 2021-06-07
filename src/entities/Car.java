@@ -3,14 +3,16 @@ package entities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.math.BigDecimal;
+
 public class Car {
     // Lavet af Rikke
 
     public int id;
     public String name, horsepower;
-    double price;
+    BigDecimal price;
 
-    public Car(int id, String name, double price, String horsepower) {
+    public Car(int id, String name, BigDecimal price, String horsepower) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,11 +46,11 @@ public class Car {
         this.horsepower = horsepower;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

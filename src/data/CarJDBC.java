@@ -1,13 +1,15 @@
 package data;
 
 import entities.Car;
+
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CarJDBC implements CarDataAccess {
-      //Laver af Henrik
+      //Lavet af Henrik
 
 //    @Override
     public ArrayList<Car> getAllCars() {
@@ -93,7 +95,7 @@ public class CarJDBC implements CarDataAccess {
             while (resultSet.next()) {// iteration starter 'before first'
                 int id              = resultSet.getInt("car_model_id");
                 String modelName    = resultSet.getString("model_name");
-                double price        = resultSet.getDouble("price");
+                BigDecimal price        = resultSet.getBigDecimal("price");
                 String horsepower   = resultSet.getString("horsepower");
 
                 Car car = new Car(id, modelName, price, horsepower);

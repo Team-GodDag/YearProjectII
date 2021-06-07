@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
@@ -14,15 +15,13 @@ import java.util.Locale;
 public class Tools {
     // Lavet af Rikke og Lars
 
+    public BigDecimal monthlyPay(LocalDate startDate, LocalDate endDate, BigDecimal price) {
 
-
-    public double monthlyPay(LocalDate startDate, LocalDate endDate, double price) {
-
-        double differenceInMonths = ChronoUnit.MONTHS.between(startDate, endDate);
-        if (differenceInMonths < 1) {
+        BigDecimal differenceInMonths  = new BigDecimal(ChronoUnit.MONTHS.between(startDate, endDate));
+        if (differenceInMonths.compareTo(BigDecimal.valueOf(1)) <= 0) {
             return price;
         }
-        return  (price / differenceInMonths);
+        return  (price.divide(differenceInMonths));
     }
 
     public void inputNumbersOnly(final TextField tf) {
@@ -68,10 +67,10 @@ public class Tools {
         return timeDifferenceInYears;
     }
 
-    public String formatter(double carPrice) {
+    public String formatter(BigDecimal carPrice) {
         DecimalFormat dfGerman = new DecimalFormat("#,###.##",
             new DecimalFormatSymbols(Locale.GERMAN));
-        return String.valueOf(dfGerman.format(carPrice));
+        return dfGerman.format(carPrice);
     }
 }
 

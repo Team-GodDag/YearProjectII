@@ -34,6 +34,7 @@ import javafx.stage.Stage;
 import logic.*;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -448,7 +449,7 @@ public class NewOfferView {
         clearButton.setOnAction(click -> UIManager.instance().switchCenter(new NewOfferView().createView()));
 
         calcQuoteButton.setOnAction(click -> {
-            paymentCalculator.setDownPayment(Double.parseDouble(downPaymentTextField.getText()));
+            paymentCalculator.setDownPayment(new BigDecimal(downPaymentTextField.getText()));
             periodPayInterestTxt.setText(paymentCalculator.calculatePaymentPeriodInterestRate(tools.yearsBetweenDates(payStartLocalDate, payEndLocalDate)) + " %");
             paymentCalculator.calculateAll();
             creditRatingTxt.setText(creditRatingText.getText());
@@ -590,7 +591,7 @@ public class NewOfferView {
     }
 
     private void checkApprovalNeed(Car car) {
-        if (car.getPrice() > 5000000) {
+        if (car.getPrice().compareTo(BigDecimal.valueOf(5000000)) >= 0) {
             needsApproval = true;
         } else {
             needsApproval = false;
