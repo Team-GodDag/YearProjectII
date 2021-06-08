@@ -53,8 +53,6 @@ public class PaymentCalculator {
 
             if(downPayment.compareTo(car.getPrice()) > 0) {
                 throw new ArithmeticException("Udbetaling overstiger bilens pris");
-//            } else {
-//            priceAfterDownPayment = car.getPrice() - downPayment;
         }
             return priceAfterDownPayment;
     }
