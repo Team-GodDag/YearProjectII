@@ -3,12 +3,12 @@ package logic;
 import data.CreditRator;
 import data.InterestRate;
 import entities.Car;
+import entities.Offer;
 
 import java.math.BigDecimal;
 
 
 public class PaymentCalculator {
-
     // Lavet af Rikke, Rune, Lars
 
     private BigDecimal baseBankInterestRate;
@@ -27,6 +27,8 @@ public class PaymentCalculator {
     private Car car;
     private BigDecimal downPayment;
 
+//    private Offer offer;
+
 
     public boolean rkiInterestCalc(String creditRating) {
 
@@ -35,12 +37,15 @@ public class PaymentCalculator {
         if (creditRating.equals("A")) {
             rkiOK = true;
             rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(1));
+
         } if(creditRating.equals("B")) {
             rkiOK = true;
             rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(2));
+
         } if(creditRating.equals("C")) {
             rkiOK = true;
             rkiAndBankInterestRate = rkiAndBankInterestRate.add(BigDecimal.valueOf(3));
+
         } else if(creditRating.equals("D")) {
             rkiOK = false;
         }
@@ -91,6 +96,7 @@ public class PaymentCalculator {
 
     public void calculateTotalInterestRate() {
         totalInterestRate = rkiAndBankInterestRate.add(paymentPeriodInterestRate).add(downPaymentInterestRate);
+        System.out.println("rki: " + rkiAndBankInterestRate + " payperiod: " + paymentPeriodInterestRate + " downpay: " + downPaymentInterestRate);
     }
 
     public void calculateAll() {

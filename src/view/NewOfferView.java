@@ -14,6 +14,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -105,14 +106,12 @@ public class NewOfferView {
 
         creditRatingText.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
                 if (newValue.equals("D")) {
-                    Platform.runLater(() -> {
+//                    Platform.runLater(() -> {
                         saleDeniedAlert();
                         UIManager.instance().switchCenter(new NewOfferView().createView());
-                    });
 
                 } else {
                     requestBankRate();
@@ -159,13 +158,13 @@ public class NewOfferView {
         GridPane.setConstraints(carModelLabel, 0, 9);
         GridPane.setConstraints(carModelCombobox, 1, 9);
         carModelCombobox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-                                                                                    public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
-                                                                                        car = (Car) newValue;
-                                                                                        setCarInfo(car);
-                                                                                        paymentCalculator.setCar(car);
-                                                                                        checkApprovalNeed(car);
-                                                                                    }
-                                                                                }
+                public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+                    car = (Car) newValue;
+                    setCarInfo(car);
+                    paymentCalculator.setCar(car);
+                    checkApprovalNeed(car);
+                }
+            }
         );
 
         Label priceLabel = new Label("Pris: ");
@@ -571,7 +570,16 @@ public class NewOfferView {
 
 
     private void requestRkiRating(String cprInput) {
-        CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
+//        CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
+        Thread rkiThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String creditRating = paymentCalculator.fetchCreditRating(cprInput);
+                Platform.runLater(() -> creditRatingText.setText(creditRating));
+            }
+        });
+        rkiThread.start();
+
     }
 
     private void requestBankRate() {

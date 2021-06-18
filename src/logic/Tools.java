@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class Tools {
         if (differenceInMonths.compareTo(BigDecimal.valueOf(1)) <= 0) {
             return price;
         }
-        return  (price.divide(differenceInMonths));
+        return  (price.divide(differenceInMonths, RoundingMode.HALF_EVEN));
     }
 
     public void inputNumbersOnly(final TextField tf) {

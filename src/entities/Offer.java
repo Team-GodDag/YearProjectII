@@ -13,24 +13,18 @@ public class Offer {
     private BigDecimal downpayment, carPrice, todaysBankRate;
     private String creditRating, status;
     private Date dateOfSale, dateOfPayStart, dateOfPayEnd;
+//    private Customer customer;              //skal disse tre med?
+//    private SalesPerson salesPerson;        //skal disse tre med?
+//    private Car car;                        //skal disse tre med?
 
+//Calculation constructor
+//    public Offer() {
+//        this.id = 0;
+//        this.dateOfSale = java.sql.Date.valueOf(LocalDate.now());   //viser kun dato, så nok OK
+//        this.
+//    }
 
-    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, PaymentCalculator paymentCalculator, LocalDate dateOfSale, LocalDate startPayDate, LocalDate endPayDate, String status) { //boolean isApproved,
-        this.id             = 0;
-        this.customerId     = customer.getId();
-        this.salesPersonId  = salesPerson.getId();
-        this.creditRating   = creditRating;
-        this.carId          = car.getId();
-        this.carPrice       = car.getPrice();
-        this.downpayment    = paymentCalculator.getDownPayment();
-        this.todaysBankRate = paymentCalculator.getBaseBankInterestRate();
-        this.status         = status;
-        this.dateOfSale     = java.sql.Date.valueOf(dateOfSale);
-        this.dateOfPayStart = java.sql.Date.valueOf(startPayDate);
-        this.dateOfPayEnd   = java.sql.Date.valueOf(endPayDate);
-    }
-
-//Constructor til DB-entry
+//Constructor til DB-entry - ville være fordel m. Builder
     public Offer(int id, int customerId, int salesPersonId, int carId, String creditRating, String status,  BigDecimal carPrice, BigDecimal downpayment, BigDecimal todaysBankRate, Date dateOfSale, Date dateOfPayStart, Date dateOfPayEnd) {
         this.id             = id;
         this.customerId     = customerId;
@@ -46,7 +40,20 @@ public class Offer {
         this.dateOfPayEnd   = dateOfPayEnd;
     }
 
-    public Offer() {
+
+    public Offer(Customer customer, Car car, SalesPerson salesPerson, String creditRating, PaymentCalculator paymentCalculator, LocalDate dateOfSale, LocalDate startPayDate, LocalDate endPayDate, String status) { //boolean isApproved,
+        this.id             = 0;
+        this.customerId     = customer.getId();
+        this.salesPersonId  = salesPerson.getId();
+        this.creditRating   = creditRating;
+        this.carId          = car.getId();
+        this.carPrice       = car.getPrice();
+        this.downpayment    = paymentCalculator.getDownPayment();
+        this.todaysBankRate = paymentCalculator.getBaseBankInterestRate();
+        this.status         = status;
+        this.dateOfSale     = java.sql.Date.valueOf(dateOfSale);
+        this.dateOfPayStart = java.sql.Date.valueOf(startPayDate);
+        this.dateOfPayEnd   = java.sql.Date.valueOf(endPayDate);
     }
 
     public String getStatus() {
