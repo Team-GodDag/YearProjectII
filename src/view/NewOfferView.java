@@ -571,11 +571,11 @@ public class NewOfferView {
 
     private void requestRkiRating(String cprInput) {
 //        CompletableFuture.runAsync(() -> creditRatingText.setText(paymentCalculator.fetchCreditRating(cprInput)));
-        Thread rkiThread = new Thread(new Runnable() {
+        Thread rkiThread = new Thread(new Runnable() {      //opretter ny tråd til at hente fra RKI
             @Override
             public void run() {
-                String creditRating = paymentCalculator.fetchCreditRating(cprInput);
-                Platform.runLater(() -> creditRatingText.setText(creditRating));
+                String creditRating = paymentCalculator.fetchCreditRating(cprInput);    //gemmer kreditværdighed i lokal variabel for læsbarhed
+                Platform.runLater(() -> creditRatingText.setText(creditRating));    //opdaterer GUI - må vist kun gøres af GUI-tråden
             }
         });
         rkiThread.start();
